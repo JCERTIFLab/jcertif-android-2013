@@ -4,6 +4,6 @@
 
 JCertif Lab est une plateforme collaborative dédiée au développement des applications Open Source pour encourager l'innovation à travers des projets de développement d'applications Web, Mobiles et d'entreprises.
 
-JCertif Android Application
+JCertif Android Application 2013
 ============== 
 Ce projet consiste à développer l'application Android de l'événement JCertif qui a lieu tous les ans à Brazzaville (Congo).
