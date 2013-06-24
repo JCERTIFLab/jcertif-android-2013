@@ -10,7 +10,7 @@
         <item>Agenda</item>
          <item>Social</item>
         <item>Maps</item>
-        <item>Saturn</item>
+       
         
     </string-array>
     <string name="drawer_open">Open navigation drawer</string>

@@ -28,7 +28,7 @@ import com.jcertif.android.fragments.SpeakeListFragment;
 
 
 /**
- * Partially inspired by the ASOP source
+ * Partially based on the ASOP source/Menu Drawer
  * 
  * @author bashizip
  *
