@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.jcertif.adroid.service.RESTService;
+import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Session;
@@ -25,7 +26,7 @@ import com.jcertif.android.model.Session;
  */
 public class SessionListFragment extends RESTResponderFragment {
 
-	private static final String SESSIONS_LIST_URI = "http://";
+	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL+"/session/list";
 
 	private static String TAG = SessionListFragment.class.getName();
 	
@@ -42,9 +43,8 @@ public class SessionListFragment extends RESTResponderFragment {
 		setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_session, container,
 				false);
-		// int i = getArguments().getInt(ARG_SESSION_ID);
-		String session = getResources().getStringArray(R.array.menu_array)[0];
 
+		String session = getResources().getStringArray(R.array.menu_array)[0];
 		getActivity().setTitle(session);
 		
 		 mAdapter = new ArrayAdapter<Session>(getActivity(), R.layout.item_label_list);
@@ -85,10 +85,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	        }
 	        else if (activity != null) {
 	            // Here we check to see if our activity is null or not.
-	            // We only want to update our views if our activity exists.
-	            
-	         
-	            
+	            // We only want to update our views if our activity exists.      	            
 	            // Load our list adapter with our session.
 	        	mAdapter.clear();
 	            for (Session session : mSessions) {
