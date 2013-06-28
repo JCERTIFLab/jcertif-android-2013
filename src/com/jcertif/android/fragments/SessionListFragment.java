@@ -1,6 +1,7 @@
 package com.jcertif.android.fragments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -12,12 +13,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jcertif.adroid.service.RESTService;
 import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
+import com.jcertif.android.adapters.SessionAdapter;
 import com.jcertif.android.model.Session;
 
 /**
@@ -33,7 +38,8 @@ public class SessionListFragment  extends RESTResponderFragment {
 	private static String TAG = SessionListFragment.class.getName();
 
 	private List<Session> mSessions;
-	ArrayAdapter<Session> mAdapter;
+	private ListView mLvSessions;
+	private SessionAdapter mAdapter;;
 
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
@@ -45,14 +51,14 @@ public class SessionListFragment  extends RESTResponderFragment {
 		setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_session, container,
 				false);
-
+        mLvSessions=(ListView)rootView.findViewById(R.id.lv_session);
 		String session = getResources().getStringArray(R.array.menu_array)[0];
 		getActivity().setTitle(session);
-
-		mAdapter = new ArrayAdapter<Session>(getActivity(),
-				R.layout.item_label_list);
 		
 		mSessions= new ArrayList<Session>();
+		mAdapter= new SessionAdapter(this.getActivity(), mSessions);
+		mLvSessions.setAdapter(mAdapter);			
+		
 		return rootView;
 	}
 
@@ -105,16 +111,17 @@ public class SessionListFragment  extends RESTResponderFragment {
 			// Here we check to see if our activity is null or not.
 			// We only want to update our views if our activity exists.
 			// Load our list adapter with our session.
-			mAdapter.clear();
-			for (Session session : mSessions) {
-				mAdapter.add(session);
-			}
+		    
+		     mAdapter.notifyDataSetChanged();
+			
 		}
 	}
 
 	private List<Session> loadSessionsFromCache() {
 	
-		return null;
+		//call DAO here
+		
+		return new ArrayList<Session>();
 	}
 
 	@Override
@@ -126,10 +133,11 @@ public class SessionListFragment  extends RESTResponderFragment {
 		if (code == 200 && result != null) {
 
 			// For really complicated JSON decoding use Gson
-			mSessions = readFromCache();
+			mSessions = parseSessionJson(result);
 			Log.d(TAG, result);
-			saveToCache(mSessions);
 			setSessions();
+			saveToCache(mSessions);
+			
 		} else {
 			Activity activity = getActivity();
 			if (activity != null) {
@@ -142,9 +150,15 @@ public class SessionListFragment  extends RESTResponderFragment {
 	}
 
 
-	protected void saveToCache(List<Session> sessions) {
-		// TODO Auto-generated method stub
-		
+	private List<Session> parseSessionJson(String result) {
+		  Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();       
+	        Session[] sessions=  gson.fromJson(result, Session[].class);
+	       	        
+		return Arrays.asList(sessions);
+	}
+
+	protected void saveToCache(List<Session> sessions) {	
+		// must be done async		
 	}
 
 
