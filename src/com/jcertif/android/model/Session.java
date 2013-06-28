@@ -1,9 +1,11 @@
 package com.jcertif.android.model;
 
-import java.util.Date;
-import java.util.List;
 
-public class Session {
+
+import java.util.Date;
+
+
+public class Session extends JCertifObject{
 
 	private int id;
 	private String title;
@@ -11,19 +13,35 @@ public class Session {
 	private String description;
 	private String status;
 	private String keyword;
-	private List<Categorie> category;
+	private String[] category;
+        private Date start;
 	private Date end;
-	private List<Speaker> speakers;
+	private String[] speakers;
 	private int salle;
-	private String version;
+	
 	
 	public Session() {
 		super();
 	}
 
+    public Session(int id, String title, String summary, String description, String status, String keyword, String[] category,Date start, Date end, String[] speakers, int salle, int version, boolean deleted) {
+        super(version, deleted);
+        this.id = id;
+        this.title = title;
+        this.summary = summary;
+        this.description = description;
+        this.status = status;
+        this.keyword = keyword;
+        this.category = category;
+        this.start=start;
+        this.end = end;
+        this.speakers = speakers;
+        this.salle = salle;
+    }
+
 	public Session(int id, String title, String summary, String description,
-			String status, String keyword, List<Categorie> category, Date end,
-			List<Speaker> speakers, int salle, String version) {
+			String status, String keyword, String[] category,Date start, Date end,
+			String[] speakers, int salle, String version) {
 		super();
 		this.id = id;
 		this.title = title;
@@ -32,10 +50,11 @@ public class Session {
 		this.status = status;
 		this.keyword = keyword;
 		this.category = category;
+                this.start=start;
 		this.end = end;
 		this.speakers = speakers;
 		this.salle = salle;
-		this.version = version;
+		
 	}
 
 	public int getId() {
@@ -86,11 +105,11 @@ public class Session {
 		this.keyword = keyword;
 	}
 
-	public List<Categorie> getCategory() {
+	public String[] getCategory() {
 		return category;
 	}
 
-	public void setCategory(List<Categorie> category) {
+	public void setCategory(String[] category) {
 		this.category = category;
 	}
 
@@ -102,11 +121,11 @@ public class Session {
 		this.end = end;
 	}
 
-	public List<Speaker> getSpeakers() {
+	public String[] getSpeakers() {
 		return speakers;
 	}
 
-	public void setSpeakers(List<Speaker> speakers) {
+	public void setSpeakers(String[] speakers) {
 		this.speakers = speakers;
 	}
 
@@ -118,13 +137,15 @@ public class Session {
 		this.salle = salle;
 	}
 
-	public String getVersion() {
-		return version;
-	}
+    public Date getStart() {
+        return start;
+    }
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+	
 	
 	
 	

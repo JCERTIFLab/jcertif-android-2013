@@ -35,6 +35,7 @@ import android.util.Log;
  *
  */
 public class RESTService extends IntentService {
+	
     private static final String TAG = RESTService.class.getName();
     
     public static final int GET    = 0x1;
@@ -47,8 +48,7 @@ public class RESTService extends IntentService {
     public static final String EXTRA_RESULT_RECEIVER = "com.jcertif.android.EXTRA_RESULT_RECEIVER";
     
      public static final String REST_RESULT = "com.jcertif.android.REST_RESULT";
-
-	public static final String KEY_JSON_PLAYLOAD = "com.jcertif.android.JSON_PLAYLOAD";
+	 public static final String KEY_JSON_PLAYLOAD = "com.jcertif.android.JSON_PLAYLOAD";
 
     public RESTService() {
         super(TAG);
@@ -99,7 +99,6 @@ public class RESTService extends IntentService {
                     request = new HttpPost();
                     request.setURI(new URI(action.toString()));
                     
-                   
                     request.setHeader("Content-Type", "application/json");
                     
                     HttpPost postRequest = (HttpPost) request;
@@ -215,16 +214,16 @@ public class RESTService extends IntentService {
         return "";
     }
     
+    
+    
+    
     private static List<BasicNameValuePair> paramsToList(Bundle params) {
         ArrayList<BasicNameValuePair> formList = new ArrayList<BasicNameValuePair>(params.size());
         
         for (String key : params.keySet()) {
             Object value = params.get(key);
             
-            // We can only put Strings in a form entity, so we call the toString()
-            // method to enforce. We also probably don't need to check for null here
-            // but we do anyway because Bundle.get() can return null.
-            if (value != null) formList.add(new BasicNameValuePair(key, value.toString()));
+                     if (value != null) formList.add(new BasicNameValuePair(key, value.toString()));
         }
         
         return formList;

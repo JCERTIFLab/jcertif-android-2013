@@ -9,15 +9,17 @@ import android.os.Handler;
 import android.os.ResultReceiver;
 
 
-public abstract class RESTResponderFragment extends SherlockFragment {
+public abstract class RESTResponderFragment  extends SherlockFragment {
     
     private ResultReceiver mReceiver;
+  
     
     // We are going to use a constructor here to make our ResultReceiver,
     // but be careful because Fragments are required to have only zero-arg
     // constructors. Normally you don't want to use constructors at all
     // with Fragments.
     public RESTResponderFragment() {
+    	
         mReceiver = new ResultReceiver(new Handler()) {
 
             @Override
@@ -51,4 +53,6 @@ public abstract class RESTResponderFragment extends SherlockFragment {
 
     // Implementers of this Fragment will handle the result here.
     abstract public void onRESTResult(int code, String result);
+//    protected abstract void saveToCache();
+//    protected abstract ArrayList<?> readFromCache();
 }
