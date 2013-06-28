@@ -56,9 +56,7 @@ public class SessionListFragment  extends RESTResponderFragment {
 		getActivity().setTitle(session);
 		
 		mSessions= new ArrayList<Session>();
-		mAdapter= new SessionAdapter(this.getActivity(), mSessions);
-		mLvSessions.setAdapter(mAdapter);			
-		
+						
 		return rootView;
 	}
 
@@ -67,6 +65,8 @@ public class SessionListFragment  extends RESTResponderFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		// This gets called each time our Activity has finished creating itself.
+		//First check the local cahe, if it's ampty data will be fetched from web
+		mSessions = loadSessionsFromCache();
 		setSessions();
 	}
 
@@ -78,7 +78,7 @@ public class SessionListFragment  extends RESTResponderFragment {
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
 
-		mSessions = loadSessionsFromCache();
+		//
 		
 		if (mSessions.isEmpty()&& activity != null) {
 			
@@ -112,18 +112,14 @@ public class SessionListFragment  extends RESTResponderFragment {
 			// We only want to update our views if our activity exists.
 			// Load our list adapter with our session.
 		    
-		     mAdapter.notifyDataSetChanged();
+			mAdapter= new SessionAdapter(this.getActivity(), mSessions);
+			mLvSessions.setAdapter(mAdapter);	
+		   //  mAdapter.notifyDataSetChanged();
 			
 		}
 	}
 
-	private List<Session> loadSessionsFromCache() {
 	
-		//call DAO here
-		
-		return new ArrayList<Session>();
-	}
-
 	@Override
 	public void onRESTResult(int code, String result) {
 		// Here is where we handle our REST response. This is similar to the
@@ -158,13 +154,13 @@ public class SessionListFragment  extends RESTResponderFragment {
 	}
 
 	protected void saveToCache(List<Session> sessions) {	
-		// must be done async		
+		// must be done async
 	}
 
 
-	protected ArrayList<Session> readFromCache() {
-		// TODO Auto-generated method stub
-		return null;
+	private List<Session> loadSessionsFromCache() {		
+		//call DAO Layer here		
+		return new ArrayList<Session>();
 	}
 
 
