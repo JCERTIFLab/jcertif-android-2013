@@ -149,7 +149,7 @@ public class SessionListFragment  extends RESTResponderFragment {
 		}
 	}
 
-
+ 
 	private List<Session> parseSessionJson(String result) {
 		  Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();       
 	        Session[] sessions=  gson.fromJson(result, Session[].class);

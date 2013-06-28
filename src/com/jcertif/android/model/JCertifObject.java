@@ -3,7 +3,8 @@ package com.jcertif.android.model;
 
 /**
  *
- * @author 
+ * @author
+ *  
  */
 public class JCertifObject {
    
