@@ -23,6 +23,7 @@ import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.adapters.SessionAdapter;
+import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.model.Session;
 
 /**
@@ -30,10 +31,10 @@ import com.jcertif.android.model.Session;
  * @author
  * 
  */
-public class SessionListFragment  extends RESTResponderFragment {
+public class SessionListFragment extends RESTResponderFragment {
 
-	private static final String SESSIONS_LIST_URI = 
-			JcertifApplication.BASE_URL+ "/session/list";
+	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL
+			+ "/session/list";
 
 	private static String TAG = SessionListFragment.class.getName();
 
@@ -51,12 +52,12 @@ public class SessionListFragment  extends RESTResponderFragment {
 		setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_session, container,
 				false);
-        mLvSessions=(ListView)rootView.findViewById(R.id.lv_session);
+		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		String session = getResources().getStringArray(R.array.menu_array)[0];
 		getActivity().setTitle(session);
-		
-		mSessions= new ArrayList<Session>();
-						
+
+		mSessions = new ArrayList<Session>();
+
 		return rootView;
 	}
 
@@ -65,7 +66,8 @@ public class SessionListFragment  extends RESTResponderFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		// This gets called each time our Activity has finished creating itself.
-		//First check the local cahe, if it's ampty data will be fetched from web
+		// First check the local cahe, if it's ampty data will be fetched from
+		// web
 		mSessions = loadSessionsFromCache();
 		setSessions();
 	}
@@ -79,25 +81,19 @@ public class SessionListFragment  extends RESTResponderFragment {
 		MainActivity activity = (MainActivity) getActivity();
 
 		//
-		
-		if (mSessions.isEmpty()&& activity != null) {
-			
+
+		if (mSessions.isEmpty() && activity != null) {
+
 			// This is where we make our REST call to the service. We also pass
 			// in our ResultReceiver
 			// defined in the RESTResponderFragment super class.
 
 			// We will explicitly call our Service since we probably want to
-			// keep it as a private
-			// component in our app. You could do this with Intent actions as
-			// well, but you have
-			// to make sure you define your intent filters correctly in your
-			// manifest.
+			// keep it as a private component in our app.
 			Intent intent = new Intent(activity, RESTService.class);
 			intent.setData(Uri.parse(SESSIONS_LIST_URI));
 
-			// Here we are going to place our REST call parameters. Note that
-			// we could have just used Uri.Builder and appendQueryParameter()
-
+			// Here we are going to place our REST call parameters.
 			Bundle params = new Bundle();
 			params.putString(RESTService.KEY_JSON_PLAYLOAD, null);
 
@@ -111,15 +107,14 @@ public class SessionListFragment  extends RESTResponderFragment {
 			// Here we check to see if our activity is null or not.
 			// We only want to update our views if our activity exists.
 			// Load our list adapter with our session.
-		    
-			mAdapter= new SessionAdapter(this.getActivity(), mSessions);
-			mLvSessions.setAdapter(mAdapter);	
-		   //  mAdapter.notifyDataSetChanged();
-			
+
+			mAdapter = new SessionAdapter(this.getActivity(), mSessions);
+			mLvSessions.setAdapter(mAdapter);
+			// mAdapter.notifyDataSetChanged();
+
 		}
 	}
 
-	
 	@Override
 	public void onRESTResult(int code, String result) {
 		// Here is where we handle our REST response. This is similar to the
@@ -127,13 +122,11 @@ public class SessionListFragment  extends RESTResponderFragment {
 
 		// Check to see if we got an HTTP 200 code and have some data.
 		if (code == 200 && result != null) {
-
-			// For really complicated JSON decoding use Gson
 			mSessions = parseSessionJson(result);
 			Log.d(TAG, result);
 			setSessions();
 			saveToCache(mSessions);
-			
+
 		} else {
 			Activity activity = getActivity();
 			if (activity != null) {
@@ -145,24 +138,39 @@ public class SessionListFragment  extends RESTResponderFragment {
 		}
 	}
 
- 
 	private List<Session> parseSessionJson(String result) {
-		  Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();       
-	        Session[] sessions=  gson.fromJson(result, Session[].class);
-	       	        
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+				.create();
+		Session[] sessions = gson.fromJson(result, Session[].class);
+
 		return Arrays.asList(sessions);
 	}
 
-	protected void saveToCache(List<Session> sessions) {	
-		// must be done async
+	protected void saveToCache(final List<Session> sessions) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (Session session : sessions)
+					SessionProvider.getInstance(getActivity()).store(session);
+			}
+		}).start();
+	}
+
+	private List<Session> loadSessionsFromCache() {
+	
+		List<Session> list = SessionProvider.getInstance(getActivity()).getAll(
+				Session.class);
+		
+		return list;
 	}
 
 
-	private List<Session> loadSessionsFromCache() {		
-		//call DAO Layer here		
-		return new ArrayList<Session>();
+	@Override
+	public void onPause() {
+		super.onDestroy();
+		SessionProvider.getInstance(getActivity()).close();
+
 	}
-
-
 
 }
