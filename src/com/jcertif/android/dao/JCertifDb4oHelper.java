@@ -40,8 +40,6 @@ public abstract class JCertifDb4oHelper<T> {
 	 * Create, open and close the database
 	 */
 	private ObjectContainer db() {
-
-		if (oc == null) {
 			try {
 
 				oc = new OpendDBTask().execute().get();
@@ -50,13 +48,16 @@ public abstract class JCertifDb4oHelper<T> {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 			} catch (ExecutionException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
-
-			}
 		}
 
 		return oc;
 	}
 
+	
+	/**
+	 * 
+	 *
+	 */
 	class OpendDBTask extends AsyncTask<Void, Void, ObjectContainer> {
 
 		@Override
@@ -65,11 +66,11 @@ public abstract class JCertifDb4oHelper<T> {
 				if (oc == null || oc.ext().isClosed()) {
 					oc = Db4oEmbedded.openFile(dbConfig(),
 							db4oDBFullPath(context));
-					// We first load the initial data from the database
-					// SessionLoader.load(context, oc);
+					
 				}
 			} catch (DatabaseFileLockedException ie) {
 				Log.e(JCertifDb4oHelper.class.getName(), ie.toString());
+				
 			} catch (Db4oIOException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 			} catch (IncompatibleFileFormatException e) {

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,13 +19,13 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jcertif.adroid.service.RESTService;
 import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.adapters.SessionAdapter;
 import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.model.Session;
+import com.jcertif.android.service.RESTService;
 
 /**
  * 
@@ -40,8 +41,9 @@ public class SessionListFragment extends RESTResponderFragment {
 
 	private List<Session> mSessions;
 	private ListView mLvSessions;
-	private SessionAdapter mAdapter;;
-
+	private SessionAdapter mAdapter;
+	private SessionProvider mProvider;
+	
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
 	}
@@ -60,6 +62,12 @@ public class SessionListFragment extends RESTResponderFragment {
 
 		return rootView;
 	}
+	
+	public  SessionProvider getProvider() {
+		if (mProvider == null)
+			mProvider = new SessionProvider(this.getSherlockActivity());
+		return mProvider;
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -68,6 +76,7 @@ public class SessionListFragment extends RESTResponderFragment {
 		// This gets called each time our Activity has finished creating itself.
 		// First check the local cahe, if it's ampty data will be fetched from
 		// web
+		
 		mSessions = loadSessionsFromCache();
 		setSessions();
 	}
@@ -117,9 +126,7 @@ public class SessionListFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, String result) {
-		// Here is where we handle our REST response. This is similar to the
-		// LoaderCallbacks<D>.onLoadFinished() call from the previous tutorial.
-
+		// Here is where we handle our REST response. 
 		// Check to see if we got an HTTP 200 code and have some data.
 		if (code == 200 && result != null) {
 			mSessions = parseSessionJson(result);
@@ -152,16 +159,13 @@ public class SessionListFragment extends RESTResponderFragment {
 			@Override
 			public void run() {
 				for (Session session : sessions)
-					SessionProvider.getInstance(getActivity()).store(session);
+					mProvider.store(session);
 			}
 		}).start();
 	}
 
-	private List<Session> loadSessionsFromCache() {
-	
-		List<Session> list = SessionProvider.getInstance(getActivity()).getAll(
-				Session.class);
-		
+	private List<Session> loadSessionsFromCache() {	
+		List<Session> list =getProvider().getAll(Session.class);		
 		return list;
 	}
 
@@ -169,8 +173,12 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onPause() {
 		super.onDestroy();
-		SessionProvider.getInstance(getActivity()).close();
-
+		mProvider.close();
+	    mProvider=null;
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();	
+	}
 }

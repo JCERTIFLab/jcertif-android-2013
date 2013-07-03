@@ -2,7 +2,7 @@ package com.jcertif.android.fragments;
 
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.jcertif.adroid.service.RESTService;
+import com.jcertif.android.service.RESTService;
 
 import android.os.Bundle;
 import android.os.Handler;

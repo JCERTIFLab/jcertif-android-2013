@@ -1,4 +1,4 @@
-package com.jcertif.adroid.service;
+package com.jcertif.android.service;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

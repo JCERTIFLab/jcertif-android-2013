@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.jcertif.adroid.service.RESTService"></service>
+        <service android:name="com.jcertif.android.service.RESTService"></service>
     </application>
 
 </manifest>
