@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -40,8 +41,9 @@ public class SessionListFragment extends RESTResponderFragment {
 
 	private List<Session> mSessions;
 	private ListView mLvSessions;
-	private SessionAdapter mAdapter;;
-
+	private SessionAdapter mAdapter;
+	private SessionProvider mProvider;
+	
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
 	}
@@ -60,6 +62,12 @@ public class SessionListFragment extends RESTResponderFragment {
 
 		return rootView;
 	}
+	
+	public  SessionProvider getProvider() {
+		if (mProvider == null)
+			mProvider = new SessionProvider(this.getSherlockActivity());
+		return mProvider;
+	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -68,6 +76,7 @@ public class SessionListFragment extends RESTResponderFragment {
 		// This gets called each time our Activity has finished creating itself.
 		// First check the local cahe, if it's ampty data will be fetched from
 		// web
+		
 		mSessions = loadSessionsFromCache();
 		setSessions();
 	}
@@ -152,16 +161,13 @@ public class SessionListFragment extends RESTResponderFragment {
 			@Override
 			public void run() {
 				for (Session session : sessions)
-					SessionProvider.getInstance(getActivity()).store(session);
+					mProvider.store(session);
 			}
 		}).start();
 	}
 
-	private List<Session> loadSessionsFromCache() {
-	
-		List<Session> list = SessionProvider.getInstance(getActivity()).getAll(
-				Session.class);
-		
+	private List<Session> loadSessionsFromCache() {	
+		List<Session> list =getProvider().getAll(Session.class);		
 		return list;
 	}
 
@@ -169,8 +175,14 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onPause() {
 		super.onDestroy();
-		SessionProvider.getInstance(getActivity()).close();
-
+		mProvider.close();
+	    mProvider=null;
 	}
 
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+	}
 }

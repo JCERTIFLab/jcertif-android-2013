@@ -41,7 +41,7 @@ public abstract class JCertifDb4oHelper<T> {
 	 */
 	private ObjectContainer db() {
 
-		if (oc == null) {
+
 			try {
 
 				oc = new OpendDBTask().execute().get();
@@ -51,7 +51,7 @@ public abstract class JCertifDb4oHelper<T> {
 			} catch (ExecutionException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 
-			}
+			
 		}
 
 		return oc;
@@ -70,6 +70,7 @@ public abstract class JCertifDb4oHelper<T> {
 				}
 			} catch (DatabaseFileLockedException ie) {
 				Log.e(JCertifDb4oHelper.class.getName(), ie.toString());
+				
 			} catch (Db4oIOException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 			} catch (IncompatibleFileFormatException e) {
