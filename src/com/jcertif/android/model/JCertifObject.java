@@ -6,7 +6,7 @@ package com.jcertif.android.model;
  * @author
  *  
  */
-public class JCertifObject {
+public abstract class JCertifObject {
    
     int version;
     boolean deleted;

@@ -5,9 +5,11 @@ package com.jcertif.android.model;
 import java.util.Date;
 
 
+
 public class Session extends JCertifObject{
 
-	private int id;
+	
+	private long id;
 	private String title;
 	private String summary;
 	private String description;
@@ -18,6 +20,7 @@ public class Session extends JCertifObject{
 	private Date end;
 	private String[] speakers;
 	private int salle;
+	
 	
 	
 	public Session() {
@@ -57,7 +60,7 @@ public class Session extends JCertifObject{
 		
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 

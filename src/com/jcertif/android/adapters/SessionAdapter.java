@@ -24,14 +24,10 @@ public class SessionAdapter extends GenericListAdapter<Session> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		if (convertView == null) {
 			holder = new ViewHolder();
-
 			convertView = inflater.inflate(R.layout.item_session, null);
-
 			holder.title = (TextView) convertView.findViewById(R.id.tv_title);
-
 			holder.summary = (TextView) convertView
 					.findViewById(R.id.tv_summary);
-
 			convertView.setTag(holder);
 
 		} else {
