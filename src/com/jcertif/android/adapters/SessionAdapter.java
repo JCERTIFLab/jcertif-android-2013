@@ -35,10 +35,8 @@ public class SessionAdapter extends GenericListAdapter<Session> {
 		}
 
 		session = list.get(position);
-
 		holder.title.setText(session.getTitle());
 		holder.summary.setText(session.getSummary());
-
 		return convertView;
 	}
 

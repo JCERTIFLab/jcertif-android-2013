@@ -40,6 +40,7 @@ public abstract class JCertifDb4oHelper<T> {
 	 * Create, open and close the database
 	 */
 	private ObjectContainer db() {
+
 			try {
 
 				oc = new OpendDBTask().execute().get();
@@ -47,12 +48,10 @@ public abstract class JCertifDb4oHelper<T> {
 			} catch (InterruptedException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 			} catch (ExecutionException e) {
-				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
-		}
-
-		return oc;
+				Log.e(JCertifDb4oHelper.class.getName(), e.toString());		
+	    }
+			return oc;
 	}
-
 	
 	/**
 	 * 
@@ -188,4 +187,5 @@ public abstract class JCertifDb4oHelper<T> {
 		if (oc != null)
 			oc.close();
 	}
-}
+	}
+
