@@ -29,11 +29,6 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 
-/**
- * 
- * 
- *
- */
 public class RESTService extends IntentService {
 	
     private static final String TAG = RESTService.class.getName();
@@ -64,9 +59,7 @@ public class RESTService extends IntentService {
         
         if (extras == null || action == null || !extras.containsKey(EXTRA_RESULT_RECEIVER)) {
             // Extras contain our ResultReceiver and data is our REST action.  
-            // So, without these components we can't do anything useful.
-            Log.e(TAG, "You did not pass extras or data with the Intent.");
-            
+            Log.e(TAG, "You did not pass extras or data with the Intent.");          
             return;
         }
         
