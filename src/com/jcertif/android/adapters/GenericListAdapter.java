@@ -2,8 +2,15 @@ package com.jcertif.android.adapters;
 
 import java.util.List;
 
+
 import android.content.Context;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Interpolator;
+
 
 import android.widget.BaseAdapter;
 
@@ -14,31 +21,57 @@ import android.widget.BaseAdapter;
  */
 
 public abstract class GenericListAdapter<T> extends BaseAdapter {
+	 protected static final long ANIM_DEFAULT_SPEED = 1000L;
 
-	List<T> list;
-	LayoutInflater inflater;
-	protected Context context;
+	  protected Interpolator interpolator;
 
-	public GenericListAdapter(Context context, List<T> list) {
-		super();
-		inflater = LayoutInflater.from(context);
-		this.list = list;
-		this.context=context;
-	}
+	  protected SparseBooleanArray positionsMapper;
+	  protected List<T> items;
+	  protected int size, height, width, previousPostition;
+	  protected SpeedScrollListener scrollListener;
+	  protected double speed;
+	  protected long animDuration;
+	  protected View v;
+	  protected Context context;
 
-	public int getCount() {
+	  protected GenericListAdapter(Context context, SpeedScrollListener scrollListener, List<T> items) {
+	    this.context = context;
+	    this.scrollListener = scrollListener;
+	    this.items = items;
+	    if (items != null)
+	      size = items.size();
 
-		return list.size();
-	}
+	    previousPostition = -1;
+	    positionsMapper = new SparseBooleanArray(size);
+	    WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+	    width = windowManager.getDefaultDisplay().getWidth();
+	    height = windowManager.getDefaultDisplay().getHeight();
 
-	public Object getItem(int index) {
-		// TODO Auto-generated method stub
-		return list.get(index);
-	}
+	    defineInterpolator();
+	  }
 
-	public long getItemId(int index) {
-		// TODO Auto-generated method stub
-		return list.indexOf(list.get(index));
-	}
+	  @Override
+	  public int getCount() {
+	    return size;
+	  }
+
+	  @Override
+	  public Object getItem(int position) {
+	    return items != null && position < size ? items.get(position) : null;
+	  }
+
+	  @Override
+	  public long getItemId(int position) {
+	    return position;
+	  }
+
+	  @Override
+	  public View getView(int position, View convertView, ViewGroup parent) {
+	    return getAnimatedView(position, convertView, parent);
+	  }
+
+	  protected abstract View getAnimatedView(int position, View convertView, ViewGroup parent);
+
+	  protected abstract void defineInterpolator();
 
 }

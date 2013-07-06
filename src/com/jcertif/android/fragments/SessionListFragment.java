@@ -23,6 +23,7 @@ import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.adapters.SessionAdapter;
+import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.service.RESTService;
@@ -39,10 +40,11 @@ public class SessionListFragment extends RESTResponderFragment {
 
 	private static String TAG = SessionListFragment.class.getName();
 
-	private List<Session> mSessions;
+	private List<Session> mSessions = new ArrayList<Session>();;
 	private ListView mLvSessions;
 	private SessionAdapter mAdapter;
 	private SessionProvider mProvider;
+	private SpeedScrollListener mListener;
 	
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
@@ -57,9 +59,6 @@ public class SessionListFragment extends RESTResponderFragment {
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		String session = getResources().getStringArray(R.array.menu_array)[0];
 		getActivity().setTitle(session);
-
-		mSessions = new ArrayList<Session>();
-
 		return rootView;
 	}
 	
@@ -74,10 +73,9 @@ public class SessionListFragment extends RESTResponderFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		// This gets called each time our Activity has finished creating itself.
-		// First check the local cahe, if it's ampty data will be fetched from
-		// web
-		
-		mSessions = loadSessionsFromCache();
+		// First check the local cache, if it's empty data will be fetched from
+		// web	
+		mSessions = loadSessionsFromCache();		
 		setSessions();
 	}
 
@@ -88,8 +86,6 @@ public class SessionListFragment extends RESTResponderFragment {
 	 */
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
-
-		//
 
 		if (mSessions.isEmpty() && activity != null) {
 
@@ -116,10 +112,10 @@ public class SessionListFragment extends RESTResponderFragment {
 			// Here we check to see if our activity is null or not.
 			// We only want to update our views if our activity exists.
 			// Load our list adapter with our session.
-
-			mAdapter = new SessionAdapter(this.getActivity(), mSessions);
+			mListener = new SpeedScrollListener();
+			mLvSessions.setOnScrollListener(mListener);
+			mAdapter = new SessionAdapter(this.getActivity(), mListener,mSessions);
 			mLvSessions.setAdapter(mAdapter);
-			// mAdapter.notifyDataSetChanged();
 
 		}
 	}
@@ -173,8 +169,10 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onPause() {
 		super.onDestroy();
+		if(mProvider!=null){
 		mProvider.close();
 	    mProvider=null;
+		}
 	}
 
 	@Override
