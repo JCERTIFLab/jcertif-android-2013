@@ -1,6 +1,7 @@
 package com.jcertif.android;
 
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
@@ -12,26 +13,29 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.ActionProvider;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.SessionListFragment;
 import com.jcertif.android.fragments.SpeakeListFragment;
-
 
 /**
  * Partially based on the ASOP source/Menu Drawer
  * 
- * @author bashizip
- *
  */
 public class MainActivity extends SherlockFragmentActivity {
 
@@ -58,8 +62,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, mMenuTitles));
+		mDrawerList.setAdapter(new DrawerListAdapter());
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
@@ -89,7 +92,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		if (savedInstanceState == null) {
-			selectItem(0);
+			selectItem(1);
 		}
 	}
 
@@ -122,17 +125,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		// Handle action buttons
 		switch (item.getItemId()) {
 		case R.id.action_search:
-			// create intent to perform web search for this planet
-			Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-			intent.putExtra(SearchManager.QUERY, getSupportActionBar()
-					.getTitle());
-			// catch event that there's no activity to handle intent
-			if (intent.resolveActivity(getPackageManager()) != null) {
-				startActivity(intent);
-			} else {
-				Toast.makeText(this, R.string.app_not_available,
-						Toast.LENGTH_LONG).show();
-			}
+			
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -153,13 +146,17 @@ public class MainActivity extends SherlockFragmentActivity {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
 		Bundle args = new Bundle();
-		
+		boolean login = false;
 
 		switch (position) {
 		case 0:
-			fragment = new SessionListFragment();
+			fragment = new LoginFragment();
+			login=true;
 			break;
 		case 1:
+			fragment = new SessionListFragment();
+			break;
+		case 2:
 			fragment = new SpeakeListFragment();
 			break;
 		default:
@@ -175,7 +172,11 @@ public class MainActivity extends SherlockFragmentActivity {
 
 		// update selected item and title, then close the drawer
 		mDrawerList.setItemChecked(position, true);
-		setTitle(mMenuTitles[position]);
+		if(!login){
+		//	setTitle(mMenuTitles[position]);
+		}else{
+			setTitle(getString(R.string.login));
+		}
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
@@ -455,6 +456,77 @@ public class MainActivity extends SherlockFragmentActivity {
 		};
 	}
 	
-	
+	class DrawerListAdapter extends BaseAdapter{
+
+        private static final int TYPE_PROFILE= 0;
+		private static final int TYPE_ITEM = 1;        
+        private LayoutInflater mInflater;
+               
+		public int getCount() {
+			return mMenuTitles.length;
+		}
+
+		public DrawerListAdapter() {
+			 mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return mMenuTitles[position];
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+		
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			 ViewHolder holder = null;
+	            int type = getItemViewType(position);
+	            if (convertView == null) {
+	                holder = new ViewHolder();
+	                switch (type) {
+	                    case TYPE_ITEM:
+	                        convertView = mInflater.inflate(R.layout.item_label_list, null);
+	                        holder.textView = (TextView)convertView.findViewById(R.id.tv_row_menu);
+	                        holder.textView.setText(mMenuTitles[position-1]);
+	                        break;
+	                    case TYPE_PROFILE:
+	                        convertView = mInflater.inflate(R.layout.item_profile, null);
+	                        holder.textView = (TextView)convertView.findViewById(R.id.tv_username);
+	                        holder.imgView=(ImageView)findViewById(R.id.img_profile);
+	                        
+	                        holder.textView.setText("Please Login");
+	                        
+	                        //here: set the avatar
+	                        break;
+	                }
+	                convertView.setTag(holder);
+	            } else {
+	                holder = (ViewHolder)convertView.getTag();
+	            }
+	           
+	            return convertView;
+	        }
+		
+		
+
+		@Override
+		public int getItemViewType(int position) {
+			return (position==0)?TYPE_PROFILE:TYPE_ITEM;
+		}
+
+		@Override
+		public int getViewTypeCount() {		
+			return 2;
+		}
+		
+		 public  class ViewHolder {
+		        public TextView textView;
+		        public ImageView imgView;
+		    }
+		
+	}
 
 }

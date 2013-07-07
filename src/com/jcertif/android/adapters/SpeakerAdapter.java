@@ -48,7 +48,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 			holder = (ViewHolder) convertView.getTag();
 		Speaker sp = items.get(position);
 		holder.name.setText(sp.getFirstname() + " " + sp.getLastname());
-	
+
 		Picasso.with(context).load(sp.getPhoto()).into(holder.avatar);
 		return convertView;
 	}
