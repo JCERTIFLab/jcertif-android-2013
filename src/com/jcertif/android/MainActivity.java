@@ -151,7 +151,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		switch (position) {
 		case 0:
 			fragment = new LoginFragment();
-			login=true;
 			break;
 		case 1:
 			fragment = new SessionListFragment();
@@ -170,13 +169,9 @@ public class MainActivity extends SherlockFragmentActivity {
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
 
-		// update selected item and title, then close the drawer
+		// update selected item, then close the drawer
 		mDrawerList.setItemChecked(position, true);
-		if(!login){
-		//	setTitle(mMenuTitles[position]);
-		}else{
-			setTitle(getString(R.string.login));
-		}
+		
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
