@@ -45,7 +45,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	private SessionAdapter mAdapter;
 	private SessionProvider mProvider;
 	private SpeedScrollListener mListener;
-	
+
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
 	}
@@ -61,8 +61,8 @@ public class SessionListFragment extends RESTResponderFragment {
 		getActivity().setTitle(session);
 		return rootView;
 	}
-	
-	public  SessionProvider getProvider() {
+
+	public SessionProvider getProvider() {
 		if (mProvider == null)
 			mProvider = new SessionProvider(this.getSherlockActivity());
 		return mProvider;
@@ -74,8 +74,8 @@ public class SessionListFragment extends RESTResponderFragment {
 
 		// This gets called each time our Activity has finished creating itself.
 		// First check the local cache, if it's empty data will be fetched from
-		// web	
-		mSessions = loadSessionsFromCache();		
+		// web
+		mSessions = loadSessionsFromCache();
 		setSessions();
 	}
 
@@ -114,7 +114,8 @@ public class SessionListFragment extends RESTResponderFragment {
 			// Load our list adapter with our session.
 			mListener = new SpeedScrollListener();
 			mLvSessions.setOnScrollListener(mListener);
-			mAdapter = new SessionAdapter(this.getActivity(), mListener,mSessions);
+			mAdapter = new SessionAdapter(this.getActivity(), mListener,
+					mSessions);
 			mLvSessions.setAdapter(mAdapter);
 
 		}
@@ -122,7 +123,7 @@ public class SessionListFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, String result) {
-		// Here is where we handle our REST response. 
+		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
 		if (code == 200 && result != null) {
 			mSessions = parseSessionJson(result);
@@ -160,23 +161,22 @@ public class SessionListFragment extends RESTResponderFragment {
 		}).start();
 	}
 
-	private List<Session> loadSessionsFromCache() {	
-		List<Session> list =getProvider().getAll(Session.class);		
+	private List<Session> loadSessionsFromCache() {
+		List<Session> list = getProvider().getAll(Session.class);
 		return list;
 	}
-
 
 	@Override
 	public void onPause() {
 		super.onDestroy();
-		if(mProvider!=null){
-		mProvider.close();
-	    mProvider=null;
+		if (mProvider != null) {
+			mProvider.close();
+			mProvider = null;
 		}
 	}
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();	
+		super.onDestroy();
 	}
 }
