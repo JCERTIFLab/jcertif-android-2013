@@ -169,9 +169,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
 
-		// update selected item, then close the drawer
-		mDrawerList.setItemChecked(position, true);
-		
+		mDrawerList.setItemChecked(position, true);	
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
