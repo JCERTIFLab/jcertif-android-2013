@@ -1,5 +1,7 @@
 package com.jcertif.android;
 
+import java.util.List;
+
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -29,15 +31,19 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.SessionListFragment;
 import com.jcertif.android.fragments.SpeakeListFragment;
+import com.jcertif.android.model.User;
+import com.squareup.picasso.Picasso;
 
 /**
  * Partially based on the ASOP source/Menu Drawer
  * 
  */
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends SherlockFragmentActivity implements
+		LoginFragment.OnSignedInListener {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -46,6 +52,8 @@ public class MainActivity extends SherlockFragmentActivity {
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
 	private String[] mMenuTitles;
+	private UserProvider userProvider;
+	public static User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +70,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
 				GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-		mDrawerList.setAdapter(new DrawerListAdapter());
+		mDrawerList.setAdapter(new DrawerListAdapter(getLoggedInUser()));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
@@ -96,6 +104,18 @@ public class MainActivity extends SherlockFragmentActivity {
 		}
 	}
 
+	private User getLoggedInUser() {
+		if (user == null) {
+			userProvider = new UserProvider(this);
+			List<User> list = userProvider.getAll(User.class);
+			if (list != null && !list.isEmpty()) {
+				user = list.get(0);
+			}
+			userProvider.close();
+		}
+		return user;
+	}
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getSupportMenuInflater();
@@ -125,7 +145,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		// Handle action buttons
 		switch (item.getItemId()) {
 		case R.id.action_search:
-			
+
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -146,8 +166,6 @@ public class MainActivity extends SherlockFragmentActivity {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
 		Bundle args = new Bundle();
-		boolean login = false;
-
 		switch (position) {
 		case 0:
 			fragment = new LoginFragment();
@@ -169,7 +187,7 @@ public class MainActivity extends SherlockFragmentActivity {
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
 
-		mDrawerList.setItemChecked(position, true);	
+		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
@@ -448,19 +466,22 @@ public class MainActivity extends SherlockFragmentActivity {
 			}
 		};
 	}
-	
-	class DrawerListAdapter extends BaseAdapter{
 
-        private static final int TYPE_PROFILE= 0;
-		private static final int TYPE_ITEM = 1;        
-        private LayoutInflater mInflater;
-               
+	class DrawerListAdapter extends BaseAdapter {
+
+		private static final int TYPE_PROFILE = 0;
+		private static final int TYPE_ITEM = 1;
+		private LayoutInflater mInflater;
+
+		private User user;
+
 		public int getCount() {
 			return mMenuTitles.length;
 		}
 
-		public DrawerListAdapter() {
-			 mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		public DrawerListAdapter(User user) {
+			mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			this.user = user;
 		}
 
 		@Override
@@ -472,54 +493,74 @@ public class MainActivity extends SherlockFragmentActivity {
 		public long getItemId(int position) {
 			return position;
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			 ViewHolder holder = null;
-	            int type = getItemViewType(position);
-	            if (convertView == null) {
-	                holder = new ViewHolder();
-	                switch (type) {
-	                    case TYPE_ITEM:
-	                        convertView = mInflater.inflate(R.layout.item_label_list, null);
-	                        holder.textView = (TextView)convertView.findViewById(R.id.tv_row_menu);
-	                        holder.textView.setText(mMenuTitles[position-1]);
-	                        break;
-	                    case TYPE_PROFILE:
-	                        convertView = mInflater.inflate(R.layout.item_profile, null);
-	                        holder.textView = (TextView)convertView.findViewById(R.id.tv_username);
-	                        holder.imgView=(ImageView)findViewById(R.id.img_profile);
-	                        
-	                        holder.textView.setText("Please Login");
-	                        
-	                        //here: set the avatar
-	                        break;
-	                }
-	                convertView.setTag(holder);
-	            } else {
-	                holder = (ViewHolder)convertView.getTag();
-	            }
-	           
-	            return convertView;
-	        }
-		
-		
+			ViewHolder holder = null;
+			int type = getItemViewType(position);
+			if (convertView == null) {
+				holder = new ViewHolder();
+				switch (type) {
+				case TYPE_ITEM:
+					convertView = mInflater.inflate(R.layout.item_label_list,
+							null);
+					holder.textView = (TextView) convertView
+							.findViewById(R.id.tv_row_menu);
+					holder.textView.setText(mMenuTitles[position - 1]);
+					break;
+				case TYPE_PROFILE:
+					convertView = mInflater
+							.inflate(R.layout.item_profile, null);
+					holder.textView = (TextView) convertView
+							.findViewById(R.id.tv_username);
+					holder.imgView = (ImageView)convertView. findViewById(R.id.img_profile);
+
+					if (user == null) {
+						holder.textView.setText("Please Login");
+					} else {
+						holder.textView.setText(user.getFirstName());
+						Picasso.with(MainActivity.this).load(user.getImgUrl())
+								.into(holder.imgView);
+					}
+
+					break;
+				}
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+
+			return convertView;
+		}
 
 		@Override
 		public int getItemViewType(int position) {
-			return (position==0)?TYPE_PROFILE:TYPE_ITEM;
+			return (position == 0) ? TYPE_PROFILE : TYPE_ITEM;
 		}
 
 		@Override
-		public int getViewTypeCount() {		
+		public int getViewTypeCount() {
 			return 2;
 		}
-		
-		 public  class ViewHolder {
-		        public TextView textView;
-		        public ImageView imgView;
-		    }
-		
+
+		public class ViewHolder {
+			public TextView textView;
+			public ImageView imgView;
+		}
+
+	}
+
+	@Override
+	public void onSignedIn(User user) {
+		mDrawerList.setAdapter(new DrawerListAdapter(user));
+		setLogedInUser(user);
+	}
+
+	private void setLogedInUser(User user) {
+		this.user = user;
+		userProvider = new UserProvider(this);
+		userProvider.store(user);
+		userProvider.close();
 	}
 
 }

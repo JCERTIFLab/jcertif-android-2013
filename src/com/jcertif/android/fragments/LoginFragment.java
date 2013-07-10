@@ -36,6 +36,7 @@ import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.jcertif.android.R;
+import com.jcertif.android.model.User;
 
 public class LoginFragment extends RESTResponderFragment implements
 		ConnectionCallbacks, OnConnectionFailedListener,
@@ -51,7 +52,16 @@ public class LoginFragment extends RESTResponderFragment implements
 	private SignInButton mPlusOneButton;
 	private EditText et_email;
 	private EditText et_password;
+	private User user;
 
+	
+	 OnSignedInListener mSignedCallback;
+
+	    // Container Activity must implement this interface
+	    public interface OnSignedInListener {
+	        public void onSignedIn(User user);
+	    }
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -73,15 +83,11 @@ public class LoginFragment extends RESTResponderFragment implements
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
 
-		/*mPlusClient = new PlusClient.Builder(this.getActivity()
+		mPlusClient = new PlusClient.Builder(this.getActivity()
 				.getApplicationContext(), this, this)
 				.setVisibleActivities("http://schemas.google.com/AddActivity",
 						"http://schemas.google.com/BuyActivity")
-				.setScopes(Scopes.PLUS_LOGIN,Scopes.PLUS_PROFILE).build();*/
-		
-		mPlusClient = new PlusClient.Builder(this.getActivity()
-				.getApplicationContext(), this, this)
-				.build();
+				.setScopes(Scopes.PLUS_LOGIN,Scopes.PLUS_PROFILE).build();
 
 		mConnectionProgressDialog = new ProgressDialog(this.getActivity());
 		mConnectionProgressDialog.setTitle("Login");
@@ -94,7 +100,16 @@ public class LoginFragment extends RESTResponderFragment implements
 
 	}
 	
-	
+	 @Override
+	    public void onAttach(Activity activity) {
+	        super.onAttach(activity);
+	       try {
+	        	mSignedCallback = (OnSignedInListener) activity;
+	        } catch (ClassCastException e) {
+	            throw new ClassCastException(activity.toString()
+	                    + " must implement OnSignedInListener");
+	        }
+	    }
 	
 
 	@Override
@@ -191,98 +206,11 @@ public class LoginFragment extends RESTResponderFragment implements
 	public void onPersonLoaded(ConnectionResult status, Person person) {
 		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
 			et_email.setText(person.getDisplayName());
+			user= new User(person.getDisplayName(), "", person.getImage().getUrl());
+			mSignedCallback.onSignedIn(user);
 		}
 		else{
-			new ConnectAsyncTask().execute();
+			//TODO handle this
 		}
-	}
-	
-	
-	private class ConnectAsyncTask extends AsyncTask<String, Void, String> {
-
-	    private static final int MY_ACTIVITYS_AUTH_REQUEST_CODE = 1;
-		String sAccessToken = null;
-
-	    @Override
-	    protected void onPostExecute(String info) {
-
-	        Log.d("JSONData = ", "" + info);
-	        //This contains all the data you wanted.
-	    }
-
-	    @Override
-	    protected String doInBackground(String... params) {
-
-	        HttpURLConnection urlConnection = null;
-	        try {
-	            URL url = new URL(
-	                    "https://www.googleapis.com/oauth2/v1/userinfo");
-	            sAccessToken = GoogleAuthUtil
-	                    .getToken(
-	                    		  LoginFragment.this.getActivity(),
-	                            mPlusClient.getAccountName() + "",
-	                            "oauth2:"
-	                                    + Scopes.PLUS_PROFILE
-	                                    + " https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email");
-
-	            //This is probably not the right way to do.
-	            //What I am doing here is, get an AccessToken, invalidate it and get a new
-	            //AccessToken again. Because I couldn't find a way to check whether the 
-	            //AccessToken is expired or not.
-
-	            GoogleAuthUtil.invalidateToken(LoginFragment.this.getActivity(), sAccessToken);
-
-	            sAccessToken = GoogleAuthUtil
-	                    .getToken(
-	                           LoginFragment.this.getActivity(),
-	                            mPlusClient.getAccountName() + "",
-	                            "oauth2:"
-	                                    + Scopes.PLUS_PROFILE
-	                                    + " https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email");
-
-	            urlConnection = (HttpURLConnection) url.openConnection();
-	            urlConnection.setRequestProperty("Authorization", "Bearer "
-	                    + sAccessToken);
-
-	            BufferedReader r = new BufferedReader(new InputStreamReader(
-	                    urlConnection.getInputStream(), "UTF-8"));
-	            StringBuilder total = new StringBuilder();
-	            String line=null;
-	            while ((line = r.readLine()) != null) {
-	                total.append(line);
-	            }
-	            line = total.toString();
-	            if (!TextUtils.isEmpty(line)) {
-	                return line;
-	            } else {
-	                return null;
-	            }
-	        } catch (UserRecoverableAuthException userAuthEx) {
-	            // Start the user recoverable action using the intent returned
-	            // by getIntent()
-
-	            userAuthEx.printStackTrace();
-	            LoginFragment.this.getActivity().startActivityForResult(
-	                    userAuthEx.getIntent(), MY_ACTIVITYS_AUTH_REQUEST_CODE);
-	            return null;
-	        } catch (FileNotFoundException e) {
-	            //You get this exception when the AccessToken is expired.
-	            //I don't know how its a FileNotFoundException
-	            //Thats why instead of relying on this, I did the above to get
-	            //new AccessToken
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return null;
-	        } finally {
-	            if (urlConnection != null) {
-	                urlConnection.disconnect();
-	            }
-	        }
-	       return null;
-	    }
-
-	    @Override
-	    protected void onPreExecute() {
-	    }
 	}
 }
