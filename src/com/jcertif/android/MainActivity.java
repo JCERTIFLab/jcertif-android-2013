@@ -2,7 +2,6 @@ package com.jcertif.android;
 
 import java.util.List;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -20,12 +19,10 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -35,12 +32,13 @@ import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.SessionListFragment;
 import com.jcertif.android.fragments.SpeakeListFragment;
-import com.jcertif.android.model.User;
+import com.jcertif.android.model.Participant;
 import com.squareup.picasso.Picasso;
 
 /**
- * Partially based on the ASOP source/Menu Drawer
+ * Partially based on the ASOP source/Drawer Layout
  * 
+ * @author Patrick Bashizi (bashizip)
  */
 public class MainActivity extends SherlockFragmentActivity implements
 		LoginFragment.OnSignedInListener {
@@ -53,7 +51,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private CharSequence mTitle;
 	private String[] mMenuTitles;
 	private UserProvider userProvider;
-	public static User user;
+	public static Participant user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,10 +102,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 	}
 
-	private User getLoggedInUser() {
+	private Participant getLoggedInUser() {
 		if (user == null) {
 			userProvider = new UserProvider(this);
-			List<User> list = userProvider.getAll(User.class);
+			List<Participant> list = userProvider.getAll(Participant.class);
 			if (list != null && !list.isEmpty()) {
 				user = list.get(0);
 			}
@@ -473,13 +471,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 		private static final int TYPE_ITEM = 1;
 		private LayoutInflater mInflater;
 
-		private User user;
+		private Participant user;
 
 		public int getCount() {
 			return mMenuTitles.length;
 		}
 
-		public DrawerListAdapter(User user) {
+		public DrawerListAdapter(Participant user) {
 			mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			this.user = user;
 		}
@@ -513,13 +511,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 							.inflate(R.layout.item_profile, null);
 					holder.textView = (TextView) convertView
 							.findViewById(R.id.tv_username);
-					holder.imgView = (ImageView)convertView. findViewById(R.id.img_profile);
+					holder.imgView = (ImageView) convertView
+							.findViewById(R.id.img_profile);
 
 					if (user == null) {
 						holder.textView.setText("Please Login");
 					} else {
-						holder.textView.setText(user.getFirstName());
-						Picasso.with(MainActivity.this).load(user.getImgUrl())
+						holder.textView.setText(user.getFirstname());
+						Picasso.with(MainActivity.this).load(user.getPhoto())
 								.into(holder.imgView);
 					}
 
@@ -551,13 +550,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	public void onSignedIn(User user) {
+	public void onSignedIn(Participant user) {
 		mDrawerList.setAdapter(new DrawerListAdapter(user));
 		setLogedInUser(user);
 	}
 
-	private void setLogedInUser(User user) {
-		this.user = user;
+	private void setLogedInUser(Participant user) {
+		MainActivity.user = user;
 		userProvider = new UserProvider(this);
 		userProvider.store(user);
 		userProvider.close();

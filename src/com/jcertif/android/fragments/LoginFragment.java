@@ -1,31 +1,18 @@
 package com.jcertif.android.fragments;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.db4o.config.TVector;
-import com.google.android.gms.auth.GoogleAuthUtil;
-import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -34,9 +21,9 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
-import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.jcertif.android.R;
-import com.jcertif.android.model.User;
+import com.jcertif.android.model.Participant;
+
 
 public class LoginFragment extends RESTResponderFragment implements
 		ConnectionCallbacks, OnConnectionFailedListener,
@@ -52,14 +39,14 @@ public class LoginFragment extends RESTResponderFragment implements
 	private SignInButton mPlusOneButton;
 	private EditText et_email;
 	private EditText et_password;
-	private User user;
+	private Participant user;
 
 	
 	 OnSignedInListener mSignedCallback;
 
 	    // Container Activity must implement this interface
 	    public interface OnSignedInListener {
-	        public void onSignedIn(User user);
+	        public void onSignedIn(Participant user);
 	    }
 	
 	@Override
@@ -206,7 +193,17 @@ public class LoginFragment extends RESTResponderFragment implements
 	public void onPersonLoaded(ConnectionResult status, Person person) {
 		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
 			et_email.setText(person.getDisplayName());
-			user= new User(person.getDisplayName(), "", person.getImage().getUrl());
+			user= new Participant();
+			user.setFirstname(person.getDisplayName());
+			user.setEmail(person.getEmails().get(0).getValue());
+			user.setBiography(person.getAboutMe());
+			user.setCity(person.getCurrentLocation());
+			user.setCountry(person.getCurrentLocation());
+			user.setCompany(person.getOrganizations().get(0).getName());
+			user.setPhone("");
+			user.setPhoto(person.getImage().getUrl());
+			user.setWebsite(person.getUrl());
+			
 			mSignedCallback.onSignedIn(user);
 		}
 		else{
