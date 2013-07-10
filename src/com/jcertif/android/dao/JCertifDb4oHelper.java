@@ -22,6 +22,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * 
+ * @author Patrick Bashizi
+ *
+ * @param <T>
+ */
 public abstract class JCertifDb4oHelper<T> {
 
 	private static ObjectContainer oc = null;

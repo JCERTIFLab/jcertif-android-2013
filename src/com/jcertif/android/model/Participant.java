@@ -1,6 +1,10 @@
 package com.jcertif.android.model;
 
-
+/**
+ * 
+ * @author bashizip
+ *
+ */
 
 
 public class Participant extends Member {	

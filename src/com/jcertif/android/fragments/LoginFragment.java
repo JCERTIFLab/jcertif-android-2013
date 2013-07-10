@@ -1,5 +1,7 @@
 package com.jcertif.android.fragments;
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,6 +23,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.Person.Emails;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Participant;
 
@@ -195,8 +198,9 @@ public class LoginFragment extends RESTResponderFragment implements
 			et_email.setText(person.getDisplayName());
 			user= new Participant();
 			user.setFirstname(person.getDisplayName());
-			user.setEmail(person.getEmails().get(0).getValue());
-			user.setBiography(person.getAboutMe());
+			//user.setLastname(person.getName().getFamilyName());
+			user.setEmail(mPlusClient.getAccountName());
+			user.setBiography(person.getTagline());
 			user.setCity(person.getCurrentLocation());
 			user.setCountry(person.getCurrentLocation());
 			user.setCompany(person.getOrganizations().get(0).getName());

@@ -30,6 +30,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.LoginFragment;
+import com.jcertif.android.fragments.ProfileFragment;
 import com.jcertif.android.fragments.SessionListFragment;
 import com.jcertif.android.fragments.SpeakeListFragment;
 import com.jcertif.android.model.Participant;
@@ -166,7 +167,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 		Bundle args = new Bundle();
 		switch (position) {
 		case 0:
-			fragment = new LoginFragment();
+			if(getLoggedInUser()==null){
+				fragment = new LoginFragment();
+			}else{
+				fragment=new ProfileFragment();
+			}
 			break;
 		case 1:
 			fragment = new SessionListFragment();

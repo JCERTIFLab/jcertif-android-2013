@@ -25,5 +25,6 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="email">Email</string>
+    <string name="profile">Profile</string>
 
 </resources>
