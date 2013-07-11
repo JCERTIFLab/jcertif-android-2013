@@ -476,15 +476,39 @@ public class MainActivity extends SherlockFragmentActivity implements
 				holder = new ViewHolder();
 				switch (type) {
 				case TYPE_ITEM:
-					convertView = mInflater.inflate(R.layout.item_label_list,
+					convertView = mInflater.inflate(R.layout.drawer_list_item,
 							null);
 					holder.textView = (TextView) convertView
-							.findViewById(R.id.tv_row_menu);
-					holder.textView.setText(mMenuTitles[position - 1]);
+							.findViewById(R.id.tv_drawer_item);
+					
+					holder.imgView = (ImageView) convertView
+							.findViewById(R.id.img_drawer);
+				int index=position - 1;
+				switch (index) {
+				case 0:
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_session));
+					break;
+				case 1:
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_speaker));
+					break;
+				case 2:
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_calendar));
+					break;
+				case 3:
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_social));
+					break;
+				case 4:
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
+					break;
+				default:
+					break;
+				}
+					holder.textView.setText(mMenuTitles[index]);
+					
 					break;
 				case TYPE_PROFILE:
 					convertView = mInflater
-							.inflate(R.layout.item_profile, null);
+							.inflate(R.layout .item_profile, null);
 					holder.textView = (TextView) convertView
 							.findViewById(R.id.tv_username);
 					holder.imgView = (ImageView) convertView
@@ -494,7 +518,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 						holder.textView.setText("Please Login");
 					} else {
 						holder.textView.setText(user.getFirstname()+" "+user.getLastname());
-						Picasso.with(MainActivity.this).load(user.getPhoto())
+						Picasso.with(MainActivity.this).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile)
 								.into(holder.imgView);
 					}
 

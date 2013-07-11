@@ -44,7 +44,7 @@ public class ProfileFragment extends RESTResponderFragment {
 		tv_name.setText(user.getFirstname()+" "+user.getLastname());
 		tv_entreprise.setText(user.getCompany());
 		tv_bio.setText(user.getBiography().toString());
-		Picasso.with(getActivity()).load(user.getPhoto()).into(avatar);
+		Picasso.with(getActivity()).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile).into(avatar);
 	}
 
 	@Override
