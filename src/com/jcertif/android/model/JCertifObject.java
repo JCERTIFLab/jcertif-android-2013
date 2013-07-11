@@ -3,7 +3,7 @@ package com.jcertif.android.model;
 
 /**
  *
- * @author
+ * @author Patrick Bashizi
  *  
  */
 public abstract class JCertifObject {

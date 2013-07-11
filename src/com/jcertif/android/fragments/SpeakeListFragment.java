@@ -1,6 +1,5 @@
 package com.jcertif.android.fragments;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,18 +14,15 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.ActionBar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
-import com.jcertif.android.adapters.SessionAdapter;
 import com.jcertif.android.adapters.SpeakerAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
-import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SpeakerProvider;
-import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
@@ -68,6 +64,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mSpeakers = loadSpeakersFromCache();
 		setSessions();
 	}

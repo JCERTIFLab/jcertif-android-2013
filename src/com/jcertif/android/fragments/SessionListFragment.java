@@ -17,6 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jcertif.android.JcertifApplication;
@@ -25,18 +30,22 @@ import com.jcertif.android.R;
 import com.jcertif.android.adapters.SessionAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SessionProvider;
+import com.jcertif.android.model.Category;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.service.RESTService;
 
 /**
  * 
- * @author
+ * @author Patrick Bashizi
  * 
  */
 public class SessionListFragment extends RESTResponderFragment {
 
 	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL
 			+ "/session/list";
+
+	private static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL
+			+ "/ref/category/list";
 
 	private static String TAG = SessionListFragment.class.getName();
 
@@ -45,6 +54,11 @@ public class SessionListFragment extends RESTResponderFragment {
 	private SessionAdapter mAdapter;
 	private SessionProvider mProvider;
 	private SpeedScrollListener mListener;
+
+	String[] actions = new String[] { "All", "Android", "HTML5", "Java",
+			"Entreprise", "Web Design"
+
+	};
 
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
@@ -58,7 +72,32 @@ public class SessionListFragment extends RESTResponderFragment {
 				false);
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		String session = getResources().getStringArray(R.array.menu_array)[0];
+		setHasOptionsMenu(true);
 		getActivity().setTitle(session);
+		getSherlockActivity().getSupportActionBar().setNavigationMode(
+				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
+
+		/** Defining Navigation listener */
+		ActionBar.OnNavigationListener navigationListener = new OnNavigationListener() {
+
+			@Override
+			public boolean onNavigationItemSelected(int itemPosition,
+					long itemId) {
+				updateList(actions[itemPosition]);
+				return false;
+			}
+
+		};
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+				getSherlockActivity().getSupportActionBar().getThemedContext(),
+				R.layout.sherlock_spinner_item, actions);
+		/**
+		 * Setting dropdown items and item navigation listener for the actionbar
+		 */
+		getSherlockActivity().getSupportActionBar().setListNavigationCallbacks(
+				adapter, navigationListener);
+		adapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+
 		return rootView;
 	}
 
@@ -77,6 +116,12 @@ public class SessionListFragment extends RESTResponderFragment {
 		// web
 		mSessions = loadSessionsFromCache();
 		setSessions();
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.menu_session, menu);
 	}
 
 	/**
@@ -112,14 +157,30 @@ public class SessionListFragment extends RESTResponderFragment {
 			// Here we check to see if our activity is null or not.
 			// We only want to update our views if our activity exists.
 			// Load our list adapter with our session.
-			mListener = new SpeedScrollListener();
-			mLvSessions.setOnScrollListener(mListener);
-			mAdapter = new SessionAdapter(this.getActivity(), mListener,
-					mSessions);
-			mLvSessions.setAdapter(mAdapter);
+
+			updateList();
 
 		}
 	}
+
+	void updateList() {
+		
+		mListener = new SpeedScrollListener();
+		mLvSessions.setOnScrollListener(mListener);
+		mAdapter = new SessionAdapter(this.getActivity(), mListener, mSessions);
+		mLvSessions.setAdapter(mAdapter);
+	}
+
+	private void updateList(String cat) {
+		if (cat.equals(getString(R.string.all))) {
+			mSessions = loadSessionsFromCache();
+		} else {
+			mSessions = getProvider().getSessionsByCategory(cat);
+		}
+		updateList();
+
+	}
+
 
 	@Override
 	public void onRESTResult(int code, String result) {

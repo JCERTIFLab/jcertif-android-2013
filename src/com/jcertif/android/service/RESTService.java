@@ -29,6 +29,11 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 
+/**
+ * 
+ * @author Patrick Bashizi
+ *
+ */
 public class RESTService extends IntentService {
 	
     private static final String TAG = RESTService.class.getName();

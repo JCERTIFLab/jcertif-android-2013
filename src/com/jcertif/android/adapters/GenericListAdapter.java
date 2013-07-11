@@ -13,7 +13,7 @@ import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
 
 /**
- * 
+ * @author Patrick Bashizi
  * @param <T>
  */
 

@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
@@ -24,8 +26,11 @@ import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.Person.Emails;
+import com.google.gson.Gson;
+import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Participant;
+import com.jcertif.android.service.RESTService;
 
 
 public class LoginFragment extends RESTResponderFragment implements
@@ -35,6 +40,7 @@ public class LoginFragment extends RESTResponderFragment implements
 
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 	private static final String TAG = "Login Fragment";
+	private static final String REGISTER_URI = JcertifApplication.BASE_URL+"/participant/register";
 
 	PlusClient mPlusClient;
 	private ConnectionResult mConnectionResult;
@@ -72,6 +78,9 @@ public class LoginFragment extends RESTResponderFragment implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		 
+		
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 		mPlusClient = new PlusClient.Builder(this.getActivity()
 				.getApplicationContext(), this, this)
@@ -85,10 +94,7 @@ public class LoginFragment extends RESTResponderFragment implements
 		mConnectionProgressDialog.setMessage("Google Login...");
 	}
 
-	@Override
-	public void onRESTResult(int code, String result) {
-
-	}
+	
 	
 	 @Override
 	    public void onAttach(Activity activity) {
@@ -197,21 +203,68 @@ public class LoginFragment extends RESTResponderFragment implements
 		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
 			et_email.setText(person.getDisplayName());
 			user= new Participant();
-			user.setFirstname(person.getDisplayName());
-			//user.setLastname(person.getName().getFamilyName());
+			String fullName=person.getDisplayName();
+			user.setFirstname(fullName.substring(0, fullName.indexOf(' ')));
+			user.setLastname(fullName.substring(fullName.indexOf(' ')));
 			user.setEmail(mPlusClient.getAccountName());
 			user.setBiography(person.getTagline());
-			user.setCity(person.getCurrentLocation());
-			user.setCountry(person.getCurrentLocation());
+			user.setCity((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
+			user.setCountry((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
 			user.setCompany(person.getOrganizations().get(0).getName());
-			user.setPhone("");
 			user.setPhoto(person.getImage().getUrl());
 			user.setWebsite(person.getUrl());
+			user.setPassword(getFakePassword());
+			user.setPhone("N/A");
+			registerUser();		
 			
 			mSignedCallback.onSignedIn(user);
+		
 		}
 		else{
 			//TODO handle this
+		}
+	}
+
+	private String getFakePassword() {	
+		return "vfdvbdpfjvjvperj5455vre";
+	}
+
+	private void registerUser() {
+		Activity activity = getActivity();
+		Intent intent = new Intent(activity,RESTService.class);
+		intent.setData(Uri.parse(REGISTER_URI));
+
+		// Here we are going to place our REST call parameters.
+		Bundle params = new Bundle();
+		String payload=new Gson().toJson(user, Participant.class);
+		params.putString(RESTService.KEY_JSON_PLAYLOAD,payload);
+		intent.putExtra(RESTService.EXTRA_HTTP_VERB,RESTService.POST);
+		intent.putExtra(RESTService.EXTRA_PARAMS, params);
+		intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,getResultReceiver());
+
+		activity.startService(intent);
+	}
+	
+	@Override
+	public void onRESTResult(int code, String result) {
+		Activity activity = getActivity();
+		// Here is where we handle our REST response.
+		// Check to see if we got an HTTP 200 code and have some data.
+		if (code == 200 && result != null) {
+			Log.d(TAG, result);
+			Toast.makeText(
+					activity,
+					"Successfully Registered !",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			
+			if (activity != null) {
+				Log.d(TAG, result);
+				Toast.makeText(
+						activity,
+						"Failed to Register.Check your internet settings.",
+						Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 }

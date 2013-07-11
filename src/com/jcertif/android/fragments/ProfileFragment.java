@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Participant;
@@ -37,8 +38,10 @@ public class ProfileFragment extends RESTResponderFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		user = MainActivity.user;
-		tv_name.setText(user.getFirstname());
+		tv_name.setText(user.getFirstname()+" "+user.getLastname());
 		tv_entreprise.setText(user.getCompany());
 		tv_bio.setText(user.getBiography().toString());
 		Picasso.with(getActivity()).load(user.getPhoto()).into(avatar);

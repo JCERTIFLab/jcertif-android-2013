@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">JCERTIF</string>
+    <string name="app_name">JCertif</string>
     <string name="action_settings">Settings</string>
 
     <string-array name="menu_array">
@@ -26,5 +26,7 @@
     <string name="password">Password</string>
     <string name="email">Email</string>
     <string name="profile">Profile</string>
+    <string name="action_logout">Logout</string>
+    <string name="all">All</string>
 
 </resources>

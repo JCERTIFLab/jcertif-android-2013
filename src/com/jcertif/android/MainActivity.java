@@ -24,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.actionbarsherlock.ActionBarSherlock;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -92,14 +94,16 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			public void onDrawerOpened(View drawerView) {
 				getSupportActionBar().setTitle(mDrawerTitle);
-				supportInvalidateOptionsMenu(); // creates call to
-												// onPrepareOptionsMenu()
+				// supportInvalidateOptionsMenu(); // creates call to
+				// onPrepareOptionsMenu()
+			
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
 		if (savedInstanceState == null) {
-			selectItem(1);
+			selectItem(0);
+			//mDrawerLayout.openDrawer(null);
 		}
 	}
 
@@ -115,48 +119,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 		return user;
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getSupportMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	/* Called whenever we call invalidateOptionsMenu() */
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		// If the nav drawer is open, hide action items related to the content
-		// view
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_search).setVisible(!drawerOpen);
-		menu.findItem(R.id.action_refresh).setVisible(!drawerOpen);
-		return super.onPrepareOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(final MenuItem item) {
-		// The action bar home/up action should open or close the drawer.
-		// ActionBarDrawerToggle will take care of this.
-		if (mDrawerToggle.onOptionsItemSelected(getMenuItem(item))) {
-			return true;
-		}
-
-		// Handle action buttons
-		switch (item.getItemId()) {
-		case R.id.action_search:
-
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
 	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
+			  getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+			  view.setSelected(true);
 			selectItem(position);
 		}
 	}
@@ -167,10 +138,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 		Bundle args = new Bundle();
 		switch (position) {
 		case 0:
-			if(getLoggedInUser()==null){
+			if (getLoggedInUser() == null) {
 				fragment = new LoginFragment();
-			}else{
-				fragment=new ProfileFragment();
+			} else {
+				fragment = new ProfileFragment();
 			}
 			break;
 		case 1:
@@ -522,7 +493,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					if (user == null) {
 						holder.textView.setText("Please Login");
 					} else {
-						holder.textView.setText(user.getFirstname());
+						holder.textView.setText(user.getFirstname()+" "+user.getLastname());
 						Picasso.with(MainActivity.this).load(user.getPhoto())
 								.into(holder.imgView);
 					}
@@ -558,6 +529,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	public void onSignedIn(Participant user) {
 		mDrawerList.setAdapter(new DrawerListAdapter(user));
 		setLogedInUser(user);
+		selectItem(0);
 	}
 
 	private void setLogedInUser(Participant user) {

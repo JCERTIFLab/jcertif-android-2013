@@ -19,7 +19,7 @@ public class Session extends JCertifObject{
     private Date start;
 	private Date end;
 	private String[] speakers;
-	private int salle;
+	private int room;
 	
 	
 	
@@ -39,7 +39,7 @@ public class Session extends JCertifObject{
         this.start=start;
         this.end = end;
         this.speakers = speakers;
-        this.salle = salle;
+        this.room = salle;
     }
 
 	public Session(int id, String title, String summary, String description,
@@ -56,7 +56,7 @@ public class Session extends JCertifObject{
                 this.start=start;
 		this.end = end;
 		this.speakers = speakers;
-		this.salle = salle;
+		this.room = salle;
 		
 	}
 
@@ -133,11 +133,11 @@ public class Session extends JCertifObject{
 	}
 
 	public int getSalle() {
-		return salle;
+		return room;
 	}
 
 	public void setSalle(int salle) {
-		this.salle = salle;
+		this.room = salle;
 	}
 
     public Date getStart() {

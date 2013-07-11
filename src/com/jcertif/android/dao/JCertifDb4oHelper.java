@@ -45,7 +45,7 @@ public abstract class JCertifDb4oHelper<T> {
 	/**
 	 * Create, open and close the database
 	 */
-	private ObjectContainer db() {
+	protected ObjectContainer db() {
 
 			try {
 

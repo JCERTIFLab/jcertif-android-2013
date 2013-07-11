@@ -13,6 +13,11 @@ import android.widget.TextView;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Session;
 
+/**
+ * 
+ * @author Patrick Bashizi
+ *
+ */
 public class SessionAdapter extends GenericListAdapter<Session> {
 
 	ViewHolder holder;
