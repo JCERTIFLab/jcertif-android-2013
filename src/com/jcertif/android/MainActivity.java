@@ -150,6 +150,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case 2:
 			fragment = new SpeakeListFragment();
 			break;
+		case 3:
+			fragment = new RegistrationFormFragment();
+			break;
 		default:
 			break;
 		}
