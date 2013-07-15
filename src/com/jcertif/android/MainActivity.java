@@ -146,7 +146,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment = new SpeakeListFragment();
 			break;
 		case 3:
-			fragment = new SpeakeListFragment();
+
 			break;
 		case 4:
 		//	fragment = new SocialStreamFragment();
