@@ -122,6 +122,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 			@Override
 			public void run() {
+				if(result!=null)
 				for (Speaker sp : result)
 					mProvider.store(sp);
 			}

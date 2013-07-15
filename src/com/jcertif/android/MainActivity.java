@@ -94,8 +94,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			public void onDrawerOpened(View drawerView) {
 				getSupportActionBar().setTitle(mDrawerTitle);
-				// supportInvalidateOptionsMenu(); // creates call to
-				// onPrepareOptionsMenu()
 			
 			}
 		};
@@ -103,7 +101,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		if (savedInstanceState == null) {
 			selectItem(0);
-			//mDrawerLayout.openDrawer(null);
 		}
 	}
 
@@ -125,8 +122,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			  getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-
 			  view.setSelected(true);
 			selectItem(position);
 		}
@@ -149,6 +144,12 @@ public class MainActivity extends SherlockFragmentActivity implements
 			break;
 		case 2:
 			fragment = new SpeakeListFragment();
+			break;
+		case 3:
+			fragment = new SpeakeListFragment();
+			break;
+		case 4:
+		//	fragment = new SocialStreamFragment();
 			break;
 		default:
 			break;

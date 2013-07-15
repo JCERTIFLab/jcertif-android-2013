@@ -13,7 +13,7 @@
             android:id="@+id/avatar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_action_profile" />
 
         <TextView
             android:id="@+id/tv_speaker_name"
