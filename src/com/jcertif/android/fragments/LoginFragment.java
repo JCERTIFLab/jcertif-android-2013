@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.internal.bt;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
@@ -29,6 +32,7 @@ import com.google.android.gms.plus.model.people.Person.Emails;
 import com.google.gson.Gson;
 import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.R;
+import com.jcertif.android.fragments.RegistrationFormFragment.OnUserDialogReturns;
 import com.jcertif.android.model.Participant;
 import com.jcertif.android.service.RESTService;
 
@@ -36,7 +40,7 @@ import com.jcertif.android.service.RESTService;
 public class LoginFragment extends RESTResponderFragment implements
 		ConnectionCallbacks, OnConnectionFailedListener,
 		OnAccessRevokedListener, OnClickListener,
-		PlusClient.OnPersonLoadedListener {
+		PlusClient.OnPersonLoadedListener,OnUserDialogReturns {
 
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 	private static final String TAG = "Login Fragment";
@@ -49,6 +53,7 @@ public class LoginFragment extends RESTResponderFragment implements
 	private EditText et_email;
 	private EditText et_password;
 	private Participant user;
+	private Button btn_registerButon;
 
 	
 	 OnSignedInListener mSignedCallback;
@@ -71,6 +76,8 @@ public class LoginFragment extends RESTResponderFragment implements
 		mPlusOneButton.setOnClickListener(this);
 		et_email = (EditText) rootView.findViewById(R.id.et_email);
 		et_password = (EditText) rootView.findViewById(R.id.et_password);
+		btn_registerButon=(Button)rootView.findViewById(R.id.btn_register2);
+		btn_registerButon.setOnClickListener(this);
 		return rootView;
 	}
 
@@ -194,10 +201,17 @@ public class LoginFragment extends RESTResponderFragment implements
 					mPlusClient.connect();
 				}
 			}
+		}else if(v==btn_registerButon){
+			showRegisterDialog();
 		}
 
 	}
-
+	 private void showRegisterDialog() {
+	        FragmentManager fm = getSherlockActivity().getSupportFragmentManager();
+	        RegistrationFormFragment registerDialog = new RegistrationFormFragment();
+	        registerDialog.register(this);
+	        registerDialog.show(fm, "fragment_register");
+	    }
 	@Override
 	public void onPersonLoaded(ConnectionResult status, Person person) {
 		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
@@ -215,9 +229,9 @@ public class LoginFragment extends RESTResponderFragment implements
 			user.setWebsite(person.getUrl());
 			user.setPassword(getFakePassword());
 			user.setPhone("N/A");
-			registerUser();		
 			
-			mSignedCallback.onSignedIn(user);
+			registerUser();					
+		
 		
 		}
 		else{
@@ -251,6 +265,9 @@ public class LoginFragment extends RESTResponderFragment implements
 		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
 		if (code == 200 && result != null) {
+			
+			mSignedCallback.onSignedIn(user);
+			
 			Log.d(TAG, result);
 			Toast.makeText(
 					activity,
@@ -266,5 +283,11 @@ public class LoginFragment extends RESTResponderFragment implements
 						Toast.LENGTH_SHORT).show();
 			}
 		}
+	}
+
+	@Override
+	public void onUserEdited(Participant p) {
+		this.user=p;
+		registerUser();
 	}
 }
