@@ -44,5 +44,6 @@
     <string name="photo">Photo</string>
     <string name="biography">Biography</string>
     <string name="cancel">Cancel</string>
+    <string name="or_signin_with">Or sign in with</string>
 
 </resources>

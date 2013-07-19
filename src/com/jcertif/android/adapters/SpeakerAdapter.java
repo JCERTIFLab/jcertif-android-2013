@@ -41,6 +41,8 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 			holder = new ViewHolder();
 			holder.name = (TextView) convertView
 					.findViewById(R.id.tv_speaker_name);
+			holder.company = (TextView) convertView
+					.findViewById(R.id.tv_company);
 			holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
 
 			convertView.setTag(holder);
@@ -48,13 +50,15 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 			holder = (ViewHolder) convertView.getTag();
 		Speaker sp = items.get(position);
 		holder.name.setText(sp.getFirstname() + " " + sp.getLastname());
-
-		Picasso.with(context).load(sp.getPhoto()).into(holder.avatar);
+		holder.company.setText(sp.getCompany());
+		Picasso.with(context).load(sp.getPhoto()).resize(200, 200).centerCrop()
+				.into(holder.avatar);
 		return convertView;
 	}
 
 	public class ViewHolder {
 		public TextView name;
+		public TextView company;
 		public ImageView avatar;
 	}
 

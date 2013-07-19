@@ -127,30 +127,32 @@
                     android:inputType="textMultiLine" />
             </LinearLayout>
 
-             <LinearLayout
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginBottom="10dp"
-                 android:layout_marginTop="10dp"
-                 android:layout_weight="1" >
-
-            <Button
-                android:id="@+id/bt_cancel"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancel" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_weight="1" >
 
-            <Button
-                android:id="@+id/bt_register"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/register" />
-        </LinearLayout>
-        </LinearLayout>
+                <Button
+                    android:id="@+id/bt_cancel"
+                    style="@style/ButtonText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/black_button"
+                    android:text="@string/cancel" />
 
-       
+                <Button
+                    android:id="@+id/bt_register"
+                    style="@style/ButtonText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/yellow_button"
+                    android:text="@string/register" />
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
 
 </LinearLayout>

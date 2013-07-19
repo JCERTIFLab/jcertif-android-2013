@@ -47,24 +47,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/login" />
+            android:text="@string/login" 
+               style="@style/ButtonText"
+                    android:background="@drawable/green_button"/>
 
         <Button
             android:id="@+id/btn_register2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+               style="@style/ButtonText"
+                    android:background="@drawable/yellow_button"
             android:text="@string/register" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_or_oauth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/or_signin_with"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp" >
+
 <com.google.android.gms.common.SignInButton
     android:id="@+id/sign_in_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
 </LinearLayout>

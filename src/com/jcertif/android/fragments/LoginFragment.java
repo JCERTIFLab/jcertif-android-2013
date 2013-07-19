@@ -225,7 +225,7 @@ public class LoginFragment extends RESTResponderFragment implements
 			user.setCity((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
 			user.setCountry((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
 			user.setCompany(person.getOrganizations().get(0).getName());
-			user.setPhoto(person.getImage().getUrl());
+			user.setPhoto(getBestPictureSizeSize(person.getImage().getUrl()));
 			user.setWebsite(person.getUrl());
 			user.setPassword(getFakePassword());
 			user.setPhone("N/A");
@@ -238,7 +238,23 @@ public class LoginFragment extends RESTResponderFragment implements
 			//TODO handle this
 		}
 	}
+	
+/**
+ * G+ return pic size of 50, we need a bigger size, say 200
+ * Url are like : https://lh6.googleusercontent.com/-MgVQQ8F_Buk/AAAAAAAAAAI/AAAAAAAACSQ/8mfy3fB3xcs/photo.jpg?sz=50
+ * @param url
+ * @return
+ */
+	private String getBestPictureSizeSize(String url) {
+		String url_param= url.substring(0,url.indexOf('=')+1);
+		String best = url_param+"200";
+		return best;
+	}
 
+	/**
+	 * The backend need a not null password
+	 * @return
+	 */
 	private String getFakePassword() {	
 		return "vfdvbdpfjvjvperj5455vre";
 	}
@@ -273,7 +289,14 @@ public class LoginFragment extends RESTResponderFragment implements
 					activity,
 					"Successfully Registered !",
 					Toast.LENGTH_SHORT).show();
-		} else {
+		} else if(code == 409 && result != null){
+			mSignedCallback.onSignedIn(user);
+			Toast.makeText(
+					activity,
+					"Welcome back !, "+user.getFirstname(),
+					Toast.LENGTH_SHORT).show();
+		}
+		else
 			
 			if (activity != null) {
 				Log.d(TAG, result);
@@ -282,7 +305,7 @@ public class LoginFragment extends RESTResponderFragment implements
 						"Failed to Register.Check your internet settings.",
 						Toast.LENGTH_SHORT).show();
 			}
-		}
+		
 	}
 
 	@Override
