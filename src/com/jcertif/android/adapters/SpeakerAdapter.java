@@ -43,14 +43,16 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 					.findViewById(R.id.tv_speaker_name);
 			holder.company = (TextView) convertView
 					.findViewById(R.id.tv_company);
+			holder.citycountry = (TextView) convertView
+					.findViewById(R.id.tv_city_country);
 			holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
-
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
 		Speaker sp = items.get(position);
 		holder.name.setText(sp.getFirstname() + " " + sp.getLastname());
 		holder.company.setText(sp.getCompany());
+		holder.citycountry.setText(sp.getCity()+", "+sp.getCountry());
 		Picasso.with(context).load(sp.getPhoto()).resize(200, 200).centerCrop()
 				.into(holder.avatar);
 		return convertView;
@@ -59,6 +61,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 	public class ViewHolder {
 		public TextView name;
 		public TextView company;
+		public TextView citycountry;
 		public ImageView avatar;
 	}
 

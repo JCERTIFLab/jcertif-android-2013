@@ -37,6 +37,13 @@
                 android:text="Small Text"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
+            <TextView
+                android:id="@+id/tv_city_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Small Text"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
         </LinearLayout>
     </LinearLayout>
 

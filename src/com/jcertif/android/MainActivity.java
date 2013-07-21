@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.ProfileFragment;
 import com.jcertif.android.fragments.SessionListFragment;
+import com.jcertif.android.fragments.SessionParentFragment;
 import com.jcertif.android.fragments.SpeakeListFragment;
 import com.jcertif.android.model.Participant;
 import com.squareup.picasso.Picasso;
@@ -91,6 +93,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		if (savedInstanceState == null) {
 			selectItem(0);
+			mDrawerLayout.openDrawer(Gravity.LEFT);
 		}
 	}
 
@@ -130,7 +133,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			}
 			break;
 		case 1:
-			fragment = new SessionListFragment();
+			fragment = new SessionParentFragment();
 			break;
 		case 2:
 			fragment = new SpeakeListFragment();
@@ -296,6 +299,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		mDrawerList.setAdapter(new DrawerListAdapter(user));
 		setLogedInUser(user);
 		selectItem(0);
+		mDrawerLayout.openDrawer(Gravity.LEFT);
 	}
 
 	private void setLogedInUser(Participant user) {

@@ -13,12 +13,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -32,6 +35,7 @@ import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.model.Category;
 import com.jcertif.android.model.Session;
+import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
 /**
@@ -55,50 +59,43 @@ public class SessionListFragment extends RESTResponderFragment {
 	private SessionProvider mProvider;
 	private SpeedScrollListener mListener;
 
-	String[] actions = new String[] { "All", "Android", "HTML5", "Java",
-			"Entreprise", "Web Design"
-
-	};
-
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
+	}
+	
+	public interface OnSessionUpdatedListener{		
+		void onSessionUpdated(Session session);		
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		setRetainInstance(true);
+	//	setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_session, container,
 				false);
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		String session = getResources().getStringArray(R.array.menu_array)[0];
 		setHasOptionsMenu(true);
 		getActivity().setTitle(session);
-		getSherlockActivity().getSupportActionBar().setNavigationMode(
-				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
+		
+		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 
-		/** Defining Navigation listener */
-		ActionBar.OnNavigationListener navigationListener = new OnNavigationListener() {
+		mLvSessions.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public boolean onNavigationItemSelected(int itemPosition,
-					long itemId) {
-				updateList(actions[itemPosition]);
-				return false;
+			public void onItemClick(AdapterView<?> parent, View view, int arg2,
+					long position) {
+				Session s = ((Session) parent.getItemAtPosition((int) position));
+				updateSession(s);
 			}
 
-		};
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-				getSherlockActivity().getSupportActionBar().getThemedContext(),
-				R.layout.sherlock_spinner_item, actions);
-		/**
-		 * Setting dropdown items and item navigation listener for the actionbar
-		 */
-		getSherlockActivity().getSupportActionBar().setListNavigationCallbacks(
-				adapter, navigationListener);
-		adapter.setDropDownViewResource(R.layout.sherlock_spinner_dropdown_item);
+		});
+		
+			return rootView;
+	}
 
-		return rootView;
+	protected void updateSession(Session s) {	
+		((OnSessionUpdatedListener)getParentFragment()).onSessionUpdated(s);		
 	}
 
 	public SessionProvider getProvider() {
@@ -171,7 +168,7 @@ public class SessionListFragment extends RESTResponderFragment {
 		mLvSessions.setAdapter(mAdapter);
 	}
 
-	private void updateList(String cat) {
+	public void updateList(String cat) {
 		if (cat.equals(getString(R.string.all))) {
 			mSessions = loadSessionsFromCache();
 		} else {

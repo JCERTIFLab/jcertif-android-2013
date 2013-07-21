@@ -170,7 +170,9 @@ public class LoginFragment extends RESTResponderFragment implements
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
+	if(mConnectionProgressDialog.isShowing()){
 		mConnectionProgressDialog.dismiss();
+	}
 
 		String accountName = mPlusClient.getAccountName();
 		mPlusClient.loadPerson(this, "me");
@@ -189,12 +191,13 @@ public class LoginFragment extends RESTResponderFragment implements
 		if (v.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 			if (mConnectionResult == null) {
 				mPlusClient.connect();
-				mConnectionProgressDialog.show();
-			} else {
+			//	mConnectionProgressDialog.show();
+			}
+			 else {
 				try {
 					mConnectionResult.startResolutionForResult(
 							this.getActivity(), REQUEST_CODE_RESOLVE_ERR);
-					mConnectionProgressDialog.dismiss();
+				
 				} catch (SendIntentException e) {
 					// Try connecting again.
 					mConnectionResult = null;
@@ -293,7 +296,7 @@ public class LoginFragment extends RESTResponderFragment implements
 			mSignedCallback.onSignedIn(user);
 			Toast.makeText(
 					activity,
-					"Welcome back !, "+user.getFirstname(),
+					"Welcome back, "+user.getFirstname(),
 					Toast.LENGTH_SHORT).show();
 		}
 		else

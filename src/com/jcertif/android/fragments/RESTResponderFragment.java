@@ -43,7 +43,7 @@ public abstract class RESTResponderFragment  extends SherlockFragment {
         // events. This is what we want because this Fragment should
         // be available to receive results from our RESTService no
         // matter what the Activity is doing.
-        setRetainInstance(true);
+     //   setRetainInstance(true);
     }
     
     public ResultReceiver getResultReceiver() {

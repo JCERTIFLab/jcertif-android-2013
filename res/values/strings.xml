@@ -45,5 +45,9 @@
     <string name="biography">Biography</string>
     <string name="cancel">Cancel</string>
     <string name="or_signin_with">Or sign in with</string>
+    <string name="add_to_schedule">Add to schedule</string>
+    <string name="from_">"From "</string>
+    <string name="_to_">" to "</string>
+     <string name="desc">"DESCRIPTION"</string>
 
 </resources>

@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,7 +26,7 @@ import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
-public class SpeakeListFragment extends RESTResponderFragment {
+public class SpeakeDetailFragment extends RESTResponderFragment {
 
 	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
 			+ "/speaker/list";
@@ -41,7 +39,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	private SpeakerProvider mProvider;
 	private SpeedScrollListener mListener;
 
-	public SpeakeListFragment() {
+	public SpeakeDetailFragment() {
 		// Empty constructor required for fragment subclasses
 	}
 
@@ -52,24 +50,8 @@ public class SpeakeListFragment extends RESTResponderFragment {
 				false);
 		String speaker = getResources().getStringArray(R.array.menu_array)[1];
 		mLvSpeakers = (ListView) rootView.findViewById(R.id.lv_speaker);
-
-		mLvSpeakers.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int arg2,
-					long position) {
-				Speaker speaker = ((Speaker) parent
-						.getItemAtPosition((int) position));
-				selectSpeaker(speaker);
-			}
-
-		});
 		getActivity().setTitle(speaker);
 		return rootView;
-	}
-
-	private void selectSpeaker(Speaker speaker) {
-
 	}
 
 	public SpeakerProvider getProvider() {
@@ -82,11 +64,12 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		getSherlockActivity().getSupportActionBar().setNavigationMode(
-				ActionBar.NAVIGATION_MODE_STANDARD);
+		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		mSpeakers = loadSpeakersFromCache();
 		setSessions();
 	}
+
+	
 
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
@@ -139,39 +122,31 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 			@Override
 			public void run() {
-				if (result != null)
-					for (Speaker sp : result)
-						mProvider.store(sp);
+				if(result!=null)
+				for (Speaker sp : result)
+					mProvider.store(sp);
 			}
 		}).start();
 	}
-
-	private List<Speaker> loadSpeakersFromCache() {
-		List<Speaker> list = getProvider().getAll(Speaker.class);
+	private List<Speaker> loadSpeakersFromCache() {	
+		List<Speaker> list =getProvider().getAll(Speaker.class);		
 		return list;
 	}
 
+
 	@Override
 	public void onPause() {
-		super.onPause();
-
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
-		
+		super.onDestroy();
+		if(mProvider!=null){
+		mProvider.close();
+	    mProvider=null;
+		}
 	}
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
-		if (mProvider != null) {
-			mProvider.close();
-			mProvider = null;
-		}
+		super.onDestroy();	
 	}
-
 	private List<Speaker> parseSessionJson(String result) {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
 				.create();
