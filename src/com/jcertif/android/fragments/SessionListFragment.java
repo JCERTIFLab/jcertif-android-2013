@@ -79,7 +79,6 @@ public class SessionListFragment extends RESTResponderFragment {
 		getActivity().setTitle(session);
 		
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
-
 		mLvSessions.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

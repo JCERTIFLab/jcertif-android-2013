@@ -18,6 +18,11 @@ import com.google.gson.Gson;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Session;
 
+/**
+ * 
+ * @author Patrick Bashizi
+ *
+ */
 public class SessionParentFragment extends SherlockFragment implements
 		SessionListFragment.OnSessionUpdatedListener {
 
@@ -97,11 +102,21 @@ public class SessionParentFragment extends SherlockFragment implements
 					com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
 			FragmentTransaction ft = getChildFragmentManager()
 					.beginTransaction();
+		
+			
+			ft.setCustomAnimations(android.R.anim.slide_in_left,
+	                android.R.anim.slide_out_right, android.R.anim.slide_in_left,
+	                android.R.anim.slide_out_right);
+			
+		/*	ft.setCustomAnimations(
+                    R.animator.card_flip_right_in, R.animator.card_flip_right_out,
+                    R.animator.card_flip_left_in, R.animator.card_flip_left_out);*/
+			
 			sessionDetailFragment = new SessionDetailFragment();
 			Bundle arg = new Bundle();
 			arg.putString("session", new Gson().toJson(session));
 			sessionDetailFragment.setArguments(arg);
-			ft.replace(R.id.list_container, sessionDetailFragment);
+			ft.replace(R.id.list_container, sessionDetailFragment).addToBackStack(null);
 			ft.commit();
 		}
 	}

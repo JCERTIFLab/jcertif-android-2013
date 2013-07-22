@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.google.gson.Gson;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Session;
@@ -28,7 +30,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		View rootView = inflater.inflate(R.layout.fragment_detail_session,
 				container, false);
 		getActivity().setTitle(R.string.app_name);
-
+		setHasOptionsMenu(true);
 		tv_title = (TextView) rootView
 				.findViewById(R.id.tv_title_session_detail);
 		tv_desc = (TextView) rootView.findViewById(R.id.tv_description);
@@ -36,13 +38,14 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		tv_date_room = (TextView) rootView.findViewById(R.id.tv_date_room);
 		tv_sep_speaker = (TextView) rootView
 				.findViewById(R.id.tv_separator_speaker);
-		
-		Object sessionjson=null;
-		if(getArguments()!=null && !getArguments().isEmpty()){
-		 sessionjson = getArguments().get("session");
+
+		Object sessionjson = null;
+		if (getArguments() != null && !getArguments().isEmpty()) {
+			sessionjson = getArguments().get("session");
 		}
 		if (sessionjson != null) {
-			session = (Session) new Gson().fromJson(sessionjson.toString(), Session.class);
+			session = (Session) new Gson().fromJson(sessionjson.toString(),
+					Session.class);
 			updateSessionData(session);
 		}
 		return rootView;
@@ -58,13 +61,19 @@ public class SessionDetailFragment extends RESTResponderFragment {
 	public void updateSessionData(Session session) {
 		tv_title.setText(session.getTitle());
 		tv_desc.setText(session.getDescription());
-		tv_date_room.setText(getString(R.string.from_ )+ " " + session.getStart()
-				+ getString(R.string._to_) + session.getEnd() + " in room "
-				+ session.getSalle());
+		tv_date_room.setText(getString(R.string.from_) + " "
+				+ session.getStart() + getString(R.string._to_)
+				+ session.getEnd() + " in room " + session.getSalle());
 		tv_sep_speaker.setText(formatSeparator(getResources().getString(
 				R.string.spakers).toUpperCase()));
 		tv_sep_desc.setText(formatSeparator(getResources().getString(
 				R.string.desc)));
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.menu_detail_session, menu);
 	}
 
 	SpannableString formatSeparator(String sep) {

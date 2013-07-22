@@ -26,6 +26,12 @@ import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
+
+/**
+ * *
+ * @author Patrick Bashizi
+ *
+ */
 public class SpeakeDetailFragment extends RESTResponderFragment {
 
 	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL

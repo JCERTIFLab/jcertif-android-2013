@@ -49,5 +49,5 @@
     <string name="from_">"From "</string>
     <string name="_to_">" to "</string>
      <string name="desc">"DESCRIPTION"</string>
-
+  <string name="action_add_to_schedule">"Add to schedule"</string>
 </resources>

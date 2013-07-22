@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.jcertif.android.dao.UserProvider;
+import com.jcertif.android.fragments.InitialisationFragment;
 import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.ProfileFragment;
 import com.jcertif.android.fragments.SessionListFragment;
@@ -91,10 +92,19 @@ public class MainActivity extends SherlockFragmentActivity implements
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+		if(firstLaunc()){
+			
+			selectItem(8);
+		}
 		if (savedInstanceState == null) {
 			selectItem(0);
 			mDrawerLayout.openDrawer(Gravity.LEFT);
 		}
+	}
+
+	private boolean firstLaunc() {
+	
+		return false;
 	}
 
 	private Participant getLoggedInUser() {
@@ -144,6 +154,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case 4:
 		//	fragment = new SocialStreamFragment();
 			break;
+		case 8:
+				fragment = new InitialisationFragment();
+				break;
 		default:
 			break;
 		}
@@ -257,7 +270,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					holder.textView = (TextView) convertView
 							.findViewById(R.id.tv_username);
 					holder.imgView = (ImageView) convertView
-							.findViewById(R.id.img_profile);
+							.findViewById(R.id.img_profile); 
 
 					if (user == null) {
 						holder.textView.setText("Please Login");
