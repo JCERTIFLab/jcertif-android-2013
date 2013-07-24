@@ -46,7 +46,7 @@ public abstract class JCertifDb4oHelper<T> {
 	 * Create, open and close the database
 	 */
 	protected ObjectContainer db() {
-
+		if (oc == null || oc.ext().isClosed()){
 			try {
 
 				oc = new OpendDBTask().execute().get();
@@ -56,6 +56,7 @@ public abstract class JCertifDb4oHelper<T> {
 			} catch (ExecutionException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());		
 	    }
+		}
 			return oc;
 	}
 	
@@ -68,11 +69,11 @@ public abstract class JCertifDb4oHelper<T> {
 		@Override
 		protected ObjectContainer doInBackground(Void... params) {
 			try {
-				if (oc == null || oc.ext().isClosed()) {
+				
 					oc = Db4oEmbedded.openFile(dbConfig(),
 							db4oDBFullPath(context));
 					
-				}
+				
 			} catch (DatabaseFileLockedException ie) {
 				Log.e(JCertifDb4oHelper.class.getName(), ie.toString());
 				
@@ -132,13 +133,21 @@ public abstract class JCertifDb4oHelper<T> {
 		return result;
 	}
 
+	/**
+	 * Get from T where fieldName=constraint
+	 * @param c
+	 * @param fieldName
+	 * @param constraint
+	 * @return
+	 */
 	public T get(Class<T> c, String fieldName, String constraint) {
 		Query q = db().query();
 		q.constrain(c);
 		q.descend(fieldName).constrain(constraint);
 		ObjectSet<T> result = q.execute();
-		if (result.hasNext())
+		if (result.hasNext()){
 			return result.next();
+		}
 		return null;
 	}
 

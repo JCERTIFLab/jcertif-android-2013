@@ -45,11 +45,8 @@ import com.jcertif.android.service.RESTService;
  */
 public class SessionListFragment extends RESTResponderFragment {
 
-	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL
-			+ "/session/list";
-
-	private static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL
-			+ "/ref/category/list";
+	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL+"/session/list";
+	private static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL+ "/ref/category/list";
 
 	private static String TAG = SessionListFragment.class.getName();
 
@@ -200,7 +197,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	}
 
 	private List<Session> parseSessionJson(String result) {
-		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm:ss")
 				.create();
 		Session[] sessions = gson.fromJson(result, Session[].class);
 
@@ -226,10 +223,10 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onPause() {
 		super.onDestroy();
-		if (mProvider != null) {
+		/*if (mProvider != null) {
 			mProvider.close();
 			mProvider = null;
-		}
+		}*/
 	}
 
 	@Override

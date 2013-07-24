@@ -49,9 +49,7 @@ public class SessionParentFragment extends SherlockFragment implements
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
 
 		sessionListFragment = new SessionListFragment();
-		
-
-		FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+     	FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 
 		ft.add(R.id.list_container, sessionListFragment);
 		if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE) {

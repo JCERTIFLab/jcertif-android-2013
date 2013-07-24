@@ -166,10 +166,10 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (mProvider != null) {
+		/*if (mProvider != null) {
 			mProvider.close();
 			mProvider = null;
-		}
+		}*/
 	}
 
 	private List<Speaker> parseSessionJson(String result) {

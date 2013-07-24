@@ -32,7 +32,7 @@ import com.jcertif.android.service.RESTService;
  * @author Patrick Bashizi
  *
  */
-public class SpeakeDetailFragment extends RESTResponderFragment {
+public class SpeakerDetailFragment extends RESTResponderFragment {
 
 	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
 			+ "/speaker/list";
@@ -45,7 +45,7 @@ public class SpeakeDetailFragment extends RESTResponderFragment {
 	private SpeakerProvider mProvider;
 	private SpeedScrollListener mListener;
 
-	public SpeakeDetailFragment() {
+	public SpeakerDetailFragment() {
 		// Empty constructor required for fragment subclasses
 	}
 

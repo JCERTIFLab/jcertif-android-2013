@@ -23,8 +23,8 @@ import com.jcertif.android.service.RESTService;
  */
 public class InitialisationFragment extends RESTResponderFragment {
 
-	ProgressBar pb_init;
-	TextView tv_init;
+	private ProgressBar pb_init;
+	private TextView tv_init;
 
     private final String SPONSOR_LEVEL_URI=JcertifApplication.BASE_URL+"/ref/sponsorlevel/list";
     private final String SESSION_STATUS_URI=JcertifApplication.BASE_URL+"/ref/sessionstatus/list";
