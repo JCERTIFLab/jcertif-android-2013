@@ -118,7 +118,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		tv_sep_desc.setText(formatSeparator(getResources().getString(
 				R.string.desc)));
 		
-	new SpeakerLoaderTask().execute();
+	//new SpeakerLoaderTask().execute();
 	}
 
 	@Override

@@ -19,16 +19,18 @@
     </style>
 
     <style name="Theme.AppTheme" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+       <item name="windowActionBarOverlay">true</item>
         <item name="actionBarItemBackground">@drawable/selectable_background_example</item>
         <item name="popupMenuStyle">@style/PopupMenu.Example</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.Example</item>
         <item name="actionBarTabStyle">@style/ActionBarTabStyle.Example</item>
         <item name="actionDropDownStyle">@style/DropDownNav.Example</item>
         <item name="actionBarStyle">@style/ActionBar.Solid.Example</item>
+        
         <item name="actionModeBackground">@drawable/cab_background_top_example</item>
         <item name="actionModeSplitBackground">@drawable/cab_background_bottom_example</item>
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Example</item>
-
+           
                 <!-- Light.DarkActionBar specific -->
         <item name="actionBarWidgetTheme">@style/Theme.Example.Widget</item>
 

@@ -25,7 +25,7 @@ import android.widget.Toast;
 /**
  * 
  * @author Patrick Bashizi
- *
+ * 
  * @param <T>
  */
 public abstract class JCertifDb4oHelper<T> {
@@ -46,7 +46,7 @@ public abstract class JCertifDb4oHelper<T> {
 	 * Create, open and close the database
 	 */
 	protected ObjectContainer db() {
-		if (oc == null || oc.ext().isClosed()){
+		if (oc == null || oc.ext().isClosed()) {
 			try {
 
 				oc = new OpendDBTask().execute().get();
@@ -54,12 +54,12 @@ public abstract class JCertifDb4oHelper<T> {
 			} catch (InterruptedException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 			} catch (ExecutionException e) {
-				Log.e(JCertifDb4oHelper.class.getName(), e.toString());		
-	    }
+				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
+			}
 		}
-			return oc;
+		return oc;
 	}
-	
+
 	/**
 	 * 
 	 *
@@ -69,14 +69,12 @@ public abstract class JCertifDb4oHelper<T> {
 		@Override
 		protected ObjectContainer doInBackground(Void... params) {
 			try {
-				
-					oc = Db4oEmbedded.openFile(dbConfig(),
-							db4oDBFullPath(context));
-					
-				
+
+				oc = Db4oEmbedded.openFile(dbConfig(), db4oDBFullPath(context));
+
 			} catch (DatabaseFileLockedException ie) {
 				Log.e(JCertifDb4oHelper.class.getName(), ie.toString());
-				
+
 			} catch (Db4oIOException e) {
 				Log.e(JCertifDb4oHelper.class.getName(), e.toString());
 			} catch (IncompatibleFileFormatException e) {
@@ -135,6 +133,7 @@ public abstract class JCertifDb4oHelper<T> {
 
 	/**
 	 * Get from T where fieldName=constraint
+	 * 
 	 * @param c
 	 * @param fieldName
 	 * @param constraint
@@ -145,7 +144,7 @@ public abstract class JCertifDb4oHelper<T> {
 		q.constrain(c);
 		q.descend(fieldName).constrain(constraint);
 		ObjectSet<T> result = q.execute();
-		if (result.hasNext()){
+		if (result.hasNext()) {
 			return result.next();
 		}
 		return null;
@@ -194,6 +193,13 @@ public abstract class JCertifDb4oHelper<T> {
 		}
 	}
 
+/*	*//**
+	 * Check if database is empty
+	 *//*
+	public boolean isDatabaseEmpy() {
+
+	}
+*/
 	/**
 	 * Closes the database
 	 */
@@ -202,5 +208,4 @@ public abstract class JCertifDb4oHelper<T> {
 		if (oc != null)
 			oc.close();
 	}
-	}
-
+}

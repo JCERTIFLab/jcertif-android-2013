@@ -37,13 +37,7 @@ public abstract class RESTResponderFragment  extends SherlockFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        // This tells our Activity to keep the same instance of this
-        // Fragment when the Activity is re-created during lifecycle
-        // events. This is what we want because this Fragment should
-        // be available to receive results from our RESTService no
-        // matter what the Activity is doing.
-     //   setRetainInstance(true);
+
     }
     
     public ResultReceiver getResultReceiver() {

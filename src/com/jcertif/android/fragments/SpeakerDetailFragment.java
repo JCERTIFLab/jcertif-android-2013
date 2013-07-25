@@ -23,6 +23,7 @@ import com.jcertif.android.R;
 import com.jcertif.android.adapters.SpeakerAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SpeakerProvider;
+import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
@@ -33,9 +34,6 @@ import com.jcertif.android.service.RESTService;
  *
  */
 public class SpeakerDetailFragment extends RESTResponderFragment {
-
-	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
-			+ "/speaker/list";
 
 	private static String TAG = SessionListFragment.class.getName();
 
@@ -71,94 +69,19 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 		super.onActivityCreated(savedInstanceState);
 
 		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-		mSpeakers = loadSpeakersFromCache();
-		setSessions();
+		
 	}
 
-	
 
-	private void setSessions() {
-		MainActivity activity = (MainActivity) getActivity();
 
-		if (mSpeakers.isEmpty() && activity != null) {
-
-			Intent intent = new Intent(activity, RESTService.class);
-			intent.setData(Uri.parse(SPEAKER_LIST_URI));
-
-			Bundle params = new Bundle();
-			params.putString(RESTService.KEY_JSON_PLAYLOAD, null);
-
-			intent.putExtra(RESTService.EXTRA_PARAMS, params);
-			intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,
-					getResultReceiver());
-
-			activity.startService(intent);
-		} else if (activity != null) {
-
-			mListener = new SpeedScrollListener();
-			mLvSpeakers.setOnScrollListener(mListener);
-			mAdapter = new SpeakerAdapter(this.getActivity(), mListener,
-					mSpeakers);
-			mLvSpeakers.setAdapter(mAdapter);
-
-		}
+	public void updateSpeakerData(Speaker s) {
+		
+		
 	}
 
 	@Override
 	public void onRESTResult(int code, String result) {
-		if (code == 200 && result != null) {
-			mSpeakers = parseSessionJson(result);
-			Log.d(TAG, result);
-			setSessions();
-			saveToCache(mSpeakers);
-
-		} else {
-			Activity activity = getActivity();
-			if (activity != null) {
-				Toast.makeText(
-						activity,
-						"Failed to load Session data. Check your internet settings.",
-						Toast.LENGTH_SHORT).show();
-			}
-		}
-	}
-
-	private void saveToCache(final List<Speaker> result) {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				if(result!=null)
-				for (Speaker sp : result)
-					mProvider.store(sp);
-			}
-		}).start();
-	}
-	private List<Speaker> loadSpeakersFromCache() {	
-		List<Speaker> list =getProvider().getAll(Speaker.class);		
-		return list;
-	}
-
-
-	@Override
-	public void onPause() {
-		super.onDestroy();
-		if(mProvider!=null){
-		mProvider.close();
-	    mProvider=null;
-		}
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();	
-	}
-	private List<Speaker> parseSessionJson(String result) {
-		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-				.create();
-		Speaker[] speakers = gson.fromJson(result, Speaker[].class);
-
-		return Arrays.asList(speakers);
-
+		// TODO Auto-generated method stub
+		
 	}
 }
