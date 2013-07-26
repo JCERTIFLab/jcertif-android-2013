@@ -1,8 +1,5 @@
 package com.jcertif.android.fragments;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +19,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.google.gson.Gson;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.jcertif.android.R;
 import com.jcertif.android.compound.SlidingUpPanelLayout;
-import com.jcertif.android.compound.SpeakerBadge;
 import com.jcertif.android.compound.SlidingUpPanelLayout.PanelSlideListener;
+import com.jcertif.android.compound.SpeakerBadge;
 import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
@@ -41,17 +37,17 @@ import com.jcertif.android.model.Speaker;
 public class SessionParentFragment extends SherlockFragment implements
 		SessionListFragment.OnSessionUpdatedListener {
 
-	Fragment sessionDetailFragment;
 	Fragment sessionListFragment;
+	Fragment sessionDetailFragment;
 
+	// TODO
 	String[] actions = new String[] { "All", "Android", "HTML5", "Java",
 			"Entreprise", "Web Design", "Community" };
 
 	private Session session;
-	TextView tv_title, tv_desc, tv_date_room, tv_sep_desc, tv_sep_speaker;
+
 	private List<Speaker> speakers = new ArrayList<Speaker>();
-	private LinearLayout lyt_detail, 
-	lyt_draggable;
+	private LinearLayout lyt_draggable_area;
 
 	SlidingUpPanelLayout slidingLayout;
 	ScrollView scroll;
@@ -72,31 +68,12 @@ public class SessionParentFragment extends SherlockFragment implements
 		getSherlockActivity().getSupportActionBar().setNavigationMode(
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
 
-		tv_title = (TextView) rootView
-				.findViewById(R.id.tv_title_session_detail);
-		tv_desc = (TextView) rootView.findViewById(R.id.tv_description);
-		tv_sep_desc = (TextView) rootView.findViewById(R.id.tv_separator_desc);
-		tv_date_room = (TextView) rootView.findViewById(R.id.tv_date_room);
-		tv_sep_speaker = (TextView) rootView
-				.findViewById(R.id.tv_separator_speaker);
-		lyt_detail = (LinearLayout) rootView
-				.findViewById(R.id.lyt_badges);
-		
-		 scroll = (ScrollView) rootView.findViewById(R.id.sv);
-	
-		
-		lyt_draggable = (LinearLayout) rootView
-				.findViewById(R.id.lyt_draggabledraggable);
-
 		sessionListFragment = new SessionListFragment();
 		FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 		ft.add(R.id.list_container, sessionListFragment);
 
-		if (onTablet()) {
-			sessionDetailFragment = new SessionDetailFragment();
-			ft.add(R.id.detail_container, sessionDetailFragment);
-		}
-
+		sessionDetailFragment = new SessionDetailFragment();
+		ft.add(R.id.detail_container, sessionDetailFragment);
 		ft.commit();
 
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
@@ -118,14 +95,19 @@ public class SessionParentFragment extends SherlockFragment implements
 		 */
 		getSherlockActivity().getSupportActionBar().setListNavigationCallbacks(
 				adapter, navigationListener);
-
-		slidingLayout = (SlidingUpPanelLayout) rootView
-				.findViewById(R.id.sliding_layout);
+		
+		lyt_draggable_area = (LinearLayout) getSherlockActivity().findViewById(R.id.lyt_draggabledraggable);
+			
 		if (!onTablet()) {
+
+		
+			slidingLayout = (SlidingUpPanelLayout) rootView
+					.findViewById(R.id.sliding_layout);
+
 			slidingLayout.setShadowDrawable(getResources().getDrawable(
 					R.drawable.above_shadow));
 
-			slidingLayout.setDragView(lyt_draggable);
+			slidingLayout.setDragView(lyt_draggable_area);
 			slidingLayout.setPanelHeight(0);
 
 			slidingLayout.setPanelSlideListener(new PanelSlideListener() {
@@ -163,6 +145,7 @@ public class SessionParentFragment extends SherlockFragment implements
 				}
 			});
 		}
+
 		return rootView;
 	}
 
@@ -184,87 +167,30 @@ public class SessionParentFragment extends SherlockFragment implements
 	}
 
 	public void updateSessionData(Session session) {
-		tv_title.setText(session.getTitle());
-		tv_desc.setText(session.getDescription());
-		tv_date_room.setText(getString(R.string.from_) + " "
-				+ session.getStart() + getString(R.string._to_)
-				+ session.getEnd() + " in room " + session.getSalle());
-		tv_sep_speaker.setText(formatSeparator(getResources().getString(
-				R.string.spakers).toUpperCase()));
-		tv_sep_desc.setText(formatSeparator(getResources().getString(
-				R.string.desc)));
 
 		if (!onTablet()) {
 			slidingLayout.showPane();
 			slidingLayout.setPanelHeight(100);
 			slidingLayout.expandPane();
-			slidingLayout.setDragView(lyt_draggable);
-		}
-		new SpeakerLoaderTask().execute();
-	}
-
-	void loadSpeakers() {
-		// load speakers
-		SpeakerProvider seProvider = new SpeakerProvider(this.getActivity());
-		String[] speakerEmails = session.getSpeakers();
-		for (int i = 0; i < speakerEmails.length; i++) {
-			Speaker speaker = seProvider.getByEmail(speakerEmails[i]);
-			speakers.add(speaker);
+			slidingLayout.setDragView(lyt_draggable_area);
 		}
 		
 	}
 
-	class SpeakerLoaderTask extends AsyncTask<Void, Void, Void> {
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			loadSpeakers();
-			return null;
-		}
-
-		@Override
-		protected void onPostExecute(Void result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-			if (!speakers.isEmpty())
-				for (Speaker sp : speakers) {
-					lyt_detail.removeAllViews();
-									lyt_detail.addView(new SpeakerBadge(
-							SessionParentFragment.this.getActivity(), sp));
-				}
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-		}
-
-	}
-
-	SpannableString formatSeparator(String sep) {
-		SpannableString content = new SpannableString(sep);
-		content.setSpan(new UnderlineSpan(), 0, sep.length(), 0);
-		return content;
-	}
+	
 
 	@Override
 	public void onSessionUpdated(Session session) {
 		this.session = session;
-	//	this.session.setDescription(session.getDescription()+getFakeText());
-		if (sessionDetailFragment != null) {
+
+	
 			((SessionDetailFragment) sessionDetailFragment)
 					.updateSessionData(session);
-		} else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) < Configuration.SCREENLAYOUT_SIZE_LARGE) {
-			getSherlockActivity()
-					.getSupportActionBar()
-					.setNavigationMode(
-							com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
+		 
+			
 
 			updateSessionData(session);
 		}
-	}
 	
-
 
 }

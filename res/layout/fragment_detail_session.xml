@@ -1,72 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-       android:background="#eee"
+    android:layout_height="match_parent"  
+    android:paddingTop="50dp"
     android:orientation="vertical" >
 
     <LinearLayout
         android:id="@+id/lyt_draggabledraggable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+         android:background="#eee"
         android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/tv_title_session_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center|bottom"
             android:text="Medium Text"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-  <LinearLayout
-            
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
-                android:orientation="vertical" >
-        <ScrollView
-            android:id="@+id/sv"
+          />
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/sv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/lyt_detail_session"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_date_room"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/tv_separator_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/tv_separator_speaker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="" />
 
             <LinearLayout
-                android:id="@+id/lyt_detail_session"
+                android:id="@+id/lyt_spesaker_badge"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:animateLayoutChanges="true"
+                android:layout_margin="10dp"
                 android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/tv_date_room"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp"
-                    android:text="Medium Text" />
-
-                <TextView
-                    android:id="@+id/tv_separator_desc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/tv_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="TextView" />
-
-                <TextView
-                    android:id="@+id/tv_separator_speaker"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="TextView" />
             </LinearLayout>
-        </ScrollView>
-  </LinearLayout>
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

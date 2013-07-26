@@ -49,7 +49,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		tv_sep_speaker = (TextView) rootView
 				.findViewById(R.id.tv_separator_speaker);
 		
-		lyt_detail=(LinearLayout)rootView.findViewById(R.id.lyt_detail_session);
+		lyt_detail=(LinearLayout)rootView.findViewById(R.id.lyt_spesaker_badge);
 
 		Object sessionjson = null;
 		if (getArguments() != null && !getArguments().isEmpty()) {
@@ -63,15 +63,15 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		return rootView;
 	}
 
-	void  loadSpeakers(){
-		//load speakers
-		SpeakerProvider seProvider= new SpeakerProvider(this.getActivity());
-		String[] speakerEmails= session.getSpeakers();
-		for(int i=0;i<=speakerEmails.length;i++){
-		Speaker speaker=seProvider.getByEmail(speakerEmails[i]);
+	void loadSpeakers() {
+		// load speakers
+		SpeakerProvider seProvider = new SpeakerProvider(this.getActivity());
+		String[] speakerEmails = session.getSpeakers();
+		for (int i = 0; i < speakerEmails.length; i++) {
+			Speaker speaker = seProvider.getByEmail(speakerEmails[i]);
 			speakers.add(speaker);
 		}
-		seProvider.close();
+		
 	}
 	
 	
@@ -89,6 +89,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 			super.onPostExecute(result);
 			if(!speakers.isEmpty())
 			for(Speaker sp:speakers){
+				lyt_detail.removeAllViews();
 			lyt_detail.addView(new SpeakerBadge(SessionDetailFragment.this.getActivity(),sp));
 			}
 		}
@@ -108,6 +109,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 	}
 
 	public void updateSessionData(Session session) {
+		this.session=session;
 		tv_title.setText(session.getTitle());
 		tv_desc.setText(session.getDescription());
 		tv_date_room.setText(getString(R.string.from_) + " "
@@ -118,7 +120,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		tv_sep_desc.setText(formatSeparator(getResources().getString(
 				R.string.desc)));
 		
-	//new SpeakerLoaderTask().execute();
+	new SpeakerLoaderTask().execute();
 	}
 
 	@Override
