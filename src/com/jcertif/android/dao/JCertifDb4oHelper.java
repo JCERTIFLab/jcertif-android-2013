@@ -132,7 +132,7 @@ public abstract class JCertifDb4oHelper<T> {
 	}
 
 	/**
-	 * Get from T where fieldName=constraint
+	 * Get from T where fieldName==constraint
 	 * 
 	 * @param c
 	 * @param fieldName

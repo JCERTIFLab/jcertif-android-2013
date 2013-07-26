@@ -16,9 +16,10 @@ public class SpeakerProvider extends JCertifDb4oHelper<Speaker> {
 		super(ctx);
 	}
 
-	@SuppressWarnings("serial")
+/*	@SuppressWarnings("serial")
 	public Speaker getByEmail(final String email) {
-		List<Speaker> list = new ArrayList<Speaker>();
+		List<Speaker> list =null;
+	
 		list = db().query(new Predicate<Speaker>() {
 
 			@Override
@@ -31,6 +32,18 @@ public class SpeakerProvider extends JCertifDb4oHelper<Speaker> {
 		return	list.get(0);
 		} 
 			return null;
+	}*/
+	
+	
+	public Speaker getByEmail(final String email) {
+		List<Speaker> list =getAll(Speaker.class);
+		if (!list.isEmpty())
+		for(Speaker s: list){
+			if(s.getEmail().equals(email)){
+				return s;
+			}
+		}
+			return new Speaker();
 	}
 
 	

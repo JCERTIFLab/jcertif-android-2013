@@ -33,13 +33,13 @@ public class SpeakerParentFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		setRetainInstance(true);
-		View rootView = inflater.inflate(R.layout.fragment_session_parent,
+		View rootView = inflater.inflate(R.layout.fragment_speaker_parent,
 				container, false);
 		getActivity().setTitle(R.string.session);
 		getSherlockActivity().getSupportActionBar().setNavigationMode(
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
 
-		speakerListFragment = new SessionListFragment();
+		speakerListFragment = new SpeakeListFragment();
 		FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 
 		ft.add(R.id.list_container, speakerListFragment);

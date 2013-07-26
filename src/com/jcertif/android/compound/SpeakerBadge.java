@@ -40,7 +40,7 @@ public class SpeakerBadge extends LinearLayout{
 	
 
 	public SpeakerBadge(Context context, Speaker speaker) {
-		super(context);
+		this(context);
 		this.speaker = speaker;
 		initData();
 	}
@@ -51,7 +51,7 @@ public class SpeakerBadge extends LinearLayout{
 		tv_name.setText(speaker.getFirstname()+ " "+speaker.getLastname());
 		tv_company.setText(speaker.getCompany());
 		tv_country.setText(	speaker.getCity()+", "+speaker.getCountry());
-		Picasso.with(getContext()).load(speaker.getPhoto()).into(pic);	
+		Picasso.with(getContext()).load(speaker.getPhoto()).resize(200, 200).into(pic);	
 	}
 
 }
