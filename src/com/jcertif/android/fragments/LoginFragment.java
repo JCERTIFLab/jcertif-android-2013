@@ -191,7 +191,7 @@ public class LoginFragment extends RESTResponderFragment implements
 		if (v.getId() == R.id.sign_in_button && !mPlusClient.isConnected()) {
 			if (mConnectionResult == null) {
 				mPlusClient.connect();
-			//	mConnectionProgressDialog.show();
+				mConnectionProgressDialog.show();
 			}
 			 else {
 				try {
@@ -228,7 +228,7 @@ public class LoginFragment extends RESTResponderFragment implements
 			user.setCity((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
 			user.setCountry((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
 			user.setCompany(person.getOrganizations().get(0).getName());
-			user.setPhoto(getBestPictureSizeSize(person.getImage().getUrl()));
+			user.setPhoto(getBestPictureSize(person.getImage().getUrl()));
 			user.setWebsite(person.getUrl());
 			user.setPassword(getFakePassword());
 			user.setPhone("N/A");
@@ -248,7 +248,7 @@ public class LoginFragment extends RESTResponderFragment implements
  * @param url
  * @return
  */
-	private String getBestPictureSizeSize(String url) {
+	private String getBestPictureSize(String url) {
 		String url_param= url.substring(0,url.indexOf('=')+1);
 		String best = url_param+"200";
 		return best;
