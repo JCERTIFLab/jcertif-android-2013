@@ -74,6 +74,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		
 	}
 	
+
 	
 	class SpeakerLoaderTask extends AsyncTask<Void, Void, Void>{
 

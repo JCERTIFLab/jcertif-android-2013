@@ -78,7 +78,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// between the sliding drawer and the action bar app icon
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_drawer, /* nav drawer image to replace 'Up' caret */
+		R.drawable.ic_navigation_drawer, /* nav drawer image to replace 'Up' caret */
 		R.string.drawer_open, /* "open drawer" description for accessibility */
 		R.string.drawer_close /* "close drawer" description for accessibility */
 		) {
@@ -95,8 +95,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		if(firstLaunc()){
-			
+		if(firstLaunc()){		
 			selectItem(8);
 		}
 		if (savedInstanceState == null) {

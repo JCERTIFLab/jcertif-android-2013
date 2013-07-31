@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <color name="pressed_jcertifstyle">#CCFFBB33</color>
     <color name="pressed_example">#CC0099CC</color>
     <color name="pressed_color">#000</color>
     <color name="default_color">#ffffff</color>

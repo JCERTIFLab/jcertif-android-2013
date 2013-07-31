@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -37,8 +38,8 @@ import com.jcertif.android.model.Speaker;
 public class SessionParentFragment extends SherlockFragment implements
 		SessionListFragment.OnSessionUpdatedListener {
 
-	Fragment sessionListFragment;
-	Fragment sessionDetailFragment;
+	SessionListFragment sessionListFragment;
+	SessionDetailFragment sessionDetailFragment;
 
 	// TODO
 	String[] actions = new String[] { "All", "Android", "HTML5", "Java",
@@ -95,21 +96,18 @@ public class SessionParentFragment extends SherlockFragment implements
 		 */
 		getSherlockActivity().getSupportActionBar().setListNavigationCallbacks(
 				adapter, navigationListener);
-		
-		lyt_draggable_area = (LinearLayout) getSherlockActivity().findViewById(R.id.lyt_draggabledraggable);
-			
+
+		// lyt_draggable_area= sessionDetailFragment.getDraggableView();
+
 		if (!onTablet()) {
 
-		
 			slidingLayout = (SlidingUpPanelLayout) rootView
 					.findViewById(R.id.sliding_layout);
-
 			slidingLayout.setShadowDrawable(getResources().getDrawable(
 					R.drawable.above_shadow));
-
-			slidingLayout.setDragView(lyt_draggable_area);
+			if (lyt_draggable_area != null)
+				slidingLayout.setDragView(lyt_draggable_area);
 			slidingLayout.setPanelHeight(0);
-
 			slidingLayout.setPanelSlideListener(new PanelSlideListener() {
 
 				@Override
@@ -129,19 +127,12 @@ public class SessionParentFragment extends SherlockFragment implements
 
 				@Override
 				public void onPanelExpanded(View panel) {
-					getSherlockActivity()
-							.getSupportActionBar()
-							.setNavigationMode(
-									com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
 
 				}
 
 				@Override
 				public void onPanelCollapsed(View panel) {
-					getSherlockActivity()
-							.getSupportActionBar()
-							.setNavigationMode(
-									com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
+
 				}
 			});
 		}
@@ -169,28 +160,22 @@ public class SessionParentFragment extends SherlockFragment implements
 	public void updateSessionData(Session session) {
 
 		if (!onTablet()) {
+
+			// if(lyt_draggable_area!=null)slidingLayout.setDragView(lyt_draggable_area);
 			slidingLayout.showPane();
 			slidingLayout.setPanelHeight(100);
 			slidingLayout.expandPane();
-			slidingLayout.setDragView(lyt_draggable_area);
-		}
-		
-	}
 
-	
+		}
+
+	}
 
 	@Override
 	public void onSessionUpdated(Session session) {
 		this.session = session;
-
-	
-			((SessionDetailFragment) sessionDetailFragment)
-					.updateSessionData(session);
-		 
-			
-
-			updateSessionData(session);
-		}
-	
+		((SessionDetailFragment) sessionDetailFragment)
+				.updateSessionData(session);
+		updateSessionData(session);
+	}
 
 }

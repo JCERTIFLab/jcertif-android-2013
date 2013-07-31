@@ -17,12 +17,9 @@
      limitations under the License.
 -->
 
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="false"
-        android:drawable="@drawable/spinner_ab_disabled_example" />
-    <item android:state_pressed="true"
-        android:drawable="@drawable/spinner_ab_pressed_example" />
-    <item android:state_pressed="false" android:state_focused="true"
-        android:drawable="@drawable/spinner_ab_focused_example" />
-    <item android:drawable="@drawable/spinner_ab_default_example" />
+<selector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:exitFadeDuration="@android:integer/config_mediumAnimTime" >
+    <item android:state_pressed="false" android:state_focused="true" android:drawable="@drawable/list_focused_jcertifstyle" />
+    <item android:state_pressed="true" android:drawable="@drawable/pressed_background_jcertifstyle" />
+    <item android:drawable="@android:color/transparent" />
 </selector>

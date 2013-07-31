@@ -17,6 +17,11 @@
      limitations under the License.
 -->
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-    <solid android:color="@color/pressed_example" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true"
+        android:drawable="@drawable/btn_cab_done_pressed_jcertifstyle" />
+    <item android:state_focused="true" android:state_enabled="true"
+        android:drawable="@drawable/btn_cab_done_focused_jcertifstyle" />
+    <item android:state_enabled="true"
+        android:drawable="@drawable/btn_cab_done_default_jcertifstyle" />
+</selector>

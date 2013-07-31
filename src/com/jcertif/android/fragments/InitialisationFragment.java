@@ -55,7 +55,6 @@ public class InitialisationFragment extends RESTResponderFragment {
 		intent.setData(Uri.parse(URI));
 		Bundle params = new Bundle();
 		params.putString(RESTService.KEY_JSON_PLAYLOAD, null);
-
 		intent.putExtra(RESTService.EXTRA_PARAMS, params);
 		intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,
 				getResultReceiver());
