@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.InitialisationFragment;
 import com.jcertif.android.fragments.LoginFragment;
@@ -120,6 +121,20 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		return user;
 	}
+	
+@Override
+	 public boolean onOptionsItemSelected(MenuItem item) {
+	        switch (item.getItemId()) {
+	            case android.R.id.home:
+	                if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+	                    mDrawerLayout.closeDrawer(mDrawerList);
+	                } else {
+	                    mDrawerLayout.openDrawer(mDrawerList);
+	                }
+	                
+	        }
+	        return true;
+	 }
 
 	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements
