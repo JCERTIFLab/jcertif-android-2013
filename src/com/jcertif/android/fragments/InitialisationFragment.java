@@ -31,6 +31,7 @@ public class InitialisationFragment extends RESTResponderFragment {
     private final String CIVILITES__URI=JcertifApplication.BASE_URL+"/ref/title/list";
     private final String CATEGORIES__URI=JcertifApplication.BASE_URL+"/ref/category/list";
    
+   
 	public InitialisationFragment() {
 		super();
 	}
@@ -54,7 +55,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 		Intent intent = new Intent(activity, RESTService.class);
 		intent.setData(Uri.parse(URI));
 		Bundle params = new Bundle();
-		params.putString(RESTService.KEY_JSON_PLAYLOAD, null);
+		params.putString(RESTService.KEY_JSON_PLAYLOAD, null);		
 		intent.putExtra(RESTService.EXTRA_PARAMS, params);
 		intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,
 				getResultReceiver());
@@ -68,7 +69,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 	}
 
 	@Override
-	public void onRESTResult(int code, String result) {
+	public void onRESTResult(int code, Bundle result) {
 
 	}
 

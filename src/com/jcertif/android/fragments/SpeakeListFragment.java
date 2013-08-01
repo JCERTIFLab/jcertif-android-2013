@@ -124,7 +124,8 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	}
 
 	@Override
-	public void onRESTResult(int code, String result) {
+	public void onRESTResult(int code, Bundle resultData) {
+		String result=	resultData.getString(RESTService.REST_RESULT);
 		if (code == 200 && result != null) {
 			mSpeakers = parseSessionJson(result);
 			Log.d(TAG, result);

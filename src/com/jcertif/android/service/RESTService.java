@@ -50,6 +50,8 @@ public class RESTService extends IntentService {
 	public static final String REST_RESULT = "com.jcertif.android.REST_RESULT";
 	public static final String KEY_JSON_PLAYLOAD = "com.jcertif.android.JSON_PLAYLOAD";
 
+	public static final String KEY_URI_SENT = "com.jcertif.android.URI_SENT";
+
 	public RESTService() {
 		super(TAG);
 	}
@@ -155,6 +157,8 @@ public class RESTService extends IntentService {
 					Bundle resultData = new Bundle();
 					resultData.putString(REST_RESULT,
 							EntityUtils.toString(responseEntity));
+					resultData.putString(KEY_URI_SENT,
+							action.toString());
 					receiver.send(statusCode, resultData);
 				} else {
 					receiver.send(statusCode, null);

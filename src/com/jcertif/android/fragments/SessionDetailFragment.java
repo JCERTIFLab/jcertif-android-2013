@@ -25,6 +25,7 @@ import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
+import com.jcertif.android.service.RESTService;
 
 public class SessionDetailFragment extends RESTResponderFragment {
 
@@ -141,8 +142,8 @@ public class SessionDetailFragment extends RESTResponderFragment {
 	}
 
 	@Override
-	public void onRESTResult(int code, String result) {
-
+	public void onRESTResult(int code, Bundle resultData) {
+		String result=	resultData.getString(RESTService.REST_RESULT);
 	}
 
 	@Override

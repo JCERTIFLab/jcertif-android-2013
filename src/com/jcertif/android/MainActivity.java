@@ -276,6 +276,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 				case 4:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
 					break;
+				case 5:
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
+					break;
 				default:
 					break;
 				}

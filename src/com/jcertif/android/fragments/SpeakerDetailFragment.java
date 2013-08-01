@@ -79,7 +79,8 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 	}
 
 	@Override
-	public void onRESTResult(int code, String result) {
+	public void onRESTResult(int code, Bundle resultData) {
+		String result=	resultData.getString(RESTService.REST_RESULT);
 		// TODO Auto-generated method stub
 		
 	}

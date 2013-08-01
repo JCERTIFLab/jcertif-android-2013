@@ -178,9 +178,10 @@ setLoading(true);
 
 
 	@Override
-	public void onRESTResult(int code, String result) {
+	public void onRESTResult(int code, Bundle resultData) {
 		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
+		String result=	resultData.getString(RESTService.REST_RESULT);
 		if (code == 200 && result != null) {
 			
 			mSessions = parseSessionJson(result);

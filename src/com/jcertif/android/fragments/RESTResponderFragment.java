@@ -24,7 +24,7 @@ public abstract class RESTResponderFragment  extends SherlockFragment {
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
                 if (resultData != null && resultData.containsKey(RESTService.REST_RESULT)) {
-                    onRESTResult(resultCode, resultData.getString(RESTService.REST_RESULT));
+                    onRESTResult(resultCode, resultData);
                 }
                 else {
                     onRESTResult(resultCode, null);
@@ -45,7 +45,7 @@ public abstract class RESTResponderFragment  extends SherlockFragment {
     }
 
     // Implementers of this Fragment will handle the result here.
-    abstract public void onRESTResult(int code, String result);
+    abstract public void onRESTResult(int code, Bundle result);
     
     protected void setLoading(boolean state){
     	getSherlockActivity()

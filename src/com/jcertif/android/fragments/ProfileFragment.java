@@ -48,7 +48,7 @@ public class ProfileFragment extends RESTResponderFragment {
 	}
 
 	@Override
-	public void onRESTResult(int code, String result) {
+	public void onRESTResult(int code, Bundle resultData) {
 
 	}
 
