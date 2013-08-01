@@ -46,4 +46,9 @@ public abstract class RESTResponderFragment  extends SherlockFragment {
 
     // Implementers of this Fragment will handle the result here.
     abstract public void onRESTResult(int code, String result);
+    
+    protected void setLoading(boolean state){
+    	getSherlockActivity()
+		.setSupportProgressBarIndeterminateVisibility(state);
+    }
 }

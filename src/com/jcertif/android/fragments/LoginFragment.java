@@ -305,7 +305,7 @@ public class LoginFragment extends RESTResponderFragment implements
 				Log.d(TAG, result);
 				Toast.makeText(
 						activity,
-						"Failed to Register.Check your internet settings.",
+						"Failed to Register.Try again.",
 						Toast.LENGTH_SHORT).show();
 			}
 		

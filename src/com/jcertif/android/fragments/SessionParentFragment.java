@@ -154,6 +154,7 @@ public class SessionParentFragment extends SherlockFragment implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
+		
 
 	}
 

@@ -103,12 +103,13 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
+	
 		// This gets called each time our Activity has finished creating itself.
 		// First check the local cache, if it's empty data will be fetched from
 		// web
 		mSessions = loadSessionsFromCache();
 		setSessions();
+		
 	}
 
 	@Override
@@ -124,7 +125,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	 */
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
-
+setLoading(true);
 		if (mSessions.isEmpty() && activity != null) {
 
 			// This is where we make our REST call to the service. We also pass
@@ -162,6 +163,7 @@ public class SessionListFragment extends RESTResponderFragment {
 		mLvSessions.setOnScrollListener(mListener);
 		mAdapter = new SessionAdapter(this.getActivity(), mListener, mSessions);
 		mLvSessions.setAdapter(mAdapter);
+		setLoading(false);
 	}
 
 	public void updateList(String cat) {
@@ -180,11 +182,12 @@ public class SessionListFragment extends RESTResponderFragment {
 		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
 		if (code == 200 && result != null) {
+			
 			mSessions = parseSessionJson(result);
 			Log.d(TAG, result);
 			setSessions();
 			saveToCache(mSessions);
-
+			setLoading(false);
 		} else {
 			Activity activity = getActivity();
 			if (activity != null) {
@@ -192,8 +195,10 @@ public class SessionListFragment extends RESTResponderFragment {
 						activity,
 						"Failed to load Session data. Check your internet settings.",
 						Toast.LENGTH_SHORT).show();
+				
 			}
 		}
+		
 	}
 
 	private List<Session> parseSessionJson(String result) {

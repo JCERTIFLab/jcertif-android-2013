@@ -45,8 +45,9 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	public SpeakeListFragment() {
 		// Empty constructor required for fragment subclasses
 	}
-	public interface OnSpeakerUpdatedListener{		
-		void onSpeakerUpdated(Speaker s);		
+
+	public interface OnSpeakerUpdatedListener {
+		void onSpeakerUpdated(Speaker s);
 	}
 
 	@Override
@@ -94,7 +95,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
-
+		setLoading(true);
 		if (mSpeakers.isEmpty() && activity != null) {
 
 			Intent intent = new Intent(activity, RESTService.class);
@@ -109,14 +110,17 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 			activity.startService(intent);
 		} else if (activity != null) {
-
-			mListener = new SpeedScrollListener();
-			mLvSpeakers.setOnScrollListener(mListener);
-			mAdapter = new SpeakerAdapter(this.getActivity(), mListener,
-					mSpeakers);
-			mLvSpeakers.setAdapter(mAdapter);
-
+			updateList();
 		}
+	}
+
+	void updateList() {
+
+		mListener = new SpeedScrollListener();
+		mLvSpeakers.setOnScrollListener(mListener);
+		mAdapter = new SpeakerAdapter(this.getActivity(), mListener, mSpeakers);
+		mLvSpeakers.setAdapter(mAdapter);
+      setLoading(false);
 	}
 
 	@Override
@@ -164,16 +168,15 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		/*if (mProvider != null) {
-			mProvider.close();
-			mProvider = null;
-		}*/
+		/*
+		 * if (mProvider != null) { mProvider.close(); mProvider = null; }
+		 */
 	}
 
 	private List<Speaker> parseSessionJson(String result) {
