@@ -22,7 +22,7 @@
     <string name="action_search">Rechercher</string>
     <string name="app_not_available">Désolé, il n\'y pas de navigateur disponible</string>
     <string name="session">session</string>
-    <string name="spakers">speakers</string>
+    <string name="spakers">présentateurs</string>
     <string name="action_refresh">Actualiser</string>
     <string name="login">Identifiant</string>
     <string name="register">S\'inscrire</string>
