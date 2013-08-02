@@ -167,7 +167,7 @@ setLoading(true);
 	}
 
 	public void updateList(String cat) {
-		if (cat.equals(getString(R.string.all))) {
+		if (cat.equals("All")||cat.equals("Tous")){
 			mSessions = loadSessionsFromCache();
 		} else {
 			mSessions = getProvider().getSessionsByCategory(cat);

@@ -22,11 +22,15 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.compound.SlidingUpPanelLayout;
 import com.jcertif.android.compound.SlidingUpPanelLayout.PanelSlideListener;
 import com.jcertif.android.compound.SpeakerBadge;
+import com.jcertif.android.dao.CategorieProvider;
+import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SpeakerProvider;
+import com.jcertif.android.model.Category;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 
@@ -77,6 +81,8 @@ public class SessionParentFragment extends SherlockFragment implements
 		ft.add(R.id.detail_container, sessionDetailFragment);
 		ft.commit();
 
+		actions=new CategorieProvider(this.getSherlockActivity()).getLabels();
+		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				getSherlockActivity().getSupportActionBar().getThemedContext(),
 				R.layout.sherlock_spinner_item, actions);
@@ -139,6 +145,7 @@ public class SessionParentFragment extends SherlockFragment implements
 
 		return rootView;
 	}
+
 
 	private boolean onTablet() {
 		return ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);

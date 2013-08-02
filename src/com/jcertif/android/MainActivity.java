@@ -23,8 +23,10 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.jcertif.android.dao.CategorieProvider;
 import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.InitialisationFragment;
+import com.jcertif.android.fragments.InitialisationFragment.RefentielDataLodedListener;
 import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.ProfileFragment;
 import com.jcertif.android.fragments.SessionListFragment;
@@ -40,7 +42,7 @@ import com.squareup.picasso.Picasso;
  * @author Patrick Bashizi (bashizip)
  */
 public class MainActivity extends SherlockFragmentActivity implements
-		LoginFragment.OnSignedInListener {
+		LoginFragment.OnSignedInListener, RefentielDataLodedListener {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -97,18 +99,22 @@ public class MainActivity extends SherlockFragmentActivity implements
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		if(firstLaunc()){		
+		
+		if (savedInstanceState == null) {
+			init();
+		}
+		if(firstLaunch()){		
 			selectItem(8);
 		}
-		if (savedInstanceState == null) {
-			selectItem(0);
-			mDrawerLayout.openDrawer(Gravity.LEFT);
-		}
+		
 	}
 
-	private boolean firstLaunc() {
-	
-		return false;
+	void init(){
+		selectItem(0);
+		mDrawerLayout.openDrawer(Gravity.LEFT);
+	}
+	private boolean firstLaunch() {
+			return new CategorieProvider(this).getLabels().length==0;
 	}
 
 	private Participant getLoggedInUser() {
@@ -174,6 +180,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			break;
 		case 8:
 				fragment = new InitialisationFragment();
+				((InitialisationFragment)fragment).setListener(this);
 				break;
 		default:
 			break;
@@ -341,6 +348,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 		userProvider = new UserProvider(this);
 		userProvider.store(user);
 		userProvider.close();
+	}
+
+	@Override
+	public void OnRefDataLoaded() {
+		init();
 	}
 
 }
