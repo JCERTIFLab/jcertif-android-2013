@@ -1,5 +1,8 @@
 package com.jcertif.android.fragments;
 
+import java.util.Arrays;
+import java.util.List;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,9 +13,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
+import com.jcertif.android.dao.JCertifDb4oHelper;
+import com.jcertif.android.dao.SponsorProvider;
+import com.jcertif.android.model.JCertifObject;
+import com.jcertif.android.model.Session;
+import com.jcertif.android.model.Sponsor;
 import com.jcertif.android.service.RESTService;
 
 
@@ -65,12 +76,41 @@ public class InitialisationFragment extends RESTResponderFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+		getSherlockActivity().getSupportActionBar().
+		setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	}
 
 	@Override
-	public void onRESTResult(int code, Bundle result) {
+	public void onRESTResult(int code, Bundle resultData) {
+		String result=	resultData.getString(RESTService.REST_RESULT);
+		String resultType= resultData.getString(RESTService.KEY_URI_SENT);
+		
+	
+		if(resultType.equals(SPONSOR_LEVEL_URI)){
+			List<Sponsor> sponsors= parseSponsorJson(result);
+			saveSponsorToCache(sponsors);
+		}
+	}
 
+
+	private List<Sponsor> parseSponsorJson(String result) {
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+				.create();
+		Sponsor[] sessions = gson.fromJson(result, Sponsor[].class);
+
+		return Arrays.asList(sessions);
+	}
+	
+	
+	protected void saveSponsorToCache(final List<Sponsor> sponsors) {
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				for (Sponsor session : sponsors)
+					new SponsorProvider(InitialisationFragment.this.getSherlockActivity()).store(session);
+			}
+		}).start();
 	}
 
 	@Override

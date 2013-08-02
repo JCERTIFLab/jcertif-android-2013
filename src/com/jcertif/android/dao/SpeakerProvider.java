@@ -16,24 +16,6 @@ public class SpeakerProvider extends JCertifDb4oHelper<Speaker> {
 		super(ctx);
 	}
 
-/*	@SuppressWarnings("serial")
-	public Speaker getByEmail(final String email) {
-		List<Speaker> list =null;
-	
-		list = db().query(new Predicate<Speaker>() {
-
-			@Override
-			public boolean match(Speaker test) {
-				return test.getEmail().equals(email);
-			}
-
-		});
-		if (!list.isEmpty()) {
-		return	list.get(0);
-		} 
-			return null;
-	}*/
-	
 	
 	public Speaker getByEmail(final String email) {
 		List<Speaker> list =getAll(Speaker.class);
