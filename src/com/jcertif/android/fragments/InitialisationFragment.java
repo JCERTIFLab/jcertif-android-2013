@@ -19,8 +19,10 @@ import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.dao.CategorieProvider;
+import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.dao.SponsorLevelProvider;
 import com.jcertif.android.model.Category;
+import com.jcertif.android.model.Speaker;
 import com.jcertif.android.model.SponsorLevel;
 import com.jcertif.android.service.RESTService;
 
@@ -42,12 +44,16 @@ public class InitialisationFragment extends RESTResponderFragment {
 			+ "/ref/title/list";
 	private final String CATEGORIES__URI = JcertifApplication.BASE_URL
 			+ "/ref/category/list";
-
+	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
+			+ "/speaker/list";
+	
+	
 	private RefentielDataLodedListener listener;
 	CategorieProvider catProvider;
 	SponsorLevelProvider spProvider;
+	SpeakerProvider spekerProvider;
 	
-	private static int threadCount=2; //must be equal to urls count; i
+	private static int threadCount=3; //must be equal to urls count
 	private static int currentThreadNo=0; //id of the incoming thread from intentService
 	
 
@@ -89,6 +95,8 @@ public class InitialisationFragment extends RESTResponderFragment {
 	spProvider=new SponsorLevelProvider(InitialisationFragment.this
 			.getSherlockActivity());
 	
+	spekerProvider=new SpeakerProvider(InitialisationFragment.this.getSherlockActivity());
+	
 		loadData(CATEGORIES__URI);
 	}
 	
@@ -117,6 +125,11 @@ public class InitialisationFragment extends RESTResponderFragment {
 			List<Category> cat = parseCategoryJson(result);
 			saveCatToCache(cat);
 		}
+		if(resultType.equals(SPEAKER_LIST_URI)){
+			List<Speaker> speskers = parseSpeakerJson(result);
+			saveSpeakerToCache(speskers);
+		}
+		
 	}
 
 	private void saveCatToCache(final List<Category> cat) {
@@ -163,7 +176,14 @@ public class InitialisationFragment extends RESTResponderFragment {
 		return Arrays.asList(sl);
 	}
 	
+	private List<Speaker> parseSpeakerJson(String result) {
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+				.create();
+		Speaker[] speakers = gson.fromJson(result, Speaker[].class);
 
+		return Arrays.asList(speakers);
+
+	}
 	protected void saveSponsorLevelToCache(final List<SponsorLevel> sls) {
 		Thread th = new Thread(new Runnable() {
 
@@ -175,6 +195,33 @@ public class InitialisationFragment extends RESTResponderFragment {
 		});
 		th.start();
 		try {
+			
+			th.join();
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       if(++currentThreadNo==threadCount){
+		listener.OnRefDataLoaded();
+       }else{
+    	   loadData(SPEAKER_LIST_URI);
+       }
+		
+	}
+	
+	private void saveSpeakerToCache(final List<Speaker> result) {
+		Thread th =	new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				if (result != null)
+					for (Speaker sp : result)
+						spekerProvider.store(sp);
+			}
+		});
+		th.start();
+try {
 			
 			th.join();
 			

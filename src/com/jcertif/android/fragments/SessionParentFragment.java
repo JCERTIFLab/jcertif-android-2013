@@ -44,18 +44,13 @@ public class SessionParentFragment extends SherlockFragment implements
 
 	SessionListFragment sessionListFragment;
 	SessionDetailFragment sessionDetailFragment;
-
-	// TODO
-	String[] actions = new String[] { "All", "Android", "HTML5", "Java",
-			"Entreprise", "Web Design", "Community" };
-
+	String[] actions ;
+	
 	private Session session;
-
 	private List<Speaker> speakers = new ArrayList<Speaker>();
 	private LinearLayout lyt_draggable_area;
-
 	SlidingUpPanelLayout slidingLayout;
-	ScrollView scroll;
+	//ScrollView scroll;
 
 	public SessionParentFragment() {
 		super();

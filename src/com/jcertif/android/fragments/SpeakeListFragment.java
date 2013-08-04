@@ -90,10 +90,10 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		getSherlockActivity().getSupportActionBar().setNavigationMode(
 				ActionBar.NAVIGATION_MODE_STANDARD);
 		mSpeakers = loadSpeakersFromCache();
-		setSessions();
+		setSpeakers();
 	}
 
-	private void setSessions() {
+	private void setSpeakers() {
 		MainActivity activity = (MainActivity) getActivity();
 		setLoading(true);
 		if (mSpeakers.isEmpty() && activity != null) {
@@ -129,7 +129,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		if (code == 200 && result != null) {
 			mSpeakers = parseSessionJson(result);
 			Log.d(TAG, result);
-			setSessions();
+			setSpeakers();
 			saveToCache(mSpeakers);
 
 		} else {
