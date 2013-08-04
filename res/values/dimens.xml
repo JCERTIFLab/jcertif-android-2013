@@ -33,12 +33,6 @@
     <dimen name="speaker_image_size">48dp</dimen>
     <dimen name="speaker_image_padding">8dp</dimen>
     <dimen name="vendor_image_size">100dp</dimen>
-    <!-- Google+ -->
-    <dimen name="stream_name_text_size">16sp</dimen>
-    <dimen name="stream_original_author_name_text_size">14sp</dimen>
-    <dimen name="stream_content_text_size">14sp</dimen>
-    <dimen name="stream_feedback_text_size">12sp</dimen>
-    <dimen name="stream_fav_icon_size">14dip</dimen>
     <!-- Widget -->
     <dimen name="widget_margin">8dp</dimen>
 </resources>

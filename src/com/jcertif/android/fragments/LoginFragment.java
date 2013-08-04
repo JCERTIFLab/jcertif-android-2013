@@ -279,10 +279,11 @@ public class LoginFragment extends RESTResponderFragment implements
 	}
 	
 	@Override
-	public void onRESTResult(int code, String result) {
+	public void onRESTResult(int code, Bundle resultData) {
 		Activity activity = getActivity();
 		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
+	String result=	resultData.getString(RESTService.REST_RESULT);
 		if (code == 200 && result != null) {
 			
 			mSignedCallback.onSignedIn(user);
@@ -305,7 +306,7 @@ public class LoginFragment extends RESTResponderFragment implements
 				Log.d(TAG, result);
 				Toast.makeText(
 						activity,
-						"Failed to Register.Check your internet settings.",
+						"Failed to Register.Try again.",
 						Toast.LENGTH_SHORT).show();
 			}
 		
