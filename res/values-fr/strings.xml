@@ -45,11 +45,11 @@
     <string name="biography">Biographie</string>
     <string name="cancel">Annuler</string>
     <string name="or_signin_with">Ou connectez-vous avec</string>
-    <string name="add_to_schedule">Ajouter au planning</string>
+    <string name="add_to_schedule">Ajouter à l\'agenda</string>
     <string name="from_">"De "</string>
     <string name="_to_">" à "</string>
      <string name="desc">"DESCRIPTION"</string>
-  <string name="action_add_to_schedule">"Ajouter au planning"</string>
+  <string name="action_add_to_schedule">"Ajouter à l'agenda"</string>
 
   
 </resources>
