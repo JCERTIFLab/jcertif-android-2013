@@ -3,9 +3,11 @@ package com.jcertif.android.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.text.SpannableString;
@@ -44,18 +46,12 @@ public class SessionParentFragment extends SherlockFragment implements
 
 	SessionListFragment sessionListFragment;
 	SessionDetailFragment sessionDetailFragment;
-
-	// TODO
-	String[] actions = new String[] { "All", "Android", "HTML5", "Java",
-			"Entreprise", "Web Design", "Community" };
+	String[] actions;
 
 	private Session session;
-
 	private List<Speaker> speakers = new ArrayList<Speaker>();
 	private LinearLayout lyt_draggable_area;
-
 	SlidingUpPanelLayout slidingLayout;
-	ScrollView scroll;
 
 	public SessionParentFragment() {
 		super();
@@ -81,8 +77,8 @@ public class SessionParentFragment extends SherlockFragment implements
 		ft.add(R.id.detail_container, sessionDetailFragment);
 		ft.commit();
 
-		actions=new CategorieProvider(this.getSherlockActivity()).getLabels();
-		
+		actions = new CategorieProvider(this.getSherlockActivity()).getLabels();
+
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(
 				getSherlockActivity().getSupportActionBar().getThemedContext(),
 				R.layout.sherlock_spinner_item, actions);
@@ -102,8 +98,6 @@ public class SessionParentFragment extends SherlockFragment implements
 		 */
 		getSherlockActivity().getSupportActionBar().setListNavigationCallbacks(
 				adapter, navigationListener);
-
-		// lyt_draggable_area= sessionDetailFragment.getDraggableView();
 
 		if (!onTablet()) {
 
@@ -133,19 +127,18 @@ public class SessionParentFragment extends SherlockFragment implements
 
 				@Override
 				public void onPanelExpanded(View panel) {
-
+					
 				}
 
 				@Override
 				public void onPanelCollapsed(View panel) {
-
+					
 				}
 			});
 		}
 
 		return rootView;
 	}
-
 
 	private boolean onTablet() {
 		return ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
@@ -161,7 +154,6 @@ public class SessionParentFragment extends SherlockFragment implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		
 
 	}
 

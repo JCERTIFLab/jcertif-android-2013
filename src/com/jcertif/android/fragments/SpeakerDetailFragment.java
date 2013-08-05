@@ -22,11 +22,7 @@ import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
 
-/**
- * *
- * @author Patrick Bashizi
- *
- */
+
 public class SpeakerDetailFragment extends RESTResponderFragment {
 
 	private static String TAG = SessionListFragment.class.getName();
