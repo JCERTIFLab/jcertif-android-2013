@@ -110,6 +110,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		
 	}
+	
+	@Override
+	public void onBackPressed() {
+		if (mDrawerLayout.isDrawerOpen(mDrawerList))
+			super.onBackPressed();
+		else
+			finish();
+	}
 
 	void init(){
 		selectItem(0);
