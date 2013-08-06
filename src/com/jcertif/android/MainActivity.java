@@ -5,11 +5,13 @@ import java.util.List;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,7 +60,12 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+		getWindow().requestFeature(
+						(int) com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
+
 		getWindow().requestFeature((int) com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
+
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();
@@ -111,6 +118,8 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 
 	}
 
+<<<<<<< HEAD
+=======
 	@Override
 	public void onBackPressed() {
 		if (mDrawerLayout.isDrawerOpen(mDrawerList))
@@ -119,6 +128,7 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 			mDrawerLayout.openDrawer(mDrawerList);
 	}
 
+>>>>>>> fbf66fbb9727e876e6e1c7cef9eb5e3c3d7d6a1b
 	void init() {
 		selectItem(0);
 		mDrawerLayout.openDrawer(Gravity.LEFT);
@@ -153,6 +163,8 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 		}
 		return true;
 	}
+<<<<<<< HEAD
+=======
 
 	//
 	// @Override
@@ -162,11 +174,17 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 	// else
 	// mDrawerLayout.openDrawer(mDrawerList);
 	// }
+>>>>>>> fbf66fbb9727e876e6e1c7cef9eb5e3c3d7d6a1b
 
 	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
+<<<<<<< HEAD
+		public void onItemClick(AdapterView<?> parent, View view, int position,
+				long id) {
+=======
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+>>>>>>> fbf66fbb9727e876e6e1c7cef9eb5e3c3d7d6a1b
 			view.setSelected(true);
 			selectItem(position);
 		}
@@ -274,6 +292,40 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 				holder = new ViewHolder();
 				switch (type) {
 				case TYPE_ITEM:
+<<<<<<< HEAD
+					convertView = mInflater.inflate(R.layout.drawer_list_item,
+							null);
+					holder.textView = (TextView) convertView
+							.findViewById(R.id.tv_drawer_item);
+
+					holder.imgView = (ImageView) convertView
+							.findViewById(R.id.img_drawer);
+					int index = position - 1;
+					switch (index) {
+					case 0:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_session));
+						break;
+					case 1:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_speaker));
+						break;
+					case 2:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_calendar));
+						break;
+					case 3:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_social));
+						break;
+					case 4:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_map));
+						break;
+					case 5:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_map));
+=======
 					convertView = mInflater.inflate(R.layout.drawer_list_item, null);
 					holder.textView = (TextView) convertView.findViewById(R.id.tv_drawer_item);
 
@@ -297,6 +349,7 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 						break;
 					case 5:
 						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
+>>>>>>> fbf66fbb9727e876e6e1c7cef9eb5e3c3d7d6a1b
 						break;
 					default:
 						break;
@@ -305,15 +358,30 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 
 					break;
 				case TYPE_PROFILE:
+<<<<<<< HEAD
+					convertView = mInflater
+							.inflate(R.layout.item_profile, null);
+					holder.textView = (TextView) convertView
+							.findViewById(R.id.tv_username);
+					holder.imgView = (ImageView) convertView
+							.findViewById(R.id.img_profile);
+
 					convertView = mInflater.inflate(R.layout.item_profile, null);
 					holder.textView = (TextView) convertView.findViewById(R.id.tv_username);
 					holder.imgView = (ImageView) convertView.findViewById(R.id.img_profile);
 
+
 					if (user == null) {
 						holder.textView.setText("Please Login");
 					} else {
+
+						holder.textView.setText(user.getFirstname() + " "
+								+ user.getLastname());
+						Picasso.with(MainActivity.this).load(user.getPhoto())
+
 						holder.textView.setText(user.getFirstname() + " " + user.getLastname());
 						Picasso.with(MainActivity.this).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile)
+
 								.into(holder.imgView);
 					}
 
@@ -362,6 +430,12 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 	@Override
 	public void OnRefDataLoaded() {
 		init();
+	}
+
+	public  void vibrate() {
+		Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(400);
+
 	}
 
 }
