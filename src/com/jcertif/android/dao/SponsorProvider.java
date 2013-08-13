@@ -8,7 +8,7 @@ public class SponsorProvider extends JCertifDb4oHelper<Sponsor> {
 
 	public SponsorProvider(Context ctx) {
 		super(ctx);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 }

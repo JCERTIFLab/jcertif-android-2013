@@ -9,8 +9,8 @@
         <item>Présentateurs</item>
         <item>Agenda</item>
         <item>Social</item>
-        <item>Plans</item>
-        <item>A propos de</item>
+        <item>Carte</item>
+        <item>A propos</item>
     </string-array>
 
     <string name="menu_settings">Paramètres</string>
@@ -24,7 +24,7 @@
     <string name="session">session</string>
     <string name="spakers">présentateurs</string>
     <string name="action_refresh">Actualiser</string>
-    <string name="login">Identifiant</string>
+    <string name="login">Connexion</string>
     <string name="register">S\'inscrire</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="password">Mot de passe</string>
@@ -49,6 +49,7 @@
     <string name="from_">"De "</string>
     <string name="_to_">" à "</string>
      <string name="desc">"DESCRIPTION"</string>
+     <string name="about">"A propos"</string>
   <string name="action_add_to_schedule">"Ajouter à l'agenda"</string>
 
   

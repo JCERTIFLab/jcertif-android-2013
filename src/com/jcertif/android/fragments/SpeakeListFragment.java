@@ -53,7 +53,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_speaker, container,
+		View rootView = inflater.inflate(R.layout.fragment_list_speaker, container,
 				false);
 		String speaker = getResources().getStringArray(R.array.menu_array)[1];
 		mLvSpeakers = (ListView) rootView.findViewById(R.id.lv_speaker);

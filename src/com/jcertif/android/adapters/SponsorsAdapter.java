@@ -2,7 +2,9 @@ package com.jcertif.android.adapters;
 
 import java.util.List;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +15,21 @@ import android.widget.TextView;
 
 import com.jcertif.android.R;
 import com.jcertif.android.model.Session;
-import com.jcertif.android.model.Speaker;
+import com.jcertif.android.model.Sponsor;
 import com.squareup.picasso.Picasso;
 
-public class SpeakerAdapter extends GenericListAdapter<Speaker> {
+/**
+ * 
+ * @author Patrick Bashizi
+ *
+ */
+public class SponsorsAdapter extends GenericListAdapter<Sponsor> {
 
 	ViewHolder holder;
 	Session session;
 
-	public SpeakerAdapter(Context context, SpeedScrollListener scrollListener,
-			List<Speaker> items) {
+	public SponsorsAdapter(Context context, SpeedScrollListener scrollListener,
+			List<Sponsor> items) {
 		super(context, scrollListener, items);
 	}
 
@@ -36,35 +43,29 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.item_speaker, parent, false);
+					R.layout.item_sposor, parent, false);
 
 			holder = new ViewHolder();
-			holder.name = (TextView) convertView
-					.findViewById(R.id.tv_speaker_name);
-			holder.company = (TextView) convertView
-					.findViewById(R.id.tv_company);
-			holder.citycountry = (TextView) convertView
-					.findViewById(R.id.tv_city_country);
-			holder.avatar = (ImageView) convertView.findViewById(R.id.logo);
+			holder.name = (TextView) convertView.findViewById(R.id.tv_name);
+			holder.logo = (ImageView) convertView
+					.findViewById(R.id.logo);
+
 			convertView.setTag(holder);
 		} else
 			holder = (ViewHolder) convertView.getTag();
-		Speaker sp = items.get(position);
-		holder.name.setText(sp.getFirstname() + " " + sp.getLastname());
-		holder.company.setText(sp.getCompany());
-		holder.citycountry.setText(sp.getCity()+", "+sp.getCountry());
-		Picasso.with(context).load(sp.getPhoto()).resize(200, 200).centerCrop()
-				.into(holder.avatar);
+
+		holder.name.setText(items.get(position).getName());
+		Picasso.with(context).load(items.get(position).getLogo()).resize(100, 100).placeholder(R.drawable.ic_action_profile).into(holder.logo);
+
 		return convertView;
 	}
 
 	public class ViewHolder {
 		public TextView name;
-		public TextView company;
-		public TextView citycountry;
-		public ImageView avatar;
+		public ImageView logo;
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public View getAnimatedView(int position, View convertView, ViewGroup parent) {
 		v = getRowView(position, convertView, parent);
@@ -81,7 +82,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 
 			previousPostition = position;
 
-			if (android.os.Build.VERSION.SDK_INT > 10) {
+		if (android.os.Build.VERSION.SDK_INT > 10) {
 				v.setTranslationX(0.0F);
 				v.setTranslationY(height);
 				v.setRotationX(45.0F);
@@ -96,7 +97,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 				localViewPropertyAnimator.setStartDelay(0).start();
 			}
 			positionsMapper.put(position, true);
-		}
+	}
 		return v;
 	}
 

@@ -27,6 +27,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 import com.jcertif.android.dao.CategorieProvider;
 import com.jcertif.android.dao.UserProvider;
+import com.jcertif.android.fragments.AboutFragment;
 import com.jcertif.android.fragments.InitialisationFragment;
 import com.jcertif.android.fragments.InitialisationFragment.RefentielDataLodedListener;
 import com.jcertif.android.fragments.LoginFragment;
@@ -188,6 +189,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case 4:
 		//	fragment = new SocialStreamFragment();
 			break;
+		case 5:
+				fragment = new AboutFragment();
+				break;
 		case 8:
 				fragment = new InitialisationFragment();
 				((InitialisationFragment)fragment).setListener(this);
@@ -276,7 +280,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 					
 					holder.imgView = (ImageView) convertView
 							.findViewById(R.id.img_drawer);
-				int index=position - 1;
+				int index=position;
 				switch (index) {
 				case 0:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_session));
@@ -293,8 +297,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 				case 4:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
 					break;
+				
 				case 5:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
 					break;
 				default:
 					break;
