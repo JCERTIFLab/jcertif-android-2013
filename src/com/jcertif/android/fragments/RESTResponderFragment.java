@@ -1,9 +1,12 @@
 package com.jcertif.android.fragments;
 
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.jcertif.android.service.RESTService;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -48,7 +51,7 @@ public abstract class RESTResponderFragment  extends SherlockFragment {
     abstract public void onRESTResult(int code, Bundle result);
     
     protected void setLoading(boolean state){
-    	getSherlockActivity()
-		.setSupportProgressBarIndeterminateVisibility(state);
+    	SherlockFragmentActivity act= getSherlockActivity(); 	
+		if(act!=null)act.setSupportProgressBarIndeterminateVisibility(state);
     }
 }

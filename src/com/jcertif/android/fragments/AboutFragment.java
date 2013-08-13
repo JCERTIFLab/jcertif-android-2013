@@ -92,7 +92,10 @@ public class AboutFragment extends RESTResponderFragment {
 			Log.d(TAG, result);
 			setSposors();
 			saveToCache(mSponsors);
+			
+			updateList();
 			setLoading(false);
+			
 		} else {
 			Activity activity = getActivity();
 			if (activity != null) {

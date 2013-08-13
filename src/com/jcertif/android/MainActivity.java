@@ -184,12 +184,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment = new SpeakerParentFragment();
 			break;
 		case 3:
-
+//			fragment = new AgendaFragment();
 			break;
 		case 4:
 		//	fragment = new SocialStreamFragment();
 			break;
 		case 5:
+			//	fragment = new MapFragment();
+				break;
+		case 6:
 				fragment = new AboutFragment();
 				break;
 		case 8:
@@ -247,7 +250,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		private Participant user;
 
 		public int getCount() {
-			return mMenuTitles.length;
+			return mMenuTitles.length+1;
 		}
 
 		public DrawerListAdapter(Participant user) {
@@ -257,6 +260,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		@Override
 		public Object getItem(int position) {
+			if(position==0){
+				return 0;
+			}else
 			return mMenuTitles[position];
 		}
 
@@ -282,29 +288,29 @@ public class MainActivity extends SherlockFragmentActivity implements
 							.findViewById(R.id.img_drawer);
 				int index=position;
 				switch (index) {
-				case 0:
+				case 1:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_session));
 					break;
-				case 1:
+				case 2:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_speaker));
 					break;
-				case 2:
+				case 3:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_calendar));
 					break;
-				case 3:
+				case 4:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_social));
 					break;
-				case 4:
+				case 5:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
 					break;
 				
-				case 5:
+				case 6:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
 					break;
 				default:
 					break;
 				}
-					holder.textView.setText(mMenuTitles[index]);
+					holder.textView.setText(mMenuTitles[index-1]);
 					
 					break;
 				case TYPE_PROFILE:

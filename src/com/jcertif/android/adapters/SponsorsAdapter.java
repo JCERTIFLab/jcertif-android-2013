@@ -55,7 +55,7 @@ public class SponsorsAdapter extends GenericListAdapter<Sponsor> {
 			holder = (ViewHolder) convertView.getTag();
 
 		holder.name.setText(items.get(position).getName());
-		Picasso.with(context).load(items.get(position).getLogo()).resize(100, 100).placeholder(R.drawable.ic_action_profile).into(holder.logo);
+		Picasso.with(context).load(items.get(position).getLogo()).resize(200, 200).into(holder.logo);
 
 		return convertView;
 	}

@@ -3,5 +3,6 @@
     <issue id="NewApi">
         <ignore path="src/com/jcertif/android/adapters/SessionAdapter.java" />
         <ignore path="src/com/jcertif/android/adapters/SpeakerAdapter.java" />
+        <ignore path="src/com/jcertif/android/adapters/SponsorsAdapter.java" />
     </issue>
 </lint>
