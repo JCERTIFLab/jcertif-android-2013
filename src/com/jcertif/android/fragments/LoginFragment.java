@@ -98,7 +98,7 @@ public class LoginFragment extends RESTResponderFragment implements
 		mConnectionProgressDialog = new ProgressDialog(this.getActivity());
 		mConnectionProgressDialog.setTitle("Login");
 		// mConnectionProgressDialog.setCancelable(false);
-		mConnectionProgressDialog.setMessage("Google Login...");
+		mConnectionProgressDialog.setMessage(getSherlockActivity().getString(R.string.google_login_));
 	}
 
 	

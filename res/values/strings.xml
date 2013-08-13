@@ -51,7 +51,9 @@
     <string name="_to_">" to "</string>
      <string name="desc">"DESCRIPTION"</string>
   <string name="action_add_to_schedule">"Add to schedule"</string>
-  <string name="fetching_initial_data">Fetching initial data</string>
+  <string name="fetching_initial_data">Fetching initial data..</string>
   <string name="init">Initialisation, please wait</string>
+  <string name="google_login_">Signing in with Google..</string>
+  <string name="sposors">Sponors</string>
   
 </resources>

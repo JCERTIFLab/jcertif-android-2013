@@ -48,9 +48,9 @@
     <string name="add_to_schedule">Ajouter à l\'agenda</string>
     <string name="from_">"De "</string>
     <string name="_to_">" à "</string>
-     <string name="desc">"DESCRIPTION"</string>
-     <string name="about">"A propos"</string>
-  <string name="action_add_to_schedule">"Ajouter à l'agenda"</string>
+    <string name="desc">"DESCRIPTION"</string>
+    <string name="about">"A propos"</string>
+    <string name="fetching_initial_data">Initialisation..</string>
+    <string name="action_add_to_schedule">"Ajouter à l'agenda"</string>
 
-  
 </resources>
