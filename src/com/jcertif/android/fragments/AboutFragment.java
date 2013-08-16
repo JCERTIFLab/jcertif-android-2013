@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.google.android.gms.internal.m;
@@ -31,10 +33,16 @@ import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SponsorProvider;
 import com.jcertif.android.model.Participant;
 import com.jcertif.android.model.Session;
+import com.jcertif.android.model.Speaker;
 import com.jcertif.android.model.Sponsor;
 import com.jcertif.android.service.RESTService;
 import com.squareup.picasso.Picasso;
 
+/**
+ * 
+ * @author 
+ *
+ */
 public class AboutFragment extends RESTResponderFragment {
 
 	private TextView tv_bout_jcertif;
@@ -74,7 +82,25 @@ public class AboutFragment extends RESTResponderFragment {
 				ActionBar.NAVIGATION_MODE_STANDARD);
 
 		mSponsors = loadSponsorsFromCache();
+		
+		gv_sponsors.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int arg2,
+					long position) {
+				Sponsor sp = ((Sponsor) parent
+						.getItemAtPosition((int) position));
+				browseTo(sp.getWebsite());
+			}
+
+			
+		});
 		setSposors();
+	}
+	private void browseTo(String website) {		
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(website));
+		startActivity(i);
 	}
 
 	private List<Sponsor> loadSponsorsFromCache() {
@@ -89,19 +115,19 @@ public class AboutFragment extends RESTResponderFragment {
 		if (code == 200 && result != null) {
 
 			mSponsors = parseSponsorJson(result);
+			updateList();
 			Log.d(TAG, result);
 			setSposors();
 			saveToCache(mSponsors);
-			
-			updateList();
-			setLoading(false);
+		
+		
 			
 		} else {
 			Activity activity = getActivity();
 			if (activity != null) {
 				Toast.makeText(
 						activity,
-						"Failed to load Sposors data. Check your internet settings.",
+						R.string.failed_to_load_sposors_data_check_your_internet_settings_,
 						Toast.LENGTH_SHORT).show();
 
 			}
@@ -146,7 +172,7 @@ public class AboutFragment extends RESTResponderFragment {
 			activity.startService(intent);
 		} else if (activity != null) {
 			updateList();
-
+			setLoading(false);
 		}
 	}
 	private SpeedScrollListener mListener;
@@ -157,7 +183,7 @@ public class AboutFragment extends RESTResponderFragment {
 		gv_sponsors.setOnScrollListener(mListener);
 		adapter = new SponsorsAdapter(this.getActivity(), mListener, mSponsors);
 		gv_sponsors.setAdapter(adapter);
-		setLoading(false);
+		
 	}
 
 	@Override

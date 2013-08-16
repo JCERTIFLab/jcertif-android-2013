@@ -25,6 +25,7 @@ import com.jcertif.android.R;
 import com.jcertif.android.adapters.SpeakerAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SpeakerProvider;
+import com.jcertif.android.fragments.SessionListFragment.OnSessionUpdatedListener;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
@@ -74,7 +75,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	}
 
 	private void selectSpeaker(Speaker speaker) {
-
+			((OnSpeakerUpdatedListener)getParentFragment()).onSpeakerUpdated(speaker);			
 	}
 
 	public SpeakerProvider getProvider() {

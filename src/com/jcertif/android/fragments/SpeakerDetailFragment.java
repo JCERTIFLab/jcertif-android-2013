@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
+import com.squareup.picasso.Picasso;
 
 
 
@@ -72,26 +74,6 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 	}
 
 	
-	class SpeakerDetailsLoaderTask extends AsyncTask<Void,Void,Void>{
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			//Load speaker
-			String speakerEmail=speaker.getEmail();
-			Speaker speaker=getProvider().getByEmail(speakerEmail);
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			super.onPostExecute(result);
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-		}	
-	}
 	
 	/** Instance of SpeakerProvider */
 	public SpeakerProvider getProvider() {
@@ -115,10 +97,9 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 		tv_company.setText(speaker.getCompany());
 		tv_website.setText(speaker.getWebsite());
 		tv_country.setText(speaker.getCountry());
-		tv_bio.setText(speaker.getBiography());
+		tv_bio.setText(Html.fromHtml(speaker.getBiography()));
+		Picasso.with(getParentFragment().getActivity()).load(s.getPhoto()).into(img_sp_avatar);
 		
-		/** execute the task*/
-		new SpeakerDetailsLoaderTask().execute();
 	}
 
 	@Override

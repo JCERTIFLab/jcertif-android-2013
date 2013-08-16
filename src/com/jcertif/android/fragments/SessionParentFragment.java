@@ -160,8 +160,6 @@ public class SessionParentFragment extends SherlockFragment implements
 	public void updateSessionData(Session session) {
 
 		if (!onTablet()) {
-
-			// if(lyt_draggable_area!=null)slidingLayout.setDragView(lyt_draggable_area);
 			slidingLayout.showPane();
 			slidingLayout.setPanelHeight(100);
 			slidingLayout.expandPane();

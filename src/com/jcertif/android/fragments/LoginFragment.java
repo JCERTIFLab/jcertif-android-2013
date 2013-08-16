@@ -36,7 +36,11 @@ import com.jcertif.android.fragments.RegistrationFormFragment.OnUserDialogReturn
 import com.jcertif.android.model.Participant;
 import com.jcertif.android.service.RESTService;
 
-
+/**
+ * 
+ * @author bashizip
+ *
+ */
 public class LoginFragment extends RESTResponderFragment implements
 		ConnectionCallbacks, OnConnectionFailedListener,
 		OnAccessRevokedListener, OnClickListener,
@@ -179,6 +183,7 @@ public class LoginFragment extends RESTResponderFragment implements
 		Log.d(TAG, "Display Name: " + accountName);
 		Toast.makeText(this.getActivity(), "Conncted:" + accountName,
 				Toast.LENGTH_LONG).show();
+		
 	}
 
 	@Override

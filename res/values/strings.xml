@@ -55,5 +55,6 @@
   <string name="init">Initialisation, please wait</string>
   <string name="google_login_">Signing in with Google..</string>
   <string name="sposors">Sponors</string>
+  <string name="failed_to_load_sposors_data_check_your_internet_settings_">Failed to load Sposors data. Check your internet settings.</string>
   
 </resources>

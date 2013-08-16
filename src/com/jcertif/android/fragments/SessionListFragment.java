@@ -125,7 +125,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	 */
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
-setLoading(true);
+        setLoading(true);
 		if (mSessions.isEmpty() && activity != null) {
 
 			// This is where we make our REST call to the service. We also pass
