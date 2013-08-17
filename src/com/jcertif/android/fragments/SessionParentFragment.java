@@ -68,7 +68,6 @@ public class SessionParentFragment extends SherlockFragment implements
 		getActivity().setTitle(R.string.session);
 		getSherlockActivity().getSupportActionBar().setNavigationMode(
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
-
 		sessionListFragment = new SessionListFragment();
 		FragmentTransaction ft = getChildFragmentManager().beginTransaction();
 		ft.add(R.id.list_container, sessionListFragment);

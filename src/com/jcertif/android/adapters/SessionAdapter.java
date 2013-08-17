@@ -47,8 +47,10 @@ public class SessionAdapter extends GenericListAdapter<Session> {
 
 			convertView.setTag(holder);
 		} else
+			{
 			holder = (ViewHolder) convertView.getTag();
-
+			}
+  
 		holder.title.setText(items.get(position).getTitle());
 		holder.summary.setText(items.get(position).getSummary());
 

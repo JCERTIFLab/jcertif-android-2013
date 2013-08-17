@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -163,7 +164,14 @@ public class SessionListFragment extends RESTResponderFragment {
 		mLvSessions.setOnScrollListener(mListener);
 		mAdapter = new SessionAdapter(this.getActivity(), mListener, mSessions);
 		mLvSessions.setAdapter(mAdapter);
+		/*if(onTablet()){
+				updateSession(mSessions.get(0));
+		}*/
 		setLoading(false);
+	}
+
+	private boolean onTablet() {
+		return ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
 	}
 
 	public void updateList(String cat) {

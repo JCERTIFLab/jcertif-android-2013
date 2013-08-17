@@ -114,6 +114,9 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
+		if(resultData==null){
+			return;
+		}
 		String result = resultData.getString(RESTService.REST_RESULT);
 		String resultType = resultData.getString(RESTService.KEY_URI_SENT);
 

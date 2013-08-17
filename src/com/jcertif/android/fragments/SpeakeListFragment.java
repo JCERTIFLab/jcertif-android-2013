@@ -54,16 +54,17 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.fragment_list_speaker, container,
-				false);
+		View rootView = inflater.inflate(R.layout.fragment_list_speaker,
+				container, false);
 		String speaker = getResources().getStringArray(R.array.menu_array)[1];
 		mLvSpeakers = (ListView) rootView.findViewById(R.id.lv_speaker);
 
 		mLvSpeakers.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int arg2,
+			public void onItemClick(AdapterView<?> parent, View view, int pos,
 					long position) {
+				mAdapter.setSelectedIndex(pos);
 				Speaker speaker = ((Speaker) parent
 						.getItemAtPosition((int) position));
 				selectSpeaker(speaker);
@@ -75,7 +76,8 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	}
 
 	private void selectSpeaker(Speaker speaker) {
-			((OnSpeakerUpdatedListener)getParentFragment()).onSpeakerUpdated(speaker);			
+		((OnSpeakerUpdatedListener) getParentFragment())
+				.onSpeakerUpdated(speaker);
 	}
 
 	public SpeakerProvider getProvider() {
@@ -121,12 +123,12 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		mLvSpeakers.setOnScrollListener(mListener);
 		mAdapter = new SpeakerAdapter(this.getActivity(), mListener, mSpeakers);
 		mLvSpeakers.setAdapter(mAdapter);
-      setLoading(false);
+		setLoading(false);
 	}
 
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
-		String result=	resultData.getString(RESTService.REST_RESULT);
+		String result = resultData.getString(RESTService.REST_RESULT);
 		if (code == 200 && result != null) {
 			mSpeakers = parseSessionJson(result);
 			Log.d(TAG, result);
