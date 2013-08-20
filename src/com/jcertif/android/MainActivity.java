@@ -9,10 +9,12 @@ import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,9 +113,54 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		
 	}
+
 	
 	
+
+		/*public void removeCurrentFragment()
+		{
+		    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+		    Fragment currentFrag =  speakerDetailFragment;
+
+		    String fragName = "NONE";
+
+		    if (currentFrag!=null)
+		        fragName = currentFrag.getClass().getSimpleName();
+
+		    if (currentFrag != null)
+		        transaction.remove(currentFrag);
+
+		    transaction.commit();
+
+		
 	
+	}
+	*/
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+	    if (keyCode == KeyEvent.KEYCODE_BACK)
+	    {
+	        if (getSupportFragmentManager().getBackStackEntryCount() == 0)
+	        {
+	        	
+	           finish();
+	            return false;
+	        }
+	        else
+	        {
+	            getSupportFragmentManager().popBackStack();
+	       
+	            return false;
+	        }
+	    }
+    
+		return super.onKeyDown(keyCode, event);
+	}
+	
+
+
+
 	@Override
 	public void onBackPressed() {
 	
@@ -176,7 +223,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private void selectItem(int position) {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
-		Bundle args = new Bundle();
+		
 		switch (position) {
 		case 0:
 			if (getLoggedInUser() == null) {
@@ -214,10 +261,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		if (fragment == null) {
-			fragment = new SessionListFragment();
+			return;
 		}
+		
 		fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, fragment).commit();
+				.replace(R.id.content_frame, fragment).addToBackStack(position+"").commit();
 
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);

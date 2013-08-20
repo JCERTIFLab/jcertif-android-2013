@@ -52,5 +52,6 @@
     <string name="about">"A propos"</string>
     <string name="fetching_initial_data">Initialisation..</string>
     <string name="action_add_to_schedule">"Ajouter à l'agenda"</string>
+      <string name="share">Partager</string>
 
 </resources>

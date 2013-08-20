@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/menu_add_to_schedule"
+        android:title="@string/add_to_schedule"
+        android:icon="@drawable/ic_action_calendar"
+        />
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/share"
+         android:icon="@drawable/ic_social_share"     
+    />
+  
+</menu>

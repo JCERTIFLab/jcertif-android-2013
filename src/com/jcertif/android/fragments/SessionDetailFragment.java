@@ -64,6 +64,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		return rootView;
 	}
 
+	
 	void loadSpeakers() {
 		// load speakers
 		SpeakerProvider seProvider = new SpeakerProvider(this.getActivity());

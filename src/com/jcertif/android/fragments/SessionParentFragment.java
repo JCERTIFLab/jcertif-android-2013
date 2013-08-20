@@ -66,6 +66,7 @@ public class SessionParentFragment extends SherlockFragment implements
 		View rootView = inflater.inflate(R.layout.fragment_session_parent,
 				container, false);
 		getActivity().setTitle(R.string.session);
+		
 		getSherlockActivity().getSupportActionBar().setNavigationMode(
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
 		sessionListFragment = new SessionListFragment();

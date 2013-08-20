@@ -27,7 +27,7 @@ import com.squareup.picasso.Picasso;
 
 public class SpeakerDetailFragment extends RESTResponderFragment {
 
-	private static String TAG = SessionListFragment.class.getName();
+	private static String TAG = SpeakerDetailFragment.class.getName();
 	
 	private Speaker speaker;
 	TextView tv_fullname, tv_title, tv_company, tv_website, tv_country, tv_bio;

@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +24,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -56,7 +58,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	private SessionAdapter mAdapter;
 	private SessionProvider mProvider;
 	private SpeedScrollListener mListener;
-
+	private ActionMode mActionMode;
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
 	}
@@ -89,9 +91,71 @@ public class SessionListFragment extends RESTResponderFragment {
 
 		});
 		
-			return rootView;
-	}
+		mLvSessions.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int pos, long arg3) {
+				   if (mActionMode != null) {
+			            return false;
+			        }
+
+ 		        mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
+			      mAdapter.setSelectedIndex(pos);
+			        return true;
+			    }
+			
+			
+		});
+		return rootView;
+	}
+	
+	
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+		
+	    @Override
+	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+	     
+	        MenuInflater inflater = mode.getMenuInflater();
+	        inflater.inflate(R.menu.context_menu_session, menu);
+	        return true;
+	    }
+
+	    @Override
+	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+	        return false; 
+	    }
+	    @Override
+	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+	      
+	    	switch (item.getItemId()) {
+	            case R.id.menu_share:
+	                shareSessionItem();
+	                mode.finish(); // Action picked, so close the CAB
+	                return true;
+	            case R.id.menu_add_to_schedule:
+	            	 addSessionItemToSchedule();
+		                mode.finish(); // Action picked, so close the CAB
+		                return true;
+	            default:
+	                return false;
+	        }
+	    }
+
+		public void onDestroyActionMode(ActionMode mode) {
+			mActionMode = null;
+	    }
+	};
+	 
+
+	private void addSessionItemToSchedule() {
+		// TODO Auto-generated method stub
+		
+	}
+    private void shareSessionItem() {
+		// TODO Auto-generated method stub
+		
+	}
 	protected void updateSession(Session s) {	
 		((OnSessionUpdatedListener)getParentFragment()).onSessionUpdated(s);		
 	}

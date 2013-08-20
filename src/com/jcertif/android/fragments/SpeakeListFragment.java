@@ -17,6 +17,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.view.ActionMode;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jcertif.android.JcertifApplication;
@@ -95,6 +99,8 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		mSpeakers = loadSpeakersFromCache();
 		setSpeakers();
 	}
+	
+	
 
 	private void setSpeakers() {
 		MainActivity activity = (MainActivity) getActivity();
@@ -137,7 +143,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		
 		}
 		if (code == 200 && result != null) {
-			mSpeakers = parseSessionJson(result);
+			mSpeakers = parseSpeakerJson(result);
 			Log.d(TAG, result);
 			setSpeakers();
 			saveToCache(mSpeakers);
@@ -190,7 +196,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		 */
 	}
 
-	private List<Speaker> parseSessionJson(String result) {
+	private List<Speaker> parseSpeakerJson(String result) {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
 				.create();
 		Speaker[] speakers = gson.fromJson(result, Speaker[].class);

@@ -46,7 +46,7 @@ public class SpeakerParentFragment extends SherlockFragment implements
 		ft.add(R.id.speaker_list_container, speakerListFragment);
 		if (onTablet()) {
 			speakerDetailFragment = new SpeakerDetailFragment();
-			ft.add(R.id.session_detail_container, speakerDetailFragment);
+			ft.add(R.id.speaker_detail_container, speakerDetailFragment);
 		}
 		ft.commit();
 		return rootView;
