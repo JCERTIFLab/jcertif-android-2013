@@ -22,7 +22,7 @@
     <string name="action_search">Search</string>
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="session">session</string>
-    <string name="spakers">speakers</string>
+    <string name="spakers">SPEAKERS</string>
     <string name="action_refresh">Refresh</string>
     <string name="login">Login</string>
     <string name="register">Register</string>

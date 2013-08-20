@@ -117,10 +117,10 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		tv_date_room.setText(getString(R.string.from_) + " "
 				+ session.getStart() + getString(R.string._to_)
 				+ session.getEnd() + " in room " + session.getSalle());
-		tv_sep_speaker.setText(formatSeparator(getResources().getString(
-				R.string.spakers).toUpperCase()));
-		tv_sep_desc.setText(formatSeparator(getResources().getString(
-				R.string.desc)));
+		tv_sep_speaker.setText(getResources().getString(
+				R.string.spakers).toUpperCase());
+		tv_sep_desc.setText(getResources().getString(
+				R.string.desc));
 		
 	new SpeakerLoaderTask().execute();
 	}
@@ -131,11 +131,11 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		inflater.inflate(R.menu.menu_detail_session, menu);
 	}
 
-	SpannableString formatSeparator(String sep) {
+/*	SpannableString formatSeparator(String sep) {
 		SpannableString content = new SpannableString(sep);
 		content.setSpan(new UnderlineSpan(), 0, sep.length(), 0);
 		return content;
-	}
+	}*/
 
 	String format(Date date) {
 		return DateFormat.format("dd/mm/yyyy", date.getTime()).toString();

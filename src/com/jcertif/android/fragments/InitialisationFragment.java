@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.google.gson.Gson;
@@ -28,7 +29,7 @@ import com.jcertif.android.service.RESTService;
 
 /**
  * 
- * @author bashizip
+ * @author Patrick Bashizi (bashizip@gmail.com)
  * 
  */
 public class InitialisationFragment extends RESTResponderFragment {
@@ -38,24 +39,28 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 	private final String SPONSOR_LEVEL_URI = JcertifApplication.BASE_URL
 			+ "/ref/sponsorlevel/list";
-	private final String SESSION_STATUS_URI = JcertifApplication.BASE_URL
-			+ "/ref/sessionstatus/list";
-	private final String CIVILITES__URI = JcertifApplication.BASE_URL
-			+ "/ref/title/list";
+
 	private final String CATEGORIES__URI = JcertifApplication.BASE_URL
 			+ "/ref/category/list";
 	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
 			+ "/speaker/list";
-	
-	
+	/*
+	 * private final String SESSION_STATUS_URI = JcertifApplication.BASE_URL +
+	 * "/ref/sessionstatus/list";
+	 */
+	/*
+	 * private final String CIVILITES__URI = JcertifApplication.BASE_URL +
+	 * "/ref/title/list";
+	 */
+
 	private RefentielDataLodedListener listener;
 	CategorieProvider catProvider;
 	SponsorLevelProvider spProvider;
 	SpeakerProvider spekerProvider;
-	
-	private static int threadCount=3; //must be equal to urls count
-	private static int currentThreadNo=0; //id of the incoming thread from intentService
-	
+
+	private static int threadCount = 3; // must be equal to urls count
+	private static int currentThreadNo = 0; // id of the incoming thread from
+											// intentService
 
 	public InitialisationFragment() {
 		super();
@@ -82,24 +87,23 @@ public class InitialisationFragment extends RESTResponderFragment {
 		return rootView;
 	}
 
-	
-
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		getSherlockActivity().getSupportActionBar().setNavigationMode(
 				ActionBar.NAVIGATION_MODE_STANDARD);
 
-	
-	catProvider=new CategorieProvider(InitialisationFragment.this.getSherlockActivity());
-	spProvider=new SponsorLevelProvider(InitialisationFragment.this
-			.getSherlockActivity());
-	
-	spekerProvider=new SpeakerProvider(InitialisationFragment.this.getSherlockActivity());
-	
+		catProvider = new CategorieProvider(
+				InitialisationFragment.this.getSherlockActivity());
+		spProvider = new SponsorLevelProvider(
+				InitialisationFragment.this.getSherlockActivity());
+
+		spekerProvider = new SpeakerProvider(
+				InitialisationFragment.this.getSherlockActivity());
+
 		loadData(CATEGORIES__URI);
 	}
-	
+
 	void loadData(String URI) {
 
 		MainActivity activity = (MainActivity) getActivity();
@@ -114,7 +118,8 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
-		if(resultData==null){
+		if (resultData == null) {
+			Toast.makeText(this.getActivity(), "Failled to load data, check your connection", Toast.LENGTH_LONG).show();
 			return;
 		}
 		String result = resultData.getString(RESTService.REST_RESULT);
@@ -124,15 +129,15 @@ public class InitialisationFragment extends RESTResponderFragment {
 			List<SponsorLevel> sponsorsLevel = parseSponsorLevelJson(result);
 			saveSponsorLevelToCache(sponsorsLevel);
 		}
-		if(resultType.equals(CATEGORIES__URI)){
+		if (resultType.equals(CATEGORIES__URI)) {
 			List<Category> cat = parseCategoryJson(result);
 			saveCatToCache(cat);
 		}
-		if(resultType.equals(SPEAKER_LIST_URI)){
+		if (resultType.equals(SPEAKER_LIST_URI)) {
 			List<Speaker> speskers = parseSpeakerJson(result);
 			saveSpeakerToCache(speskers);
 		}
-		
+
 	}
 
 	private void saveCatToCache(final List<Category> cat) {
@@ -140,31 +145,30 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 			@Override
 			public void run() {
-				for (Category sl : cat){
+				for (Category sl : cat) {
 					catProvider.store(sl);
 				}
 			}
 		});
-		
+
 		th.start();
 
 		try {
-			
+
 			th.join();
-			
+
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+			th.interrupt();
 			e.printStackTrace();
 		}
-       if(++currentThreadNo==threadCount){
-		listener.OnRefDataLoaded();
-       }else{
-    	   loadData(SPONSOR_LEVEL_URI);
-       }
-		
+		if (++currentThreadNo == threadCount) {
+			listener.OnRefDataLoaded();
+		} else {
+			loadData(SPONSOR_LEVEL_URI);
+		}
+
 	}
 
-	
 	private List<Category> parseCategoryJson(String result) {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
 				.create();
@@ -178,7 +182,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 		SponsorLevel[] sl = gson.fromJson(result, SponsorLevel[].class);
 		return Arrays.asList(sl);
 	}
-	
+
 	private List<Speaker> parseSpeakerJson(String result) {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
 				.create();
@@ -187,6 +191,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 		return Arrays.asList(speakers);
 
 	}
+
 	protected void saveSponsorLevelToCache(final List<SponsorLevel> sls) {
 		Thread th = new Thread(new Runnable() {
 
@@ -198,23 +203,23 @@ public class InitialisationFragment extends RESTResponderFragment {
 		});
 		th.start();
 		try {
-			
+
 			th.join();
-			
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-       if(++currentThreadNo==threadCount){
-		listener.OnRefDataLoaded();
-       }else{
-    	   loadData(SPEAKER_LIST_URI);
-       }
-		
+		if (++currentThreadNo == threadCount) {
+			listener.OnRefDataLoaded();
+		} else {
+			loadData(SPEAKER_LIST_URI);
+		}
+
 	}
-	
+
 	private void saveSpeakerToCache(final List<Speaker> result) {
-		Thread th =	new Thread(new Runnable() {
+		Thread th = new Thread(new Runnable() {
 
 			@Override
 			public void run() {
@@ -224,17 +229,17 @@ public class InitialisationFragment extends RESTResponderFragment {
 			}
 		});
 		th.start();
-try {
-			
+		try {
+
 			th.join();
-			
+
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-       if(++currentThreadNo==threadCount){
-		listener.OnRefDataLoaded();
-       }
+		if (++currentThreadNo == threadCount) {
+			listener.OnRefDataLoaded();
+		}
 	}
 
 	@Override

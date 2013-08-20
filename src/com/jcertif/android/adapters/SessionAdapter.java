@@ -2,6 +2,7 @@ package com.jcertif.android.adapters;
 
 import java.util.List;
 
+import android.R.color;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +23,13 @@ public class SessionAdapter extends GenericListAdapter<Session> {
 
 	ViewHolder holder;
 	Session session;
+	 private int selectedIndex=-1;
+	 private int selectedColor;
 
 	public SessionAdapter(Context context, SpeedScrollListener scrollListener,
 			List<Session> items) {
 		super(context, scrollListener, items);
+		selectedColor=context.getResources().getColor(R.color.pressed_jcertifstyle);
 	}
 
 	@Override
@@ -50,12 +54,25 @@ public class SessionAdapter extends GenericListAdapter<Session> {
 			{
 			holder = (ViewHolder) convertView.getTag();
 			}
+		  if(selectedIndex!= -1 && position == selectedIndex)
+	        {
+			  convertView.setBackgroundColor(selectedColor);
+	        }
+	        else
+	        {
+	        	convertView.setBackgroundColor(color.white);
+	        }
   
 		holder.title.setText(items.get(position).getTitle());
 		holder.summary.setText(items.get(position).getSummary());
 
 		return convertView;
 	}
+	 public void setSelectedIndex(int ind)
+	    {
+	        selectedIndex = ind;
+	        notifyDataSetChanged();
+	    }
 
 	public class ViewHolder {
 		public TextView title;

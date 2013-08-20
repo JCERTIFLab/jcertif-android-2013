@@ -61,7 +61,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); 
-		 getWindow().requestFeature((int) com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
+		// getWindow().requestFeature((int) com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_main);
 
 		mTitle = mDrawerTitle = getTitle();
@@ -112,16 +112,24 @@ public class MainActivity extends SherlockFragmentActivity implements
 		
 	}
 	
+	
+	
 	@Override
 	public void onBackPressed() {
-		if (mDrawerLayout.isDrawerOpen(mDrawerList))
+	
+		if (mDrawerLayout.isDrawerOpen(mDrawerList)){
+			mDrawerLayout.closeDrawer(Gravity.LEFT);
+		}
+		else{
 			super.onBackPressed();
-		else
-			finish();
+		}
+			
 	}
 
 	void init(){
 		selectItem(0);
+		
+		mDrawerLayout.setVisibility(View.VISIBLE);
 		mDrawerLayout.openDrawer(Gravity.LEFT);
 	}
 	private boolean firstLaunch() {
@@ -198,6 +206,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case 8:
 				fragment = new InitialisationFragment();
 				((InitialisationFragment)fragment).setListener(this);
+			//	mDrawerLayout.setVisibility(View.INVISIBLE);
 				break;
 		default:
 			break;
@@ -373,7 +382,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void OnRefDataLoaded() {
-		init();
+	
+			init();
+
 	}
 
 

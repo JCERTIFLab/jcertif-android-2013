@@ -1,21 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.jcertif.android.compound.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sliding_layout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <FrameLayout
-        android:id="@+id/list_container"
+    <FrameLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/session_list_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
     </FrameLayout>
 
-
-    <FrameLayout
-        android:id="@+id/detail_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-    </FrameLayout>
-</com.jcertif.android.compound.SlidingUpPanelLayout>

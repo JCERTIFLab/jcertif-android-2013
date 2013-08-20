@@ -25,6 +25,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.gson.Gson;
 import com.jcertif.android.R;
 import com.jcertif.android.compound.SlidingUpPanelLayout;
 import com.jcertif.android.compound.SlidingUpPanelLayout.PanelSlideListener;
@@ -51,7 +52,6 @@ public class SessionParentFragment extends SherlockFragment implements
 	private Session session;
 	private List<Speaker> speakers = new ArrayList<Speaker>();
 	private LinearLayout lyt_draggable_area;
-	SlidingUpPanelLayout slidingLayout;
 
 	public SessionParentFragment() {
 		super();
@@ -70,10 +70,11 @@ public class SessionParentFragment extends SherlockFragment implements
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_LIST);
 		sessionListFragment = new SessionListFragment();
 		FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-		ft.add(R.id.list_container, sessionListFragment);
-
-		sessionDetailFragment = new SessionDetailFragment();
-		ft.add(R.id.detail_container, sessionDetailFragment);
+		ft.add(R.id.session_list_container, sessionListFragment);
+		if (onTablet()) {
+			sessionDetailFragment = new SessionDetailFragment();
+			ft.add(R.id.session_detail_container, sessionDetailFragment);
+		}
 		ft.commit();
 
 		actions = new CategorieProvider(this.getSherlockActivity()).getLabels();
@@ -98,44 +99,6 @@ public class SessionParentFragment extends SherlockFragment implements
 		getSherlockActivity().getSupportActionBar().setListNavigationCallbacks(
 				adapter, navigationListener);
 
-		if (!onTablet()) {
-
-			slidingLayout = (SlidingUpPanelLayout) rootView
-					.findViewById(R.id.sliding_layout);
-			slidingLayout.setShadowDrawable(getResources().getDrawable(
-					R.drawable.above_shadow));
-			if (lyt_draggable_area != null)
-				slidingLayout.setDragView(lyt_draggable_area);
-			slidingLayout.setPanelHeight(0);
-			slidingLayout.setPanelSlideListener(new PanelSlideListener() {
-
-				@Override
-				public void onPanelSlide(View panel, float slideOffset) {
-					if (slideOffset < 0.2) {
-						if (getSherlockActivity().getSupportActionBar()
-								.isShowing()) {
-							getSherlockActivity().getSupportActionBar().hide();
-						}
-					} else {
-						if (!getSherlockActivity().getSupportActionBar()
-								.isShowing()) {
-							getSherlockActivity().getSupportActionBar().show();
-						}
-					}
-				}
-
-				@Override
-				public void onPanelExpanded(View panel) {
-					
-				}
-
-				@Override
-				public void onPanelCollapsed(View panel) {
-					
-				}
-			});
-		}
-
 		return rootView;
 	}
 
@@ -157,22 +120,58 @@ public class SessionParentFragment extends SherlockFragment implements
 	}
 
 	public void updateSessionData(Session session) {
+		if (sessionDetailFragment != null) {
+			((SessionDetailFragment) sessionDetailFragment)
+					.updateSessionData(session);
+		} else if (!onTablet()) {
+			getSherlockActivity()
+					.getSupportActionBar()
+					.setNavigationMode(
+							com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
+			FragmentTransaction ft = getChildFragmentManager()
+					.beginTransaction();
 
-		if (!onTablet()) {
-			slidingLayout.showPane();
-			slidingLayout.setPanelHeight(100);
-			slidingLayout.expandPane();
+			ft.setCustomAnimations(android.R.anim.slide_in_left,
+					android.R.anim.slide_out_right,
+					android.R.anim.slide_in_left,
+					android.R.anim.slide_out_right);
 
+			sessionDetailFragment = new SessionDetailFragment();
+			Bundle arg = new Bundle();
+			arg.putString("speaker", new Gson().toJson(session));
+			sessionDetailFragment.setArguments(arg);
+			ft.replace(R.id.session_list_container, sessionDetailFragment);
+			ft.addToBackStack(null);
+			ft.commit();
 		}
-
 	}
 
 	@Override
 	public void onSessionUpdated(Session session) {
-		this.session = session;
-		((SessionDetailFragment) sessionDetailFragment)
-				.updateSessionData(session);
-		updateSessionData(session);
+		if (sessionDetailFragment != null) {
+			((SessionDetailFragment) sessionDetailFragment)
+					.updateSessionData(session);
+		} else if (!onTablet()) {
+			getSherlockActivity()
+					.getSupportActionBar()
+					.setNavigationMode(
+							com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
+			FragmentTransaction ft = getChildFragmentManager()
+					.beginTransaction();
+
+			ft.setCustomAnimations(android.R.anim.slide_in_left,
+					android.R.anim.slide_out_right,
+					android.R.anim.slide_in_left,
+					android.R.anim.slide_out_right);
+
+			sessionDetailFragment = new SessionDetailFragment();
+			Bundle arg = new Bundle();
+			arg.putString("session", new Gson().toJson(session));
+			sessionDetailFragment.setArguments(arg);
+			ft.replace(R.id.session_list_container, sessionDetailFragment);
+			ft.addToBackStack(null);
+			ft.commit();
+		}
 	}
 
 }

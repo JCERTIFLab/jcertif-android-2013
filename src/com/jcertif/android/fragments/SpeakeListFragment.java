@@ -128,7 +128,14 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
-		String result = resultData.getString(RESTService.REST_RESULT);
+		String result=null;
+		if(resultData!=null){
+			result=resultData.getString(RESTService.REST_RESULT);
+		}else{
+			Toast.makeText(this.getActivity(), "Failled to load data, check your connection", Toast.LENGTH_LONG).show();
+			return;
+		
+		}
 		if (code == 200 && result != null) {
 			mSpeakers = parseSessionJson(result);
 			Log.d(TAG, result);

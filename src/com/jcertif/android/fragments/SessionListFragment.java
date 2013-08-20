@@ -80,8 +80,9 @@ public class SessionListFragment extends RESTResponderFragment {
 		mLvSessions.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int arg2,
+			public void onItemClick(AdapterView<?> parent, View view, int pos,
 					long position) {
+				mAdapter.setSelectedIndex(pos);
 				Session s = ((Session) parent.getItemAtPosition((int) position));
 				updateSession(s);
 			}

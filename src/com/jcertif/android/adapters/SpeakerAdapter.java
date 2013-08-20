@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.db4o.config.TVector;
 import com.jcertif.android.R;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
@@ -57,6 +58,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 		  if(selectedIndex!= -1 && position == selectedIndex)
 	        {
 			  convertView.setBackgroundColor(selectedColor);
+			  
 	        }
 	        else
 	        {
@@ -84,7 +86,9 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 		public TextView citycountry;
 		public ImageView avatar;
 	}
-
+/**
+ * G+ plus like animation; open source software, fuck yaaa !
+ */
 	@Override
 	public View getAnimatedView(int position, View convertView, ViewGroup parent) {
 		v = getRowView(position, convertView, parent);
