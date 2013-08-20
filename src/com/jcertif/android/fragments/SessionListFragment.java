@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -13,17 +12,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -35,8 +29,10 @@ import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.adapters.SessionAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
+import com.jcertif.android.dao.AgendaProvider;
 import com.jcertif.android.dao.SessionProvider;
-import com.jcertif.android.model.Category;
+import com.jcertif.android.dao.SpeakerProvider;
+import com.jcertif.android.model.AgendaSession;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
@@ -48,8 +44,10 @@ import com.jcertif.android.service.RESTService;
  */
 public class SessionListFragment extends RESTResponderFragment {
 
-	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL+"/session/list";
-	private static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL+ "/ref/category/list";
+	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL
+			+ "/session/list";
+	private static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL
+			+ "/ref/category/list";
 
 	private static String TAG = SessionListFragment.class.getName();
 
@@ -59,25 +57,27 @@ public class SessionListFragment extends RESTResponderFragment {
 	private SessionProvider mProvider;
 	private SpeedScrollListener mListener;
 	private ActionMode mActionMode;
+	private Session mSelectedSession;
+
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
 	}
-	
-	public interface OnSessionUpdatedListener{		
-		void onSessionUpdated(Session session);		
+
+	public interface OnSessionUpdatedListener {
+		void onSessionUpdated(Session session);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-	//	setRetainInstance(true);
+		// setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_session, container,
 				false);
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		String session = getResources().getStringArray(R.array.menu_array)[0];
 		setHasOptionsMenu(true);
 		getActivity().setTitle(session);
-		
+
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		mLvSessions.setOnItemClickListener(new OnItemClickListener() {
 
@@ -85,79 +85,101 @@ public class SessionListFragment extends RESTResponderFragment {
 			public void onItemClick(AdapterView<?> parent, View view, int pos,
 					long position) {
 				mAdapter.setSelectedIndex(pos);
-				Session s = ((Session) parent.getItemAtPosition((int) position));
-				updateSession(s);
+				mSelectedSession = ((Session) parent
+						.getItemAtPosition((int) position));
+				updateSession(mSelectedSession);
 			}
 
 		});
-		
-		mLvSessions.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-					int pos, long arg3) {
-				   if (mActionMode != null) {
-			            return false;
-			        }
+		mLvSessions
+				.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
- 		        mActionMode = getSherlockActivity().startActionMode(mActionModeCallback);
-			      mAdapter.setSelectedIndex(pos);
-			        return true;
-			    }
-			
-			
-		});
+					@Override
+					public boolean onItemLongClick(AdapterView<?> arg0,
+							View arg1, int pos, long arg3) {
+						if (mActionMode != null) {
+							return false;
+						}
+
+						mActionMode = getSherlockActivity().startActionMode(
+								mActionModeCallback);
+						mSelectedSession = ((Session) arg0
+								.getItemAtPosition((int) pos));
+						mAdapter.setSelectedIndex(pos);
+						return true;
+					}
+
+				});
 		return rootView;
 	}
-	
-	
-	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-		
-	    @Override
-	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-	     
-	        MenuInflater inflater = mode.getMenuInflater();
-	        inflater.inflate(R.menu.context_menu_session, menu);
-	        return true;
-	    }
 
-	    @Override
-	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-	        return false; 
-	    }
-	    @Override
-	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-	      
-	    	switch (item.getItemId()) {
-	            case R.id.menu_share:
-	                shareSessionItem();
-	                mode.finish(); // Action picked, so close the CAB
-	                return true;
-	            case R.id.menu_add_to_schedule:
-	            	 addSessionItemToSchedule();
-		                mode.finish(); // Action picked, so close the CAB
-		                return true;
-	            default:
-	                return false;
-	        }
-	    }
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		@Override
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.context_menu_session, menu);
+			return true;
+		}
+
+		@Override
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		@Override
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+			switch (item.getItemId()) {
+			case R.id.menu_share:
+				shareSessionItem();
+				mode.finish(); // Action picked, so close the CAB
+				break;
+			case R.id.menu_add_to_schedule:
+				addSessionItemToSchedule();
+				mode.finish(); // Action picked, so close the CAB
+				break;
+			default:
+				return false;
+			}
+			return true;
+		}
 
 		public void onDestroyActionMode(ActionMode mode) {
 			mActionMode = null;
-	    }
+		}
 	};
-	 
 
 	private void addSessionItemToSchedule() {
-		// TODO Auto-generated method stub
-		
+		AgendaProvider agProvider = new AgendaProvider(
+				this.getSherlockActivity());
+
+		agProvider.store((AgendaSession) mSelectedSession);
+		agProvider.close();
 	}
-    private void shareSessionItem() {
-		// TODO Auto-generated method stub
-		
+
+	private void shareSessionItem() {
+
+		Speaker sp = new SpeakerProvider(this.getSherlockActivity())
+				.getByEmail(mSelectedSession.getSpeakers()[0]);
+		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+		intent.putExtra(Intent.EXTRA_SUBJECT, "Share Session");
+		intent.putExtra(
+				Intent.EXTRA_TEXT,
+				"Checking out this  #Jcertif2013 session : "
+						+ mSelectedSession.getTitle() + " by "
+						+ sp.getFirstname() + " " + sp.getLastname());
+
+		startActivity(intent);
 	}
-	protected void updateSession(Session s) {	
-		((OnSessionUpdatedListener)getParentFragment()).onSessionUpdated(s);		
+
+	protected void updateSession(Session s) {
+		((OnSessionUpdatedListener) getParentFragment()).onSessionUpdated(s);
 	}
 
 	public SessionProvider getProvider() {
@@ -169,19 +191,19 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-	
+
 		// This gets called each time our Activity has finished creating itself.
 		// First check the local cache, if it's empty data will be fetched from
 		// web
 		mSessions = loadSessionsFromCache();
 		setSessions();
-		
+
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.menu_session, menu);
+		// inflater.inflate(R.menu.menu_session, menu);
 	}
 
 	/**
@@ -191,7 +213,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	 */
 	private void setSessions() {
 		MainActivity activity = (MainActivity) getActivity();
-        setLoading(true);
+		setLoading(true);
 		if (mSessions.isEmpty() && activity != null) {
 
 			// This is where we make our REST call to the service. We also pass
@@ -219,20 +241,17 @@ public class SessionListFragment extends RESTResponderFragment {
 			// Load our list adapter with our session.
 
 			updateList();
-
+			setLoading(false);
 		}
 	}
 
 	void updateList() {
-		
+
 		mListener = new SpeedScrollListener();
 		mLvSessions.setOnScrollListener(mListener);
 		mAdapter = new SessionAdapter(this.getActivity(), mListener, mSessions);
 		mLvSessions.setAdapter(mAdapter);
-		/*if(onTablet()){
-				updateSession(mSessions.get(0));
-		}*/
-		setLoading(false);
+
 	}
 
 	private boolean onTablet() {
@@ -240,7 +259,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	}
 
 	public void updateList(String cat) {
-		if (cat.equals("All")||cat.equals("Tous")){
+		if (cat.equals("All") || cat.equals("Tous")) {
 			mSessions = loadSessionsFromCache();
 		} else {
 			mSessions = getProvider().getSessionsByCategory(cat);
@@ -249,19 +268,23 @@ public class SessionListFragment extends RESTResponderFragment {
 
 	}
 
-
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
 		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
-		String result=	resultData.getString(RESTService.REST_RESULT);
+		String result = null;
+		if (resultData != null) {
+			result = resultData.getString(RESTService.REST_RESULT);
+		} else {
+			return;
+		}
 		if (code == 200 && result != null) {
-			
+
 			mSessions = parseSessionJson(result);
 			Log.d(TAG, result);
 			setSessions();
 			saveToCache(mSessions);
-			setLoading(false);
+
 		} else {
 			Activity activity = getActivity();
 			if (activity != null) {
@@ -269,10 +292,10 @@ public class SessionListFragment extends RESTResponderFragment {
 						activity,
 						"Failed to load Session data. Check your internet settings.",
 						Toast.LENGTH_SHORT).show();
-				
+
 			}
 		}
-		
+		setLoading(false);
 	}
 
 	private List<Session> parseSessionJson(String result) {
@@ -302,10 +325,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onPause() {
 		super.onDestroy();
-		/*if (mProvider != null) {
-			mProvider.close();
-			mProvider = null;
-		}*/
+
 	}
 
 	@Override
