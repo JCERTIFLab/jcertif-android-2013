@@ -2,6 +2,8 @@ package com.jcertif.android.fragments;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -9,6 +11,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +33,8 @@ import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.adapters.SessionAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
-import com.jcertif.android.dao.AgendaProvider;
 import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SpeakerProvider;
-import com.jcertif.android.model.AgendaSession;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
@@ -153,11 +155,41 @@ public class SessionListFragment extends RESTResponderFragment {
 	};
 
 	private void addSessionItemToSchedule() {
-		AgendaProvider agProvider = new AgendaProvider(
-				this.getSherlockActivity());
+	
+		if (android.os.Build.VERSION.SDK_INT >= 14){
+		Intent intent = new Intent(Intent.ACTION_INSERT);
+		intent.setType("vnd.android.cursor.item/event");
+		intent.putExtra(Events.TITLE, mSelectedSession.getTitle());
+		intent.putExtra(Events.EVENT_LOCATION,"Room"+ mSelectedSession.getSalle());
+		intent.putExtra(Events.DESCRIPTION, mSelectedSession.getDescription());
 
-		agProvider.store((AgendaSession) mSelectedSession);
-		agProvider.close();
+		
+		Date evStartDate= mSelectedSession.getStart();
+		Date evEndDate= mSelectedSession.getStart();
+	
+		// Setting dates
+		GregorianCalendar startcalDate = new GregorianCalendar();
+		startcalDate.setTime(evStartDate);
+		
+		// Setting dates
+		GregorianCalendar endCalDate = new GregorianCalendar();
+	    endCalDate.setTime(evEndDate);
+		
+		intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,startcalDate.getTimeInMillis());
+		intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,endCalDate.getTimeInMillis());
+		// Make it a full day event
+		intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+		// Make it a recurring Event
+	//	intent.putExtra(Events.RRULE, "WKST=SU");
+		// Making it private and shown as busy
+		intent.putExtra(Events.ACCESS_LEVEL, Events.ACCESS_PRIVATE);
+		intent.putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY); 
+		//intent.putExtra(Events.DISPLAY_COLOR, Events.EVENT_COLOR); 
+		startActivity(intent);
+		}else{
+			Toast.makeText(this.getSherlockActivity(), 
+					"Not supported for your device :(", Toast.LENGTH_SHORT).show();
+		} 
 	}
 
 	private void shareSessionItem() {

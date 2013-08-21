@@ -1,8 +1,14 @@
 package com.jcertif.android.model;
 
-import java.util.ArrayList;
 
+/**
+ * 
+ * @author bash
+ *
+ */
 public class AgendaSession extends Session{
 	
-	
+	public AgendaSession(){
+		
+	}
 }

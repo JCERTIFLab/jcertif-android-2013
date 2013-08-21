@@ -265,7 +265,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		
 		fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, fragment).addToBackStack(position+"").commit();
+				.replace(R.id.content_frame, fragment).commit();
 
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
