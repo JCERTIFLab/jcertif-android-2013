@@ -6,7 +6,9 @@
     <LinearLayout
         android:id="@+id/contain"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp" >
 
         <ImageView
             android:id="@+id/img_drawer"
@@ -23,7 +25,7 @@
             android:layout_marginBottom="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="10dp"
-            android:text="Medium Text"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>

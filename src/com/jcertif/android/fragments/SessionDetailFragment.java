@@ -3,10 +3,14 @@ package com.jcertif.android.fragments;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.CalendarContract;
+import android.provider.CalendarContract.Events;
 import android.text.SpannableString;
 import android.text.format.DateFormat;
 import android.text.style.UnderlineSpan;
@@ -15,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.jcertif.android.R;
 import com.jcertif.android.compound.SpeakerBadge;
@@ -117,8 +123,8 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		tv_title.setText(session.getTitle());
 		tv_desc.setText(session.getDescription());
 		tv_date_room.setText(getString(R.string.from_) + " "
-				+ session.getStart() + getString(R.string._to_)
-				+ session.getEnd() + " in room " + session.getSalle());
+				+ session.getStart().toGMTString() + getString(R.string._to_)
+				+ session.getEnd().toGMTString() + ". "+getString(R.string.room) + session.getSalle());
 		tv_sep_speaker.setText(getResources().getString(
 				R.string.spakers).toUpperCase());
 		tv_sep_desc.setText(getResources().getString(
@@ -133,12 +139,78 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		inflater.inflate(R.menu.context_menu_session, menu);
 	}
 
-/*	SpannableString formatSeparator(String sep) {
-		SpannableString content = new SpannableString(sep);
-		content.setSpan(new UnderlineSpan(), 0, sep.length(), 0);
-		return content;
-	}*/
 
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_share:
+			shareSessionItem();
+			break;
+		case R.id.menu_add_to_schedule:
+			addSessionItemToSchedule();
+			break;
+		default:
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	private void addSessionItemToSchedule() {
+		
+		if (android.os.Build.VERSION.SDK_INT >= 14){
+		Intent intent = new Intent(Intent.ACTION_INSERT);
+		intent.setType("vnd.android.cursor.item/event");
+		intent.putExtra(Events.TITLE, session.getTitle());
+		intent.putExtra(Events.EVENT_LOCATION,"Room"+ session.getSalle());
+		intent.putExtra(Events.DESCRIPTION, session.getDescription());
+
+		
+		Date evStartDate= session.getStart();
+		Date evEndDate= session.getStart();
+	
+		// Setting dates
+		GregorianCalendar startcalDate = new GregorianCalendar();
+		startcalDate.setTime(evStartDate);
+		
+		// Setting dates
+		GregorianCalendar endCalDate = new GregorianCalendar();
+	    endCalDate.setTime(evEndDate);
+		
+		intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME,startcalDate.getTimeInMillis());
+		intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,endCalDate.getTimeInMillis());
+		// Make it a full day event
+		intent.putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true);
+		// Make it a recurring Event
+	//	intent.putExtra(Events.RRULE, "WKST=SU");
+		// Making it private and shown as busy
+		intent.putExtra(Events.ACCESS_LEVEL, Events.ACCESS_PRIVATE);
+		intent.putExtra(Events.AVAILABILITY, Events.AVAILABILITY_BUSY); 
+		//intent.putExtra(Events.DISPLAY_COLOR, Events.EVENT_COLOR); 
+		startActivity(intent);
+		}else{
+			Toast.makeText(this.getSherlockActivity(), 
+					"Not supported for your device :(", Toast.LENGTH_SHORT).show();
+		} 
+	}
+
+	private void shareSessionItem() {
+
+		Speaker sp = new SpeakerProvider(this.getSherlockActivity())
+				.getByEmail(session.getSpeakers()[0]);
+		Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+		intent.setType("text/plain");
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+
+		intent.putExtra(Intent.EXTRA_SUBJECT, "Share Session");
+		intent.putExtra(
+				Intent.EXTRA_TEXT,
+				"Checking out this  #Jcertif2013 session : "
+						+ session.getTitle() + " by "
+						+ sp.getFirstname() + " " + sp.getLastname());
+
+		startActivity(intent);
+	}
 	String format(Date date) {
 		return DateFormat.format("dd/mm/yyyy", date.getTime()).toString();
 	}

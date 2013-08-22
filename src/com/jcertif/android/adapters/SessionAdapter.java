@@ -64,7 +64,7 @@ public class SessionAdapter extends GenericListAdapter<Session> {
 	        }
   
 		holder.title.setText(items.get(position).getTitle());
-		holder.summary.setText(items.get(position).getSummary());
+		holder.summary.setText(items.get(position).getStart().toGMTString());
 
 		return convertView;
 	}

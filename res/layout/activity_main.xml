@@ -25,7 +25,7 @@
     <ListView
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
-        android:paddingTop="50dp"
+        android:paddingTop="5dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"

@@ -44,8 +44,9 @@
     <string name="cancel">Annuler</string>
     <string name="or_signin_with">Ou connectez-vous avec</string>
     <string name="add_to_schedule">Ajouter à l\'agenda</string>
-    <string name="from_">"De "</string>
-    <string name="_to_">" à "</string>
+    <string name="from_">"Du "</string>
+     <string name="room">"Salle "</string>
+    <string name="_to_">" au "</string>
     <string name="desc">"DESCRIPTION"</string>
     <string name="about">"A propos"</string>
     <string name="fetching_initial_data">Initialisation..</string>

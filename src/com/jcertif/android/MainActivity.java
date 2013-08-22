@@ -44,7 +44,7 @@ import com.squareup.picasso.Picasso;
 /**
  * Partially based on the ASOP source/Drawer Layout
  * 
- * @author Patrick Bashizi (bashizip)
+ * @author Patrick Bashizi (bashizip@gmail.com)
  */
 public class MainActivity extends SherlockFragmentActivity implements
 		LoginFragment.OnSignedInListener, RefentielDataLodedListener {
@@ -66,7 +66,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		// getWindow().requestFeature((int) com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_main);
 
-		//getSupportActionBar().setLogo(R.drawable.ic_logo);
+	
 		// enable ActionBar app icon to behave as action to toggle nav drawer
 		getSupportActionBar().setDisplayUseLogoEnabled(true) ;
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -118,52 +118,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		
 	}
-
-	
-	
-
-		/*public void removeCurrentFragment()
-		{
-		    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-		    Fragment currentFrag =  speakerDetailFragment;
-
-		    String fragName = "NONE";
-
-		    if (currentFrag!=null)
-		        fragName = currentFrag.getClass().getSimpleName();
-
-		    if (currentFrag != null)
-		        transaction.remove(currentFrag);
-
-		    transaction.commit();
-
-		
-	
-	}
-	*/
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-
-	    if (keyCode == KeyEvent.KEYCODE_BACK)
-	    {
-	        if (getSupportFragmentManager().getBackStackEntryCount() == 0)
-	        {
-	        	
-	           finish();
-	            return false;
-	        }
-	        else
-	        {
-	            getSupportFragmentManager().popBackStack();
-	       
-	            return false;
-	        }
-	    }
-    
-		return super.onKeyDown(keyCode, event);
-	}
-	
-
 
 
 	@Override
