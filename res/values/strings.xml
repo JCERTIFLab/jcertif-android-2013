@@ -7,8 +7,6 @@
     <string-array name="menu_array">
         <item>Sessions</item>
         <item>Speakers</item>
-        <item>Agenda</item>
-        <item>Social</item>
         <item>Maps</item>
         <item>About</item>
     </string-array>
@@ -57,5 +55,6 @@
   <string name="sposors">Sponors</string> 
   <string name="share">Share</string>
   <string name="failed_to_load_sposors_data_check_your_internet_settings_">Failed to load Sposors data. Check your internet settings.</string>
+  <string name="vide"></string>
   
 </resources>

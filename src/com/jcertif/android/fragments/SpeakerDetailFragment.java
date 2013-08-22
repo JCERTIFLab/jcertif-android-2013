@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.jcertif.android.R;
 import com.jcertif.android.adapters.SpeakerAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
@@ -60,15 +63,15 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 		tv_country=(TextView)rootView.findViewById(R.id.tv_sp_country);
 		tv_bio=(TextView)rootView.findViewById(R.id.tv_sp_bio);
 		
-		Object speakerjson=null;
+		String speakerjson=null;
 		if(getArguments() != null && !getArguments().isEmpty()){
-			speakerjson=getArguments().get("speaker");
+			speakerjson=getArguments().get("speaker").toString();
 		}
-		if(speakerjson != null){
-			speaker=(Speaker)new Gson().fromJson(speakerjson.toString(),Speaker.class);
+		if(speakerjson != null){		
+			speaker=(Speaker)new Gson().fromJson((speakerjson),Speaker.class);
 			updateSpeakerData(speaker);
 		}
-		
+		//getSherlockActivity().setTitle(speaker.getFirstname()+" "+speaker.getLastname());
 		
 		return rootView;
 	}
@@ -98,7 +101,7 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 		tv_website.setText(speaker.getWebsite());
 		tv_country.setText(speaker.getCountry());
 		tv_bio.setText(Html.fromHtml(speaker.getBiography()));
-		Picasso.with(getParentFragment().getActivity()).load(s.getPhoto()).into(img_sp_avatar);
+		Picasso.with(getSherlockActivity()).load(s.getPhoto()).into(img_sp_avatar);
 		
 	}
 

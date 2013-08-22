@@ -93,7 +93,8 @@ public class SessionDetailFragment extends RESTResponderFragment {
 			if(!speakers.isEmpty())
 			for(Speaker sp:speakers){
 				lyt_detail.removeAllViews();
-			lyt_detail.addView(new SpeakerBadge(SessionDetailFragment.this.getActivity(),sp));
+			lyt_detail.addView(new SpeakerBadge(SessionDetailFragment.this.getSherlockActivity(),
+					SessionDetailFragment.this,sp));
 			}
 		}
 

@@ -1,5 +1,6 @@
 package com.jcertif.android.fragments;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,25 +65,7 @@ public class SpeakerParentFragment extends SherlockFragment implements
 			((SpeakerDetailFragment) speakerDetailFragment)
 					.updateSpeakerData(session);
 		} else if (!onTablet()) {
-			getSherlockActivity()
-					.getSupportActionBar()
-					.setNavigationMode(
-							com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
-			FragmentTransaction ft = getChildFragmentManager()
-					.beginTransaction();
-
-			ft.setCustomAnimations(android.R.anim.slide_in_left,
-					android.R.anim.slide_out_right,
-					android.R.anim.slide_in_left,
-					android.R.anim.slide_out_right);
-
-			speakerDetailFragment = new SpeakerDetailFragment();
-			Bundle arg = new Bundle();
-			arg.putString("speaker", new Gson().toJson(session));
-			speakerDetailFragment.setArguments(arg);
-			ft.replace(R.id.speaker_list_container,speakerDetailFragment);
-					ft.addToBackStack(null);
-			ft.commit();
+			
 		}
 	}
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,10 +81,24 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	}
 
 	private void selectSpeaker(Speaker speaker) {
+		if(onTablet()){
 		((OnSpeakerUpdatedListener) getParentFragment())
 				.onSpeakerUpdated(speaker);
+		}else{
+			Intent intent = new Intent(this.getActivity().getApplicationContext(), 
+					SpeakerDetailFragmentActivity.class);
+		
+		    String speakerJson=	new Gson().toJson(speaker);
+			intent.putExtra("speaker",speakerJson);
+			
+			startActivity(intent);
+			getSherlockActivity().overridePendingTransition ( 0 , R.anim.slide_up_left);
+		}
 	}
 
+	private boolean onTablet() {
+	return	((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
+	}
 	public SpeakerProvider getProvider() {
 		if (mProvider == null)
 			mProvider = new SpeakerProvider(this.getSherlockActivity());

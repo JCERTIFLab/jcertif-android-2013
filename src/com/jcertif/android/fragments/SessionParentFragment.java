@@ -3,37 +3,21 @@ package com.jcertif.android.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
 import android.content.res.Configuration;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Vibrator;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.OnNavigationListener;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.google.gson.Gson;
 import com.jcertif.android.R;
-import com.jcertif.android.compound.SlidingUpPanelLayout;
-import com.jcertif.android.compound.SlidingUpPanelLayout.PanelSlideListener;
-import com.jcertif.android.compound.SpeakerBadge;
 import com.jcertif.android.dao.CategorieProvider;
-import com.jcertif.android.dao.SessionProvider;
-import com.jcertif.android.dao.SpeakerProvider;
-import com.jcertif.android.model.Category;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 

@@ -240,14 +240,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 			break;
 		case 3:
 //			fragment = new AgendaFragment();
-			break;
+			break;	
+		
 		case 4:
-		//	fragment = new SocialStreamFragment();
-			break;
-		case 5:
-			//	fragment = new MapFragment();
-				break;
-		case 6:
 				fragment = new AboutFragment();
 				break;
 		case 8:
@@ -349,19 +344,19 @@ public class MainActivity extends SherlockFragmentActivity implements
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_session));
 					break;
 				case 2:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_speaker));
+					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_profile));
 					break;
-				case 3:
+				/*case 3:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_calendar));
 					break;
 				case 4:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_social));
-					break;
-				case 5:
+					break;*/
+				case 3:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
 					break;
 				
-				case 6:
+				case 4:
 					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
 					break;
 				default:

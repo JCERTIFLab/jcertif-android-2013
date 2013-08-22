@@ -7,8 +7,6 @@
     <string-array name="menu_array">
         <item>Sessions</item>
         <item>Présentateurs</item>
-        <item>Agenda</item>
-        <item>Social</item>
         <item>Carte</item>
         <item>A propos</item>
     </string-array>
