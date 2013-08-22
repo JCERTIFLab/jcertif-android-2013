@@ -99,6 +99,8 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	private boolean onTablet() {
 	return	((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE);
 	}
+	
+	
 	public SpeakerProvider getProvider() {
 		if (mProvider == null)
 			mProvider = new SpeakerProvider(this.getSherlockActivity());

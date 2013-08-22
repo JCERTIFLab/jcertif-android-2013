@@ -211,9 +211,23 @@ public class SessionListFragment extends RESTResponderFragment {
 	}
 
 	protected void updateSession(Session s) {
-		((OnSessionUpdatedListener) getParentFragment()).onSessionUpdated(s);
+		if(onTablet()){
+			((OnSessionUpdatedListener) getParentFragment()).onSessionUpdated(s);
+		}else{
+			Intent intent = new Intent(this.getActivity().getApplicationContext(), 
+					SessionDetailFragmentActivity.class);
+		
+		    String sessionJson=	new Gson().toJson(s);
+			intent.putExtra("session",sessionJson);
+			
+			startActivity(intent);
+			getSherlockActivity().overridePendingTransition ( 0 , R.anim.slide_up_left);
+		}
 	}
-
+	
+	
+	
+		
 	public SessionProvider getProvider() {
 		if (mProvider == null)
 			mProvider = new SessionProvider(this.getSherlockActivity());

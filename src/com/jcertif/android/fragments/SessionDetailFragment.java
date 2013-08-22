@@ -130,7 +130,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		inflater.inflate(R.menu.menu_detail_session, menu);
+		inflater.inflate(R.menu.context_menu_session, menu);
 	}
 
 /*	SpannableString formatSeparator(String sep) {

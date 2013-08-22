@@ -15,30 +15,30 @@ import com.jcertif.android.R;
  * @author Patrick Bashizi
  * 
  */
-public class SpeakerDetailFragmentActivity extends SherlockFragmentActivity {
+public class SessionDetailFragmentActivity extends SherlockFragmentActivity {
 
-	Fragment speakerDetailFragment;
+	Fragment sessionDetailFragment;
 
-	public SpeakerDetailFragmentActivity() {
+	public SessionDetailFragmentActivity() {
 		super();
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_speaker_detail_activity);
+		setContentView(R.layout.fragment_session_detail_activity);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setNavigationMode(
 				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
 		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-		speakerDetailFragment = new SpeakerDetailFragment();
+		sessionDetailFragment = new SessionDetailFragment();
 		
 		Bundle arg = new Bundle();
-		String speakJson=getIntent().getExtras().get("speaker").toString();
-		arg.putString("speaker",speakJson );
-		speakerDetailFragment.setArguments(arg);		
-		ft.add(R.id.speaker_detail_container2, speakerDetailFragment);
+		String sessJson=getIntent().getExtras().get("session").toString();
+		arg.putString("session",sessJson);
+		sessionDetailFragment.setArguments(arg);		
+		ft.add(R.id.session_detail_container2, sessionDetailFragment);
 		ft.commit();
 
 	}

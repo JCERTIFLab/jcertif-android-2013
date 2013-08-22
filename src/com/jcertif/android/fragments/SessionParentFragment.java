@@ -46,7 +46,7 @@ public class SessionParentFragment extends SherlockFragment implements
 			Bundle savedInstanceState) {
 
 		setRetainInstance(true);
-
+         setHasOptionsMenu(true);
 		View rootView = inflater.inflate(R.layout.fragment_session_parent,
 				container, false);
 		getActivity().setTitle(R.string.session);

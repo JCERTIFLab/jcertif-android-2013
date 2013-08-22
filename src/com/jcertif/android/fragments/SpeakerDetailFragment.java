@@ -71,8 +71,6 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 			speaker=(Speaker)new Gson().fromJson((speakerjson),Speaker.class);
 			updateSpeakerData(speaker);
 		}
-		//getSherlockActivity().setTitle(speaker.getFirstname()+" "+speaker.getLastname());
-		
 		return rootView;
 	}
 
