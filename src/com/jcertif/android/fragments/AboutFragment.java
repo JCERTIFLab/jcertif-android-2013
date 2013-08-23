@@ -69,8 +69,9 @@ public class AboutFragment extends RESTResponderFragment {
 	}
 
 	public SponsorProvider getProvider() {
-		if (mProvider == null)
+		if (mProvider == null){
 			mProvider = new SponsorProvider(this.getSherlockActivity());
+		}
 		return mProvider;
 	}
 

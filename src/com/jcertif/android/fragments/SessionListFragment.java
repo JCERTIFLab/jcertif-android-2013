@@ -249,7 +249,7 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
-		// inflater.inflate(R.menu.menu_session, menu);
+	
 	}
 
 	/**

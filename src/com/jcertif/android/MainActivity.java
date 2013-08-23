@@ -26,6 +26,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.jcertif.android.dao.CategorieProvider;
 import com.jcertif.android.dao.UserProvider;
@@ -62,17 +64,17 @@ public class MainActivity extends SherlockFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); 
-		// getWindow().requestFeature((int) com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		// getWindow().requestFeature((int)
+		// com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
 		setContentView(R.layout.activity_main);
 
-	
 		// enable ActionBar app icon to behave as action to toggle nav drawer
-		getSupportActionBar().setDisplayUseLogoEnabled(true) ;
+		getSupportActionBar().setDisplayUseLogoEnabled(true);
 		getSupportActionBar().setDisplayShowTitleEnabled(false);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
-		
+
 		mTitle = mDrawerTitle = getTitle();
 		mMenuTitles = getResources().getStringArray(R.array.menu_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -86,13 +88,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 		mDrawerList.setAdapter(new DrawerListAdapter(getLoggedInUser()));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		
-
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the sliding drawer and the action bar app icon
 		mDrawerToggle = new ActionBarDrawerToggle(this, /* host Activity */
 		mDrawerLayout, /* DrawerLayout object */
-		R.drawable.ic_navigation_drawer, /* nav drawer image to replace 'Up' caret */
+		R.drawable.ic_navigation_drawer, /*
+										 * nav drawer image to replace 'Up'
+										 * caret
+										 */
 		R.string.drawer_open, /* "open drawer" description for accessibility */
 		R.string.drawer_close /* "close drawer" description for accessibility */
 		) {
@@ -104,42 +107,39 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 			public void onDrawerOpened(View drawerView) {
 				getSupportActionBar().setTitle(mDrawerTitle);
-			
+
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		
 		if (savedInstanceState == null) {
 			init();
 		}
-		if(firstLaunch()){		
+		if (firstLaunch()) {
 			selectItem(8);
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void onBackPressed() {
-	
-		if (mDrawerLayout.isDrawerOpen(mDrawerList)){
+
+		if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
 			mDrawerLayout.closeDrawer(Gravity.LEFT);
-		}
-		else{
+		} else {
 			super.onBackPressed();
 		}
-			
+
 	}
 
-	void init(){
+	void init() {
 		selectItem(0);
-		
 		mDrawerLayout.setVisibility(View.VISIBLE);
 		mDrawerLayout.openDrawer(Gravity.LEFT);
 	}
+
 	private boolean firstLaunch() {
-			return new CategorieProvider(this).getLabels().length==0;
+		return new CategorieProvider(this).getLabels().length == 0;
 	}
 
 	private Participant getLoggedInUser() {
@@ -153,20 +153,26 @@ public class MainActivity extends SherlockFragmentActivity implements
 		}
 		return user;
 	}
-	
-@Override
-	 public boolean onOptionsItemSelected(MenuItem item) {
-	        switch (item.getItemId()) {
-	            case android.R.id.home:
-	                if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
-	                    mDrawerLayout.closeDrawer(mDrawerList);
-	                } else {
-	                    mDrawerLayout.openDrawer(mDrawerList);
-	                }
-	                
-	        }
-	        return true;
-	 }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			if (mDrawerLayout.isDrawerOpen(mDrawerList)) {
+				mDrawerLayout.closeDrawer(mDrawerList);
+			} else {
+				mDrawerLayout.openDrawer(mDrawerList);
+			}
+
+		}
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		//getSupportMenuInflater().inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
 
 	/* The click listner for ListView in the navigation drawer */
 	private class DrawerItemClickListener implements
@@ -174,7 +180,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position,
 				long id) {
-			  view.setSelected(true);
+			view.setSelected(true);
 			selectItem(position);
 		}
 	}
@@ -182,7 +188,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private void selectItem(int position) {
 		// update the main content by replacing fragments
 		Fragment fragment = null;
-		
+
 		switch (position) {
 		case 0:
 			if (getLoggedInUser() == null) {
@@ -198,17 +204,17 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment = new SpeakerParentFragment();
 			break;
 		case 3:
-//			fragment = new AgendaFragment();
-			break;	
-		
+			// fragment = new AgendaFragment();
+			break;
+
 		case 4:
-				fragment = new AboutFragment();
-				break;
+			fragment = new AboutFragment();
+			break;
 		case 8:
-				fragment = new InitialisationFragment();
-				((InitialisationFragment)fragment).setListener(this);
-			//	mDrawerLayout.setVisibility(View.INVISIBLE);
-				break;
+			fragment = new InitialisationFragment();
+			((InitialisationFragment) fragment).setListener(this);
+			// mDrawerLayout.setVisibility(View.INVISIBLE);
+			break;
 		default:
 			break;
 		}
@@ -217,7 +223,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		if (fragment == null) {
 			return;
 		}
-		
+
 		fragmentManager.beginTransaction()
 				.replace(R.id.content_frame, fragment).commit();
 
@@ -250,8 +256,6 @@ public class MainActivity extends SherlockFragmentActivity implements
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-
-
 	class DrawerListAdapter extends BaseAdapter {
 
 		private static final int TYPE_PROFILE = 0;
@@ -261,7 +265,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 		private Participant user;
 
 		public int getCount() {
-			return mMenuTitles.length+1;
+			return mMenuTitles.length + 1;
 		}
 
 		public DrawerListAdapter(Participant user) {
@@ -271,10 +275,10 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		@Override
 		public Object getItem(int position) {
-			if(position==0){
+			if (position == 0) {
 				return 0;
-			}else
-			return mMenuTitles[position];
+			} else
+				return mMenuTitles[position];
 		}
 
 		@Override
@@ -294,49 +298,57 @@ public class MainActivity extends SherlockFragmentActivity implements
 							null);
 					holder.textView = (TextView) convertView
 							.findViewById(R.id.tv_drawer_item);
-					
+
 					holder.imgView = (ImageView) convertView
 							.findViewById(R.id.img_drawer);
-				int index=position;
-				switch (index) {
-				case 1:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_session));
-					break;
-				case 2:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_profile));
-					break;
-				/*case 3:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_calendar));
-					break;
-				case 4:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_social));
-					break;*/
-				case 3:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
-					break;
-				
-				case 4:
-					holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
-					break;
-				default:
-					break;
-				}
-					holder.textView.setText(mMenuTitles[index-1]);
-					
+					int index = position;
+					switch (index) {
+					case 1:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_session));
+						break;
+					case 2:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_profile));
+						break;
+					/*
+					 * case 3:
+					 * holder.imgView.setImageDrawable(getResources().getDrawable
+					 * (R.drawable.ic_action_calendar)); break; case 4:
+					 * holder.imgView
+					 * .setImageDrawable(getResources().getDrawable
+					 * (R.drawable.ic_action_social)); break;
+					 */
+					case 3:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_map));
+						break;
+
+					case 4:
+						holder.imgView.setImageDrawable(getResources()
+								.getDrawable(R.drawable.ic_action_help));
+						break;
+					default:
+						break;
+					}
+					holder.textView.setText(mMenuTitles[index - 1]);
+
 					break;
 				case TYPE_PROFILE:
 					convertView = mInflater
-							.inflate(R.layout .item_profile, null);
+							.inflate(R.layout.item_profile, null);
 					holder.textView = (TextView) convertView
 							.findViewById(R.id.tv_username);
 					holder.imgView = (ImageView) convertView
-							.findViewById(R.id.img_profile); 
+							.findViewById(R.id.img_profile);
 
 					if (user == null) {
 						holder.textView.setText("Please Login");
 					} else {
-						holder.textView.setText(user.getFirstname()+" "+user.getLastname());
-						Picasso.with(MainActivity.this).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile)
+						holder.textView.setText(user.getFirstname() + " "
+								+ user.getLastname());
+						Picasso.with(MainActivity.this).load(user.getPhoto())
+								.placeholder(R.drawable.ic_action_profile)
 								.into(holder.imgView);
 					}
 
@@ -384,10 +396,9 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void OnRefDataLoaded() {
-	
-			init();
+
+		init();
 
 	}
-
 
 }

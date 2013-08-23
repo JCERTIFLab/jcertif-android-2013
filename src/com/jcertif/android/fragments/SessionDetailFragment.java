@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.format.DateFormat;
 import android.text.style.UnderlineSpan;
@@ -40,12 +41,25 @@ public class SessionDetailFragment extends RESTResponderFragment {
     private List<Speaker> speakers= new ArrayList<Speaker>();
 	
 	private LinearLayout lyt_detail;
+
+	
+	
+	
+	
+	public SessionDetailFragment() {
+		super();
+		setRetainInstance(true);
+	}
+
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// setRetainInstance(true);
+		
+		 //setRetainInstance(true);
+		 
 		View rootView = inflater.inflate(R.layout.fragment_detail_session,
-				container, false);
+			container, false);
 		getActivity().setTitle(R.string.app_name);
 		setHasOptionsMenu(true);
 		tv_title = (TextView) rootView
@@ -121,7 +135,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 	public void updateSessionData(Session session) {
 		this.session=session;
 		tv_title.setText(session.getTitle());
-		tv_desc.setText(session.getDescription());
+		tv_desc.setText(Html.fromHtml(session.getDescription()));
 		tv_date_room.setText(getString(R.string.from_) + " "
 				+ session.getStart().toGMTString() + getString(R.string._to_)
 				+ session.getEnd().toGMTString() + ". "+getString(R.string.room) + session.getSalle());

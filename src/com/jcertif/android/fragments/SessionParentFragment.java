@@ -39,14 +39,14 @@ public class SessionParentFragment extends SherlockFragment implements
 
 	public SessionParentFragment() {
 		super();
+		setRetainInstance(true);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		setRetainInstance(true);
-         setHasOptionsMenu(true);
+		//setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_session_parent,
 				container, false);
 		getActivity().setTitle(R.string.session);
