@@ -9,7 +9,11 @@ import android.content.IntentSender.SendIntentException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.text.method.KeyListener;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -80,6 +84,45 @@ public class LoginFragment extends RESTResponderFragment implements
 		mPlusOneButton.setOnClickListener(this);
 		et_email = (EditText) rootView.findViewById(R.id.et_email);
 		et_password = (EditText) rootView.findViewById(R.id.et_password);
+		
+		et_email.setKeyListener(new KeyListener() {
+			
+			@Override
+			public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean onKeyOther(View view, Editable text, KeyEvent event) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public boolean onKeyDown(View view, Editable text, int keyCode,
+					KeyEvent event) {
+				 if(keyCode == KeyEvent.KEYCODE_BACK){
+
+				        et_email.setText("");
+				        return false;
+				    }
+				return true;
+			}
+			
+			@Override
+			public int getInputType() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public void clearMetaKeyState(View view, Editable content, int states) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		btn_registerButon=(Button)rootView.findViewById(R.id.btn_register2);
 		btn_registerButon.setOnClickListener(this);
 		return rootView;
@@ -181,7 +224,7 @@ public class LoginFragment extends RESTResponderFragment implements
 		String accountName = mPlusClient.getAccountName();
 		mPlusClient.loadPerson(this, "me");
 		Log.d(TAG, "Display Name: " + accountName);
-		Toast.makeText(this.getActivity(), "Conncted:" + accountName,
+		Toast.makeText(this.getActivity(), "Connected:" + accountName,
 				Toast.LENGTH_LONG).show();
 		
 	}

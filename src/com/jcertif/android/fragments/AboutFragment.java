@@ -64,6 +64,9 @@ public class AboutFragment extends RESTResponderFragment {
 		getActivity().setTitle(R.string.about);
 		tv_bout_jcertif = (TextView) rootView
 				.findViewById(R.id.tv_about_jcertif);
+		
+		tv_bout_jcertif.setText(R.string.lorem);
+		
 		gv_sponsors = (GridView) rootView.findViewById(R.id.gv_sponsors);
 		return rootView;
 	}
@@ -111,8 +114,15 @@ public class AboutFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
-
+		if(resultData==null)
+		{Toast.makeText(
+				AboutFragment.this.getSherlockActivity(),
+				R.string.failed_to_load_sposors_data_check_your_internet_settings_,
+				Toast.LENGTH_SHORT).show();
+			return;
+		}
 		String result = resultData.getString(RESTService.REST_RESULT);
+	
 		if (code == 200 && result != null) {
 
 			mSponsors = parseSponsorJson(result);

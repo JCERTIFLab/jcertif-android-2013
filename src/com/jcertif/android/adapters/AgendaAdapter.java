@@ -18,19 +18,20 @@ import com.jcertif.android.model.Session;
 /**
  * 
  * @author Patrick Bashizi
- *
+ * 
  */
 public class AgendaAdapter extends GenericListAdapter<Session> {
 
 	ViewHolder holder;
 	Session session;
-	 private int selectedIndex=-1;
-	 private int selectedColor;
+	private int selectedIndex = -1;
+	private int selectedColor;
 
 	public AgendaAdapter(Context context, SpeedScrollListener scrollListener,
 			List<Session> items) {
 		super(context, scrollListener, items);
-		selectedColor=context.getResources().getColor(R.color.pressed_jcertifstyle);
+		selectedColor = context.getResources().getColor(
+				R.color.pressed_jcertifstyle);
 	}
 
 	@Override
@@ -51,29 +52,25 @@ public class AgendaAdapter extends GenericListAdapter<Session> {
 					.findViewById(R.id.tv_summary);
 
 			convertView.setTag(holder);
-		} else
-			{
+		} else {
 			holder = (ViewHolder) convertView.getTag();
-			}
-		  if(selectedIndex!= -1 && position == selectedIndex)
-	        {
-			  convertView.setBackgroundColor(selectedColor);
-	        }
-	        else
-	        {
-	        	convertView.setBackgroundColor(color.white);
-	        }
-  
+		}
+		if (selectedIndex != -1 && position == selectedIndex) {
+			convertView.setBackgroundColor(selectedColor);
+		} else {
+			convertView.setBackgroundColor(color.white);
+		}
+
 		holder.title.setText(items.get(position).getTitle());
 		holder.summary.setText(items.get(position).getSummary());
 
 		return convertView;
 	}
-	 public void setSelectedIndex(int ind)
-	    {
-	        selectedIndex = ind;
-	        notifyDataSetChanged();
-	    }
+
+	public void setSelectedIndex(int ind) {
+		selectedIndex = ind;
+		notifyDataSetChanged();
+	}
 
 	public class ViewHolder {
 		public TextView title;
@@ -96,7 +93,7 @@ public class AgendaAdapter extends GenericListAdapter<Session> {
 
 			previousPostition = position;
 
-		if (android.os.Build.VERSION.SDK_INT > 10) {
+			if (android.os.Build.VERSION.SDK_INT > 10) {
 				v.setTranslationX(0.0F);
 				v.setTranslationY(height);
 				v.setRotationX(45.0F);
@@ -111,7 +108,7 @@ public class AgendaAdapter extends GenericListAdapter<Session> {
 				localViewPropertyAnimator.setStartDelay(0).start();
 			}
 			positionsMapper.put(position, true);
-	}
+		}
 		return v;
 	}
 

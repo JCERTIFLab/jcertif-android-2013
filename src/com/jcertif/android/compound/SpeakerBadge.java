@@ -1,6 +1,8 @@
 package com.jcertif.android.compound;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.jcertif.android.R;
+import com.jcertif.android.fragments.SpeakerDetailFragmentActivity;
 import com.jcertif.android.model.Speaker;
 import com.squareup.picasso.Picasso;
 
@@ -18,7 +22,8 @@ import com.squareup.picasso.Picasso;
  * @author Patrick Bashizi
  * 
  */
-public class SpeakerBadge extends LinearLayout implements android.view.View.OnClickListener{
+public class SpeakerBadge extends LinearLayout implements
+		android.view.View.OnClickListener {
 
 	private ImageView pic;
 	private TextView tv_name;
@@ -26,7 +31,7 @@ public class SpeakerBadge extends LinearLayout implements android.view.View.OnCl
 	private TextView tv_country;
 	private Speaker speaker;
 	private Fragment parent;
-	private Context context;
+	private Activity activity;
 
 	public SpeakerBadge(Context context) {
 		super(context);
@@ -34,13 +39,17 @@ public class SpeakerBadge extends LinearLayout implements android.view.View.OnCl
 		LayoutInflater li;
 		li = (LayoutInflater) getContext().getSystemService(infService);
 		li.inflate(R.layout.item_speaker, this, true);
-        this.context=context;
+
 		tv_name = (TextView) findViewById(R.id.tv_speaker_name);
 		tv_company = (TextView) findViewById(R.id.tv_company);
 		tv_country = (TextView) findViewById(R.id.tv_city_country);
 		pic = (ImageView) findViewById(R.id.logo);
-		
+
 		pic.setOnClickListener(this);
+		tv_country.setOnClickListener(this);
+		tv_country.setOnClickListener(this);
+		tv_company.setOnClickListener(this);
+		tv_name.setOnClickListener(this);
 	}
 
 	/**
@@ -48,10 +57,11 @@ public class SpeakerBadge extends LinearLayout implements android.view.View.OnCl
 	 * @param context
 	 * @param speaker
 	 */
-	public SpeakerBadge(Context context,Fragment parent, Speaker speaker) {
-		this(context);
+	public SpeakerBadge(Activity activity, Fragment parent, Speaker speaker) {
+		this(activity.getBaseContext());
 		this.speaker = speaker;
-		this.parent=parent;
+		this.parent = parent;
+		this.activity = activity;
 		initData();
 	}
 
@@ -68,9 +78,15 @@ public class SpeakerBadge extends LinearLayout implements android.view.View.OnCl
 
 	@Override
 	public void onClick(View v) {
-		
-		Toast.makeText(context, speaker.getLastname(), Toast.LENGTH_SHORT).show();
-		
+
+		Intent intent = new Intent(this.activity,
+				SpeakerDetailFragmentActivity.class);
+       // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		String speakerJson = new Gson().toJson(speaker);
+		intent.putExtra("speaker", speakerJson);
+
+		activity.startActivity(intent);
+		activity.overridePendingTransition(R.anim.slide_up_right, R.anim.slide_up_left);
 	}
 
 }

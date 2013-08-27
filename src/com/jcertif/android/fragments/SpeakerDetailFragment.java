@@ -3,12 +3,14 @@ package com.jcertif.android.fragments;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -33,7 +35,7 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 	private static String TAG = SpeakerDetailFragment.class.getName();
 	
 	private Speaker speaker;
-	TextView tv_fullname, tv_title, tv_company, tv_website, tv_country, tv_bio;
+	TextView tv_fullname, tv_company, tv_website, tv_country, tv_bio;
 	ImageView img_sp_avatar;
 
 	private List<Speaker> mSpeakers=new ArrayList<Speaker>();
@@ -41,6 +43,7 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 	private SpeakerAdapter mAdapter; 
 	private SpeakerProvider mProvider; 
 	private SpeedScrollListener mListener; 
+	private Button btn_session;
 
 	public SpeakerDetailFragment() {
 		// Empty constructor required for fragment subclasses
@@ -57,12 +60,24 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 		
 		img_sp_avatar=(ImageView)rootView.findViewById(R.id.img_sp_avatar);
 		tv_fullname=(TextView)rootView.findViewById(R.id.tv_sp_fullname);
-		tv_title=(TextView)rootView.findViewById(R.id.tv_sp_title);
+	
 		tv_company=(TextView)rootView.findViewById(R.id.tv_sp_company);
 		tv_website=(TextView)rootView.findViewById(R.id.tv_sp_website);
 		tv_country=(TextView)rootView.findViewById(R.id.tv_sp_country);
 		tv_bio=(TextView)rootView.findViewById(R.id.tv_sp_bio);
+		btn_session=(Button) rootView.findViewById(R.id.btn_see_sessions_speaker);
 		
+		
+		btn_session.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				Intent intent = new Intent(SpeakerDetailFragment.this.getSherlockActivity(),SpeakerSessionFragment.class);
+				intent.putExtra(SpeakerSessionFragment.SPEAKER_ID, speaker.getEmail());
+				startActivity(intent);
+			}
+		});
 		String speakerjson=null;
 		if(getArguments() != null && !getArguments().isEmpty()){
 			speakerjson=getArguments().get("speaker").toString();
@@ -94,7 +109,7 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 	public void updateSpeakerData(Speaker s) {
 		this.speaker=s;
 		tv_fullname.setText(speaker.getFirstname() + " " + speaker.getLastname());
-		tv_title.setText(speaker.getTitle());
+	
 		tv_company.setText(speaker.getCompany());
 		tv_website.setText(speaker.getWebsite());
 		tv_country.setText(speaker.getCountry());

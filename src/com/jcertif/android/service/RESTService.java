@@ -49,7 +49,6 @@ public class RESTService extends IntentService {
 
 	public static final String REST_RESULT = "com.jcertif.android.REST_RESULT";
 	public static final String KEY_JSON_PLAYLOAD = "com.jcertif.android.JSON_PLAYLOAD";
-
 	public static final String KEY_URI_SENT = "com.jcertif.android.URI_SENT";
 
 	public RESTService() {

@@ -38,6 +38,7 @@
         </service>
         <activity android:name=".fragments.SpeakerDetailFragmentActivity"></activity>
         <activity android:name=".fragments.SessionDetailFragmentActivity"></activity>
+        <activity android:name=".fragments.SpeakerSessionFragment"></activity>
     </application>
 
 </manifest>

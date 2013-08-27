@@ -41,10 +41,6 @@ public class SessionDetailFragment extends RESTResponderFragment {
     private List<Speaker> speakers= new ArrayList<Speaker>();
 	
 	private LinearLayout lyt_detail;
-
-	
-	
-	
 	
 	public SessionDetailFragment() {
 		super();
@@ -55,8 +51,6 @@ public class SessionDetailFragment extends RESTResponderFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-		 //setRetainInstance(true);
 		 
 		View rootView = inflater.inflate(R.layout.fragment_detail_session,
 			container, false);

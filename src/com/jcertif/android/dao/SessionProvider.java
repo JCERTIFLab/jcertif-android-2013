@@ -27,6 +27,18 @@ public class SessionProvider extends JCertifDb4oHelper<Session> {
 		return list;
 
 	}
+
+	public List<Session> getAllSessionOfSpeaker(final String speakerId) {
+		List<Session> list = new ArrayList<Session>();
+		List<Session>	test = getAll(Session.class);
+		
+		for(Session s: test){
+			if(Arrays.asList(s.getSpeakers()).contains(speakerId)){
+				list.add(s);
+			}
+		}
+		return list;
+	}
 	
 
 }

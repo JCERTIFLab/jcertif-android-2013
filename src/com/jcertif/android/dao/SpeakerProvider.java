@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.content.Context;
 
+import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 
 public class SpeakerProvider extends JCertifDb4oHelper<Speaker> {
@@ -23,6 +24,9 @@ public class SpeakerProvider extends JCertifDb4oHelper<Speaker> {
 		}
 			return new Speaker();
 	}
+
+
+
 
 	
 }
