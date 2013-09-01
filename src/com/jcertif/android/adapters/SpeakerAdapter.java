@@ -86,9 +86,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 		public TextView citycountry;
 		public ImageView avatar;
 	}
-/**
- * G+ plus like animation; open source software, fuck yaaa !
- */
+
 	@Override
 	public View getAnimatedView(int position, View convertView, ViewGroup parent) {
 		v = getRowView(position, convertView, parent);

@@ -39,7 +39,7 @@ public class SessionParentFragment extends SherlockFragment implements
 
 	public SessionParentFragment() {
 		super();
-		setRetainInstance(true);
+	//	setRetainInstance(true);
 	}
 
 	@Override

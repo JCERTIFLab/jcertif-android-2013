@@ -50,6 +50,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 	public SpeakeListFragment() {
 		// Empty constructor required for fragment subclasses
+		setRetainInstance(true);
 	}
 
 	public interface OnSpeakerUpdatedListener {

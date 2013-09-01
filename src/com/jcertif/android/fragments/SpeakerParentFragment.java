@@ -34,7 +34,7 @@ public class SpeakerParentFragment extends SherlockFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		setRetainInstance(true);
+	setRetainInstance(true);
 		View rootView = inflater.inflate(R.layout.fragment_speaker_parent,
 				container, false);
 		getActivity().setTitle(R.string.spakers);

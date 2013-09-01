@@ -3,6 +3,7 @@ package com.jcertif.android;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -32,6 +33,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.jcertif.android.dao.CategorieProvider;
 import com.jcertif.android.dao.UserProvider;
 import com.jcertif.android.fragments.AboutFragment;
+import com.jcertif.android.fragments.AboutFragmentActivity;
 import com.jcertif.android.fragments.InitialisationFragment;
 import com.jcertif.android.fragments.InitialisationFragment.RefentielDataLodedListener;
 import com.jcertif.android.fragments.LoginFragment;
@@ -64,6 +66,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		// getWindow().requestFeature((int)
 		// com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -208,7 +211,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 			break;
 
 		case 4:
-			fragment = new AboutFragment();
+		//	fragment = new AboutFragment();
+			startActivity(new Intent(MainActivity.this, AboutFragmentActivity.class));
 			break;
 		case 8:
 			fragment = new InitialisationFragment();

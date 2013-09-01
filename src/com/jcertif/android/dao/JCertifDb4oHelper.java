@@ -28,7 +28,7 @@ import android.widget.Toast;
  * 
  * @param <T>
  */
-public abstract class JCertifDb4oHelper<T> {
+public abstract  class JCertifDb4oHelper<T> {
 
 	private static ObjectContainer oc = null;
 	private Context context;
