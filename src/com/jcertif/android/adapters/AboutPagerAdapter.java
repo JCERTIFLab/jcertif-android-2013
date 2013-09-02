@@ -22,7 +22,7 @@ public class AboutPagerAdapter extends FragmentPagerAdapter {
 		this.ctx = ctx;
 		this.fragments = fragments;
 		CONTENT = new String[] { ctx.getResources().getString(R.string.about),
-				ctx.getResources().getString(R.string.sposors) };
+				ctx.getResources().getString(R.string.sposors),ctx.getResources().getString(R.string.contributor) };
 	}
 
 	@Override

@@ -50,7 +50,7 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 					.findViewById(R.id.tv_company);
 			holder.citycountry = (TextView) convertView
 					.findViewById(R.id.tv_city_country);
-			holder.avatar = (ImageView) convertView.findViewById(R.id.logo);
+			holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
 			convertView.setTag(holder);
 		} else
 			{holder = (ViewHolder) convertView.getTag();

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jcertif.android.R;
+import com.jcertif.android.model.Contributor;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Sponsor;
 import com.squareup.picasso.Picasso;
@@ -23,13 +24,13 @@ import com.squareup.picasso.Picasso;
  * @author Patrick Bashizi
  *
  */
-public class SponsorsAdapter extends GenericListAdapter<Sponsor> {
+public class ContributorsAdapter extends GenericListAdapter<Contributor> {
 
 	ViewHolder holder;
 	Session session;
 
-	public SponsorsAdapter(Context context, SpeedScrollListener scrollListener,
-			List<Sponsor> items) {
+	public ContributorsAdapter(Context context, SpeedScrollListener scrollListener,
+			List<Contributor> items) {
 		super(context, scrollListener, items);
 	}
 
@@ -43,27 +44,33 @@ public class SponsorsAdapter extends GenericListAdapter<Sponsor> {
 
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(
-					R.layout.item_sposor, parent, false);
+					R.layout.item_contributor, parent, false);
 
 			holder = new ViewHolder();
-			holder.name = (TextView) convertView.findViewById(R.id.tv_mail);
-			holder.logo = (ImageView) convertView
+			holder.mail = (TextView) convertView.findViewById(R.id.tv_mail);
+			holder.avatar = (ImageView) convertView
 					.findViewById(R.id.avatar);
+			holder.commits = (TextView) convertView
+					.findViewById(R.id.tv_commits);
 
 			convertView.setTag(holder);
-		} else
+		} else{
 			holder = (ViewHolder) convertView.getTag();
-
-		holder.name.setText(items.get(position).getName());
-		holder.name.setText("");
-		Picasso.with(context).load(items.get(position).getLogo()).into(holder.logo);
+		}
+	Contributor cn=	items.get(position);
+		holder.mail.setText(cn.getLogin());
+		holder.commits.setText(cn.getContributions()+" commits");
+		holder.mail.setText(cn.getLogin());
+		Picasso.with(context).load(items.get(position).getAvatar_url()).into(holder.avatar);
 
 		return convertView;
 	}
 
 	public class ViewHolder {
-		public TextView name;
-		public ImageView logo;
+		public TextView mail;
+		public TextView commits;
+		public ImageView avatar;
+		
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)

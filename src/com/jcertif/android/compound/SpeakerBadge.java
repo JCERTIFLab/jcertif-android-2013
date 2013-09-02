@@ -43,7 +43,7 @@ public class SpeakerBadge extends LinearLayout implements
 		tv_name = (TextView) findViewById(R.id.tv_speaker_name);
 		tv_company = (TextView) findViewById(R.id.tv_company);
 		tv_country = (TextView) findViewById(R.id.tv_city_country);
-		pic = (ImageView) findViewById(R.id.logo);
+		pic = (ImageView) findViewById(R.id.avatar);
 
 		pic.setOnClickListener(this);
 		tv_country.setOnClickListener(this);

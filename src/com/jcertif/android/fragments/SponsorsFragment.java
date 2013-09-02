@@ -63,7 +63,7 @@ public class SponsorsFragment extends RESTResponderFragment {
 		getActivity().setTitle(R.string.about);
 		
 		
-		gv_sponsors = (GridView) rootView.findViewById(R.id.gv_contributors);
+		gv_sponsors = (GridView) rootView.findViewById(R.id.gv_sponsors);
 		return rootView;
 	}
 
@@ -113,7 +113,7 @@ public class SponsorsFragment extends RESTResponderFragment {
 		if(resultData==null)
 		{Toast.makeText(
 				SponsorsFragment.this.getSherlockActivity(),
-				R.string.failed_to_load_sposors_data_check_your_internet_settings_,
+				R.string.failed_to_load_data_check_your_internet_settings_,
 				Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -134,7 +134,7 @@ public class SponsorsFragment extends RESTResponderFragment {
 			if (activity != null) {
 				Toast.makeText(
 						activity,
-						R.string.failed_to_load_sposors_data_check_your_internet_settings_,
+						R.string.failed_to_load_data_check_your_internet_settings_,
 						Toast.LENGTH_SHORT).show();
 
 			}

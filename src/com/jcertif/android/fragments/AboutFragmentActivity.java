@@ -47,10 +47,12 @@ public class AboutFragmentActivity extends SherlockFragmentActivity {
 
 		aboutFragment = new AboutFragment();
 		sponsorsFragment = new SponsorsFragment();
+		contributorFragment= new ContributorFragment();
 
 		fragments = new ArrayList<Fragment>();
 		fragments.add(aboutFragment);
 		fragments.add(sponsorsFragment);
+		fragments.add(contributorFragment);
 
 		mAdapter = new AboutPagerAdapter(this,
 				super.getSupportFragmentManager(), fragments);

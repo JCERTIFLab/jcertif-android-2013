@@ -55,7 +55,7 @@
   <string name="sposors">Sponsors</string> 
   <string name="share">Share</string>
    <string name="room">Room</string>
-  <string name="failed_to_load_sposors_data_check_your_internet_settings_">Failed to load Sposors data. Check your internet settings.</string>
+  <string name="failed_to_load_data_check_your_internet_settings_">Failed to load data. Check your internet settings.</string>
   <string name="vide"></string>
    <string name="lorem">"Sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
 sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
@@ -67,5 +67,7 @@ sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
 Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum.
 "</string>
    <string name="sessions">Sessions</string>
+    <string name="contributor">Contributor</string>
+   <string name="tv_commits">tv_commits</string>
   
 </resources>
