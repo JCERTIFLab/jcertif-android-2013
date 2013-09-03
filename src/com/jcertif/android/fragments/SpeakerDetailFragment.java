@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -78,6 +79,17 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 				startActivity(intent);
 			}
 		});
+		
+		tv_website.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				browseTo(speaker.getWebsite());
+				
+			}
+		});
+		
 		String speakerjson=null;
 		if(getArguments() != null && !getArguments().isEmpty()){
 			speakerjson=getArguments().get("speaker").toString();
@@ -90,7 +102,11 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 	}
 
 	
-	
+	private void browseTo(String website) {		
+		Intent i = new Intent(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(website));
+		startActivity(i);
+	}
 	/** Instance of SpeakerProvider */
 	public SpeakerProvider getProvider() {
 		if (mProvider == null)
@@ -111,7 +127,9 @@ public class SpeakerDetailFragment extends RESTResponderFragment {
 		tv_fullname.setText(speaker.getFirstname() + " " + speaker.getLastname());
 	
 		tv_company.setText(speaker.getCompany());
-		tv_website.setText(speaker.getWebsite());
+		int maxLeght= speaker.getWebsite().length()>25?20: speaker.getWebsite().length();
+		String webUrl="<a href='"+ speaker.getWebsite()+"'>"+speaker.getWebsite().substring(0, maxLeght)+"</a>";
+		tv_website.setText(Html.fromHtml(webUrl));
 		tv_country.setText(speaker.getCountry());
 		tv_bio.setText(Html.fromHtml(speaker.getBiography()));
 		Picasso.with(getSherlockActivity()).load(s.getPhoto()).into(img_sp_avatar);
