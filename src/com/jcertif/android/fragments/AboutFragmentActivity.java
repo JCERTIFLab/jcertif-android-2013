@@ -28,6 +28,7 @@ public class AboutFragmentActivity extends SherlockFragmentActivity {
 	Fragment aboutFragment;
 	Fragment sponsorsFragment;
 	Fragment contributorFragment;
+	Fragment externalLibsFragment;
 
 	AboutPagerAdapter mAdapter;
 	private List<Fragment> fragments;
@@ -48,11 +49,13 @@ public class AboutFragmentActivity extends SherlockFragmentActivity {
 		aboutFragment = new AboutFragment();
 		sponsorsFragment = new SponsorsFragment();
 		contributorFragment= new ContributorFragment();
+		externalLibsFragment = new ExternalLibsUsedFragment();
 
 		fragments = new ArrayList<Fragment>();
 		fragments.add(aboutFragment);
 		fragments.add(sponsorsFragment);
 		fragments.add(contributorFragment);
+		fragments.add(externalLibsFragment);
 
 		mAdapter = new AboutPagerAdapter(this,
 				super.getSupportFragmentManager(), fragments);

@@ -14,6 +14,7 @@ import com.db4o.ext.Db4oIOException;
 import com.db4o.ext.IncompatibleFileFormatException;
 import com.db4o.ext.OldFormatException;
 import com.db4o.query.Query;
+import com.jcertif.android.model.Contributor;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 
@@ -99,9 +100,12 @@ public abstract  class JCertifDb4oHelper<T> {
 		EmbeddedConfiguration configuration = Db4oEmbedded.newConfiguration();
 		configuration.common().objectClass(Session.class).objectField("id")
 				.indexed(true);
+		configuration.common().objectClass(Contributor.class).objectField("id")
+		.indexed(true);
 		configuration.common().objectClass(Session.class).cascadeOnUpdate(true);
 		configuration.common().objectClass(Speaker.class).objectField("email")
 				.indexed(true);
+		
 		configuration.common().objectClass(Speaker.class).cascadeOnUpdate(true);
 		return configuration;
 	}

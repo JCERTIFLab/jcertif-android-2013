@@ -66,5 +66,6 @@
    <string name="sessions">Sessions</string>
     <string name="contributor">Contributor</string>
    <string name="tv_commits">tv_commits</string>
-  
+     <string name="  open_source_licence">Open Source Licences</string>
+
 </resources>
