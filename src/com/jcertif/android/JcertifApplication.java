@@ -5,8 +5,9 @@ import android.content.res.Configuration;
 
 public class JcertifApplication extends Application{
 
-	public static final String BASE_URL="http://jcertif-backend.msomda.cloudbees.net";
-	
+	//public static final String BASE_URL="http://jcertif-backend.msomda.cloudbees.net";
+	public static final String BASE_URL="http://jcertif.backend.vm-host.net";
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		// TODO Auto-generated method stub

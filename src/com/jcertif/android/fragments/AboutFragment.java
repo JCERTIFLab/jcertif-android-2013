@@ -1,5 +1,9 @@
 package com.jcertif.android.fragments;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,6 +12,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +41,7 @@ import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.model.Sponsor;
 import com.jcertif.android.service.RESTService;
+import com.jcertif.android.util.Utils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -60,12 +66,19 @@ public class AboutFragment extends RESTResponderFragment {
 		tv_bout_jcertif = (TextView) rootView
 				.findViewById(R.id.tv_about_jcertif);
 		
-		tv_bout_jcertif.setText(R.string.lorem);
-		
 	
+        InputStream is = null;
+        try {
+            is = getResources().getAssets().open("about.html");
+            tv_bout_jcertif.setText(Html.fromHtml(Utils.inputStreamToString(is)));
+        } catch (IOException e) {
+            e.printStackTrace();  
+        }
+		
 		return rootView;
 	}
 
+	  
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

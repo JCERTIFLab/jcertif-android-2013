@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.jcertif.android.R;
+import com.jcertif.android.util.Utils;
 
 /**
  * 
@@ -39,7 +40,7 @@ public class ExternalLibsUsedFragment extends RESTResponderFragment {
         InputStream is = null;
         try {
             is = getResources().getAssets().open("ext.html");
-            tv_ext.setText(Html.fromHtml(inputStreamToString(is)));
+            tv_ext.setText(Html.fromHtml(Utils.inputStreamToString(is)));
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -47,20 +48,6 @@ public class ExternalLibsUsedFragment extends RESTResponderFragment {
 		return rootView;
 	}
 
-	
-	   public static String inputStreamToString(InputStream is) throws IOException {
-	        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-	        StringBuilder sb = new StringBuilder();
-	        String line = null;
-
-	        while ((line = reader.readLine()) != null) {
-	            sb.append(line);
-	        }
-
-	        is.close();
-
-	        return sb.toString();
-	    }
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
