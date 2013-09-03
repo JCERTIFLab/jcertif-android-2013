@@ -210,7 +210,7 @@ public class SessionDetailFragment extends RESTResponderFragment {
 		intent.setType("text/plain");
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
-		intent.putExtra(Intent.EXTRA_SUBJECT, "Share Session");
+		intent.putExtra(Intent.EXTRA_SUBJECT, "JCertif 2013:"+ session.getTitle());
 		intent.putExtra(
 				Intent.EXTRA_TEXT,
 				"Checking out this  #Jcertif2013 session : "
