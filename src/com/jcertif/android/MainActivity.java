@@ -37,6 +37,7 @@ import com.jcertif.android.fragments.AboutFragmentActivity;
 import com.jcertif.android.fragments.InitialisationFragment;
 import com.jcertif.android.fragments.InitialisationFragment.RefentielDataLodedListener;
 import com.jcertif.android.fragments.LoginFragment;
+import com.jcertif.android.fragments.MapEventFragment;
 import com.jcertif.android.fragments.ProfileFragment;
 import com.jcertif.android.fragments.SessionListFragment;
 import com.jcertif.android.fragments.SessionParentFragment;
@@ -207,7 +208,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment = new SpeakerParentFragment();
 			break;
 		case 3:
-			// fragment = new AgendaFragment();
+			 fragment = new MapEventFragment();
 			break;
 
 		case 4:
