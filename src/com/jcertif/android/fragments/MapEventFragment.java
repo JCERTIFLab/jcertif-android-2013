@@ -29,7 +29,8 @@ public class MapEventFragment extends RESTResponderFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
+		getSherlockActivity().getSupportActionBar().setNavigationMode(
+				com.actionbarsherlock.app.ActionBar.NAVIGATION_MODE_STANDARD);
 		setRetainInstance(true);
 		View rootView=inflater.inflate(R.layout.fragment_map, container,false);
 		
@@ -50,7 +51,7 @@ public class MapEventFragment extends RESTResponderFragment {
 		initPosition=new LatLng(-4.257399,15.283935);
 		
 		gmap=mapv.getMap();
-		gmap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+		gmap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 		gmap.getUiSettings().setCompassEnabled(true);
 		try{
 			MapsInitializer.initialize(this.getSherlockActivity());
@@ -58,15 +59,15 @@ public class MapEventFragment extends RESTResponderFragment {
 			e.printStackTrace();
 		}
 		//Move the camera instantly to initial position with a zoom of 17.
-		gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(initPosition, 17));
+		gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(initPosition, 30));
 		// Zoom in, animating the camera.
-		gmap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null); 
+		gmap.animateCamera(CameraUpdateFactory.zoomTo(30), 200, null); 
 		//Initialize the marker
 		marker=gmap
 				.addMarker(new MarkerOptions()
 				.title("Brazzaville")
 				.visible(true).position(initPosition)
-				.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker)));
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location)));
 	}
 
 	@Override

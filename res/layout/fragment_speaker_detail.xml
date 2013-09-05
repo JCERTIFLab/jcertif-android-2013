@@ -91,7 +91,7 @@
                         android:layout_marginBottom="20dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
-                        android:background="@color/body_text_1_positive"
+                        android:background="@drawable/list_selector_session_btn"
                         android:text="@string/sessions"
                         android:textColor="@color/default_color"
                         android:textStyle="bold" />
