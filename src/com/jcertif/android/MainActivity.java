@@ -310,20 +310,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 					switch (index) {
 					case 1:
 						holder.imgView.setImageDrawable(getResources()
-								.getDrawable(R.drawable.ic_action_session));
+								.getDrawable(R.drawable.ic_action_list));
 						break;
 					case 2:
 						holder.imgView.setImageDrawable(getResources()
-								.getDrawable(R.drawable.ic_action_profile));
+								.getDrawable(R.drawable.ic_action_user));
 						break;
-					/*
-					 * case 3:
-					 * holder.imgView.setImageDrawable(getResources().getDrawable
-					 * (R.drawable.ic_action_calendar)); break; case 4:
-					 * holder.imgView
-					 * .setImageDrawable(getResources().getDrawable
-					 * (R.drawable.ic_action_social)); break;
-					 */
+				
 					case 3:
 						holder.imgView.setImageDrawable(getResources()
 								.getDrawable(R.drawable.ic_action_map));
