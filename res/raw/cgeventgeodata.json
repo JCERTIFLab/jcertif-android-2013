@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Brazzaville",
+        "latlng": [
+            -4.257399,
+            15.283935
+        ],
+        "url": "http://www.jcertif.com"
+    },
+    {
+        "name": "Monument Savorgnan de Brazza",
+        "latlng": [
+            -4.257199,
+            15.266863
+        ],
+        "url": "http://www.jcertif.com"
+    },
+    {
+        "name": "Marche Total",
+        "latlng": [
+            -4.289496,
+            15.249439
+        ],
+        "url": "http://www.jcertif.com"
+    },
+    {
+        "name": "Faculte des sciences de la sante",
+        "latlng": [
+            -4.274731,
+            15.254424
+        ],
+        "url": "http://www.jcertif.com"
+    },
+    {
+        "name": "Arret CCF",
+        "latlng": [
+            -4.277256,
+            15.259613
+        ],
+        "url": "http://www.jcertif.com"
+    },
+    {
+        "name": "Universite Marien Ngouabi",
+        "latlng": [
+            -4.276315,
+            15.248073
+        ],
+        "url": "http://www.jcertif.com"
+    }
+] 
