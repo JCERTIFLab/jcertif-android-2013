@@ -61,5 +61,9 @@
     <string name="contributor">Contributor</string>
    <string name="tv_commits">tv_commits</string>
      <string name="  open_source_licence">Open Source Licences</string>
+     <string name="sign_in_with">Sign in with</string>
+     <string name="sign_in_twitter">Twitter</string>
+     <string name="twitter">Twitter</string>
+     <string name="github">Github</string>
 
 </resources>

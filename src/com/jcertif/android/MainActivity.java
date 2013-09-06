@@ -2,6 +2,7 @@ package com.jcertif.android;
 
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -378,11 +379,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	public void onSignedIn(Participant user) {
+	public void onSignedIn(Participant user,ProgressDialog dlg) {
+		
 		mDrawerList.setAdapter(new DrawerListAdapter(user));
 		setLogedInUser(user);
 		selectItem(0);
 		mDrawerLayout.openDrawer(Gravity.LEFT);
+		
+		dlg.dismiss();
 	}
 
 	private void setLogedInUser(Participant user) {

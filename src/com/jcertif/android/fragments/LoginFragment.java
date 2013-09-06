@@ -43,34 +43,31 @@ import com.jcertif.android.service.RESTService;
 /**
  * 
  * @author bashizip
- *
+ * 
  */
 public class LoginFragment extends RESTResponderFragment implements
 		ConnectionCallbacks, OnConnectionFailedListener,
 		OnAccessRevokedListener, OnClickListener,
-		PlusClient.OnPersonLoadedListener,OnUserDialogReturns {
+		PlusClient.OnPersonLoadedListener, OnUserDialogReturns {
 
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 	private static final String TAG = "Login Fragment";
-	private static final String REGISTER_URI = JcertifApplication.BASE_URL+"/participant/register";
+	private static final String REGISTER_URI = JcertifApplication.BASE_URL
+			+ "/participant/register";
 
 	PlusClient mPlusClient;
 	private ConnectionResult mConnectionResult;
 	private ProgressDialog mConnectionProgressDialog;
 	private SignInButton mPlusOneButton;
-	private EditText et_email;
-	private EditText et_password;
+
 	private Participant user;
-	private Button btn_registerButon;
+	OnSignedInListener mSignedCallback;
 
-	
-	 OnSignedInListener mSignedCallback;
+	// Container Activity must implement this interface
+	public interface OnSignedInListener {
+		public void onSignedIn(Participant user,ProgressDialog dlg);
+	}
 
-	    // Container Activity must implement this interface
-	    public interface OnSignedInListener {
-	        public void onSignedIn(Participant user);
-	    }
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -82,49 +79,7 @@ public class LoginFragment extends RESTResponderFragment implements
 				.findViewById(R.id.sign_in_button);
 
 		mPlusOneButton.setOnClickListener(this);
-		et_email = (EditText) rootView.findViewById(R.id.et_email);
-		et_password = (EditText) rootView.findViewById(R.id.et_password);
-		
-		et_email.setKeyListener(new KeyListener() {
-			
-			@Override
-			public boolean onKeyUp(View view, Editable text, int keyCode, KeyEvent event) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public boolean onKeyOther(View view, Editable text, KeyEvent event) {
-				// TODO Auto-generated method stub
-				return false;
-			}
-			
-			@Override
-			public boolean onKeyDown(View view, Editable text, int keyCode,
-					KeyEvent event) {
-				 if(keyCode == KeyEvent.KEYCODE_BACK){
 
-				        et_email.setText("");
-				        return false;
-				    }
-				return true;
-			}
-			
-			@Override
-			public int getInputType() {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-			
-			@Override
-			public void clearMetaKeyState(View view, Editable content, int states) {
-				// TODO Auto-generated method stub
-				
-			}
-		});
-		
-		btn_registerButon=(Button)rootView.findViewById(R.id.btn_register2);
-		btn_registerButon.setOnClickListener(this);
 		return rootView;
 	}
 
@@ -132,35 +87,33 @@ public class LoginFragment extends RESTResponderFragment implements
 	public void onActivityCreated(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onActivityCreated(savedInstanceState);
-		 
-		
-		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+
+		getSherlockActivity().getSupportActionBar().setNavigationMode(
+				ActionBar.NAVIGATION_MODE_STANDARD);
 
 		mPlusClient = new PlusClient.Builder(this.getActivity()
 				.getApplicationContext(), this, this)
 				.setVisibleActivities("http://schemas.google.com/AddActivity",
 						"http://schemas.google.com/BuyActivity")
-				.setScopes(Scopes.PLUS_LOGIN,Scopes.PLUS_PROFILE).build();
+				.setScopes(Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE).build();
 
 		mConnectionProgressDialog = new ProgressDialog(this.getActivity());
 		mConnectionProgressDialog.setTitle("Login");
 		// mConnectionProgressDialog.setCancelable(false);
-		mConnectionProgressDialog.setMessage(getSherlockActivity().getString(R.string.google_login_));
+		mConnectionProgressDialog.setMessage(getSherlockActivity().getString(
+				R.string.google_login_));
 	}
 
-	
-	
-	 @Override
-	    public void onAttach(Activity activity) {
-	        super.onAttach(activity);
-	       try {
-	        	mSignedCallback = (OnSignedInListener) activity;
-	        } catch (ClassCastException e) {
-	            throw new ClassCastException(activity.toString()
-	                    + " must implement OnSignedInListener");
-	        }
-	    }
-	
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		try {
+			mSignedCallback = (OnSignedInListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString()
+					+ " must implement OnSignedInListener");
+		}
+	}
 
 	@Override
 	public void onDestroy() {
@@ -217,16 +170,16 @@ public class LoginFragment extends RESTResponderFragment implements
 
 	@Override
 	public void onConnected(Bundle connectionHint) {
-	if(mConnectionProgressDialog.isShowing()){
-		mConnectionProgressDialog.dismiss();
-	}
+		/*if (mConnectionProgressDialog.isShowing()) {
+			mConnectionProgressDialog.dismiss();
+		}*/
 
 		String accountName = mPlusClient.getAccountName();
 		mPlusClient.loadPerson(this, "me");
 		Log.d(TAG, "Display Name: " + accountName);
 		Toast.makeText(this.getActivity(), "Connected:" + accountName,
 				Toast.LENGTH_LONG).show();
-		
+
 	}
 
 	@Override
@@ -240,129 +193,124 @@ public class LoginFragment extends RESTResponderFragment implements
 			if (mConnectionResult == null) {
 				mPlusClient.connect();
 				mConnectionProgressDialog.show();
-			}
-			 else {
+			} else {
 				try {
 					mConnectionResult.startResolutionForResult(
 							this.getActivity(), REQUEST_CODE_RESOLVE_ERR);
-				
+
 				} catch (SendIntentException e) {
 					// Try connecting again.
 					mConnectionResult = null;
 					mPlusClient.connect();
 				}
 			}
-		}else if(v==btn_registerButon){
-			showRegisterDialog();
 		}
 
 	}
-	 private void showRegisterDialog() {
-	        FragmentManager fm = getSherlockActivity().getSupportFragmentManager();
-	        RegistrationFormFragment registerDialog = new RegistrationFormFragment();
-	        registerDialog.register(this);
-	        registerDialog.show(fm, "fragment_register");
-	    }
+
+	private void showRegisterDialog() {
+		FragmentManager fm = getSherlockActivity().getSupportFragmentManager();
+		RegistrationFormFragment registerDialog = new RegistrationFormFragment();
+		registerDialog.register(this);
+		registerDialog.show(fm, "fragment_register");
+	}
+
 	@Override
 	public void onPersonLoaded(ConnectionResult status, Person person) {
 		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
-			et_email.setText(person.getDisplayName());
-			user= new Participant();
-			String fullName=person.getDisplayName();
+
+			user = new Participant();
+			String fullName = person.getDisplayName();
 			user.setFirstname(fullName.substring(0, fullName.indexOf(' ')));
 			user.setLastname(fullName.substring(fullName.indexOf(' ')));
 			user.setEmail(mPlusClient.getAccountName());
 			user.setBiography(person.getTagline());
-			user.setCity((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
-			user.setCountry((person.getCurrentLocation()==null)?"N/A":person.getCurrentLocation());
+			user.setCity((person.getCurrentLocation() == null) ? "N/A" : person
+					.getCurrentLocation());
+			user.setCountry((person.getCurrentLocation() == null) ? "N/A"
+					: person.getCurrentLocation());
 			user.setCompany(person.getOrganizations().get(0).getName());
 			user.setPhoto(getBestPictureSize(person.getImage().getUrl()));
 			user.setWebsite(person.getUrl());
 			user.setPassword(getFakePassword());
 			user.setPhone("N/A");
-			
-			registerUser();					
-		
-		
-		}
-		else{
-			//TODO handle this
+
+			registerUser();
+
+		} else {
+			// TODO handle this
 		}
 	}
-	
-/**
- * G+ return pic size of 50, we need a bigger size, say 200
- * Url are like : https://lh6.googleusercontent.com/-MgVQQ8F_Buk/AAAAAAAAAAI/AAAAAAAACSQ/8mfy3fB3xcs/photo.jpg?sz=50
- * @param url
- * @return
- */
+
+	/**
+	 * G+ return pic size of 50, we need a bigger size, say 200 Url are like :
+	 * https://lh6.googleusercontent.com/-MgVQQ8F_Buk/AAAAAAAAAAI/AAAAAAAACSQ/8
+	 * mfy3fB3xcs/photo.jpg?sz=50
+	 * 
+	 * @param url
+	 * @return
+	 */
 	private String getBestPictureSize(String url) {
-		String url_param= url.substring(0,url.indexOf('=')+1);
-		String best = url_param+"200";
+		String url_param = url.substring(0, url.indexOf('=') + 1);
+		String best = url_param + "200";
 		return best;
 	}
 
 	/**
 	 * The backend need a not null password
+	 * 
 	 * @return
 	 */
-	private String getFakePassword() {	
+	private String getFakePassword() {
 		return "vfdvbdpfjvjvperj5455vre";
 	}
 
 	private void registerUser() {
 		Activity activity = getActivity();
-		Intent intent = new Intent(activity,RESTService.class);
+		Intent intent = new Intent(activity, RESTService.class);
 		intent.setData(Uri.parse(REGISTER_URI));
 
 		// Here we are going to place our REST call parameters.
 		Bundle params = new Bundle();
-		String payload=new Gson().toJson(user, Participant.class);
-		params.putString(RESTService.KEY_JSON_PLAYLOAD,payload);
-		intent.putExtra(RESTService.EXTRA_HTTP_VERB,RESTService.POST);
+		String payload = new Gson().toJson(user, Participant.class);
+		params.putString(RESTService.KEY_JSON_PLAYLOAD, payload);
+		intent.putExtra(RESTService.EXTRA_HTTP_VERB, RESTService.POST);
 		intent.putExtra(RESTService.EXTRA_PARAMS, params);
-		intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,getResultReceiver());
+		intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER, getResultReceiver());
 
 		activity.startService(intent);
 	}
-	
+
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
 		Activity activity = getActivity();
 		// Here is where we handle our REST response.
 		// Check to see if we got an HTTP 200 code and have some data.
-	String result=	resultData.getString(RESTService.REST_RESULT);
+		String result = resultData.getString(RESTService.REST_RESULT);
 		if (code == 200 && result != null) {
-			
-			mSignedCallback.onSignedIn(user);
-			
+
+			mSignedCallback.onSignedIn(user,mConnectionProgressDialog);
+
 			Log.d(TAG, result);
-			Toast.makeText(
-					activity,
-					"Successfully Registered !",
+			Toast.makeText(activity, "Successfully Registered !",
 					Toast.LENGTH_SHORT).show();
-		} else if(code == 409 && result != null){
-			mSignedCallback.onSignedIn(user);
-			Toast.makeText(
-					activity,
-					"Welcome back, "+user.getFirstname(),
+		} else if (code == 409 && result != null) {
+			mSignedCallback.onSignedIn(user,mConnectionProgressDialog);
+			Toast.makeText(activity, "Welcome back, " + user.getFirstname(),
+					Toast.LENGTH_SHORT).show();
+		} else
+
+		if (activity != null) {
+			Log.d(TAG, result);
+			Toast.makeText(activity, "Failed to Register.Try again.",
 					Toast.LENGTH_SHORT).show();
 		}
-		else
-			
-			if (activity != null) {
-				Log.d(TAG, result);
-				Toast.makeText(
-						activity,
-						"Failed to Register.Try again.",
-						Toast.LENGTH_SHORT).show();
-			}
-		
+
 	}
 
 	@Override
 	public void onUserEdited(Participant p) {
-		this.user=p;
+		this.user = p;
 		registerUser();
 	}
 }

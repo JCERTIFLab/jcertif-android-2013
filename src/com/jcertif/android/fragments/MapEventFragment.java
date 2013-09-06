@@ -147,7 +147,7 @@ public class MapEventFragment extends RESTResponderFragment {
                         jsonObj.getJSONArray("latlng").getDouble(1)
                  ))
                  .visible(true)
-                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_location))
             );
         }
     }

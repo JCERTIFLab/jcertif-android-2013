@@ -12,66 +12,9 @@
         <LinearLayout
             android:id="@+id/lv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:orientation="vertical" >
-
-            <LinearLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="70dp"
-                android:orientation="vertical" >
-
-                <EditText
-                    android:id="@+id/et_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:hint="@string/email" >
-                </EditText>
-
-                <EditText
-                    android:id="@+id/et_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:ems="10"
-                    android:hint="@string/password"
-                    android:inputType="textPassword" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/buttons"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="10dp" >
-
-                <Button
-                    android:id="@+id/btn_login"
-                    style="@style/ButtonText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/green_button"
-                    android:text="@string/login" />
-
-                <Button
-                    android:id="@+id/btn_register2"
-                    style="@style/ButtonText"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/yellow_button"
-                    android:text="@string/register" />
-            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_or_oauth"
@@ -80,19 +23,37 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="20dp"
                 android:layout_marginTop="20dp"
-                android:text="@string/or_signin_with"
+                android:text="@string/sign_in_with"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp" >
+                android:layout_gravity="center_vertical"
+                android:layout_margin="20dp"
+                android:orientation="vertical" >
 
                 <com.google.android.gms.common.SignInButton
                     android:id="@+id/sign_in_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp" />
+
+                <Button
+                    android:id="@+id/button1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/twitter" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:text="@string/github" />
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
