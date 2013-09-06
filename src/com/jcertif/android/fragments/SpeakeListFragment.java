@@ -1,8 +1,10 @@
 package com.jcertif.android.fragments;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -18,10 +20,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jcertif.android.JcertifApplication;
@@ -30,14 +28,12 @@ import com.jcertif.android.R;
 import com.jcertif.android.adapters.SpeakerAdapter;
 import com.jcertif.android.adapters.SpeedScrollListener;
 import com.jcertif.android.dao.SpeakerProvider;
-import com.jcertif.android.fragments.SessionListFragment.OnSessionUpdatedListener;
-import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
-public class SpeakeListFragment extends RESTResponderFragment {
+public class SpeakeListFragment extends RESTResponderFragment implements PullToRefreshAttacher.OnRefreshListener {
 
-	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
+	public static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
 			+ "/speaker/list";
 
 	private static String TAG = SessionListFragment.class.getName();
@@ -47,6 +43,7 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	private SpeakerAdapter mAdapter;
 	private SpeakerProvider mProvider;
 	private SpeedScrollListener mListener;
+	
 
 	public SpeakeListFragment() {
 		// Empty constructor required for fragment subclasses
@@ -65,6 +62,18 @@ public class SpeakeListFragment extends RESTResponderFragment {
 		String speaker = getResources().getStringArray(R.array.menu_array)[1];
 		mLvSpeakers = (ListView) rootView.findViewById(R.id.lv_speaker);
 
+		
+		
+		 /**
+         * Here we create a PullToRefreshAttacher manually without an Options instance.
+         * PullToRefreshAttacher will manually create one using default values.
+         */
+      
+        // Set the Refreshable View to be the ListView and the refresh listener to be this.
+		
+	   mPullToRefreshAttacher=((MainActivity)getSherlockActivity()).getmPullToRefreshAttacher();				
+       mPullToRefreshAttacher.addRefreshableView(mLvSpeakers, this);
+		
 		mLvSpeakers.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -142,12 +151,18 @@ public class SpeakeListFragment extends RESTResponderFragment {
 	}
 
 	void updateList() {
-
+		mLvSpeakers.setAdapter(null);
+		
 		mListener = new SpeedScrollListener();
 		mLvSpeakers.setOnScrollListener(mListener);
 		mAdapter = new SpeakerAdapter(this.getActivity(), mListener, mSpeakers);
+	
 		mLvSpeakers.setAdapter(mAdapter);
 		setLoading(false);
+		if(refreshing){
+			refreshing=false;
+			mPullToRefreshAttacher.setRefreshComplete();
+		}
 	}
 
 	@Override
@@ -164,6 +179,8 @@ public class SpeakeListFragment extends RESTResponderFragment {
 			mSpeakers = parseSpeakerJson(result);
 			Log.d(TAG, result);
 			setSpeakers();
+			
+			
 			saveToCache(mSpeakers);
 
 		} else {
@@ -221,5 +238,17 @@ public class SpeakeListFragment extends RESTResponderFragment {
 
 		return Arrays.asList(speakers);
 
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+	
+		mProvider.deleteAll(Speaker.class);
+		mLvSpeakers.setAdapter(null);
+		mSpeakers = new ArrayList<Speaker>();
+		setSpeakers();
+		
+	   refreshing=true;
+		
 	}
 }

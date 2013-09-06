@@ -2,6 +2,8 @@ package com.jcertif.android.adapters;
 
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
 import android.R.color;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -22,13 +24,15 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 
 	ViewHolder holder;
 	Session session;
-	 private int selectedIndex=-1;
-	 private int selectedColor;
+	private int selectedIndex = -1;
+	private int selectedColor;
+	
 
 	public SpeakerAdapter(Context context, SpeedScrollListener scrollListener,
 			List<Speaker> items) {
 		super(context, scrollListener, items);
-		selectedColor=context.getResources().getColor(R.color.pressed_jcertifstyle);
+		selectedColor = context.getResources().getColor(
+				R.color.pressed_jcertifstyle);
 	}
 
 	@Override
@@ -52,34 +56,31 @@ public class SpeakerAdapter extends GenericListAdapter<Speaker> {
 					.findViewById(R.id.tv_city_country);
 			holder.avatar = (ImageView) convertView.findViewById(R.id.avatar);
 			convertView.setTag(holder);
-		} else
-			{holder = (ViewHolder) convertView.getTag();
-			}
-		  if(selectedIndex!= -1 && position == selectedIndex)
-	        {
-			  convertView.setBackgroundColor(selectedColor);
-			  
-	        }
-	        else
-	        {
-	        	convertView.setBackgroundColor(color.white);
-	        }
-		
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+		if (selectedIndex != -1 && position == selectedIndex) {
+			convertView.setBackgroundColor(selectedColor);
+
+		} else {
+			convertView.setBackgroundColor(color.white);
+		}
+
 		Speaker sp = items.get(position);
 		holder.name.setText(sp.getFirstname() + " " + sp.getLastname());
 		holder.company.setText(sp.getCompany());
-		holder.citycountry.setText(sp.getCity()+", "+sp.getCountry());
+		holder.citycountry.setText(sp.getCity() + ", " + sp.getCountry());
 		Picasso.with(context).load(sp.getPhoto()).resize(200, 200).centerCrop()
 				.into(holder.avatar);
-		
-		
+
 		return convertView;
 	}
-	 public void setSelectedIndex(int ind)
-	    {
-	        selectedIndex = ind;
-	        notifyDataSetChanged();
-	    }
+
+	public void setSelectedIndex(int ind) {
+		selectedIndex = ind;
+		notifyDataSetChanged();
+	}
+
 	public class ViewHolder {
 		public TextView name;
 		public TextView company;

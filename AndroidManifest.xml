@@ -58,6 +58,8 @@
         <activity android:name=".fragments.SessionDetailFragmentActivity"></activity>
         <activity android:name=".fragments.SpeakerSessionFragment"></activity>
         <activity android:name=".fragments.AboutFragmentActivity"></activity>
+        <receiver android:name=".broadcast.UpdaterBroadcast"></receiver>
+        <service android:name=".service.DataUpdaterService"></service>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.jcertif.android.fragments;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,8 +19,9 @@ import com.jcertif.android.service.RESTService;
 public abstract class RESTResponderFragment extends SherlockFragment {
 
 	private ResultReceiver mReceiver;
-	WaitDialog pd;
-
+	protected boolean refreshing=false;
+	protected PullToRefreshAttacher mPullToRefreshAttacher;
+	
 	public RESTResponderFragment() {
 
 		mReceiver = new ResultReceiver(new Handler()) {
@@ -55,16 +57,5 @@ public abstract class RESTResponderFragment extends SherlockFragment {
 		if (act != null) {
 			act.setSupportProgressBarIndeterminateVisibility(state);
 		}
-	/*	if (pd == null) {
-			pd = new WaitDialog(this.getSherlockActivity().getApplicationContext());
-			
-		}
-		if (state == true) {
-			pd.show();
-
-		} else {
-			pd.dismiss();
-		}
-	}*/
 	}
 }

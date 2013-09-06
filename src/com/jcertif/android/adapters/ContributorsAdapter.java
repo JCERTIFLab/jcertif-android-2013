@@ -60,6 +60,7 @@ public class ContributorsAdapter extends GenericListAdapter<Contributor> {
 	Contributor cn=	items.get(position);
 		holder.mail.setText(cn.getLogin());
 		holder.commits.setText(cn.getContributions()+" commits");
+		holder.commits.setText("");
 		holder.mail.setText(cn.getLogin());
 		Picasso.with(context).load(items.get(position).getAvatar_url()).into(holder.avatar);
 

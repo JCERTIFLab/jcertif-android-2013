@@ -1,22 +1,23 @@
 package com.jcertif.android;
 
+import java.util.Calendar;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,23 +30,23 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import com.jcertif.android.broadcast.UpdaterBroadcast;
 import com.jcertif.android.dao.CategorieProvider;
 import com.jcertif.android.dao.UserProvider;
-import com.jcertif.android.fragments.AboutFragment;
 import com.jcertif.android.fragments.AboutFragmentActivity;
 import com.jcertif.android.fragments.InitialisationFragment;
 import com.jcertif.android.fragments.InitialisationFragment.RefentielDataLodedListener;
 import com.jcertif.android.fragments.LoginFragment;
 import com.jcertif.android.fragments.MapEventFragment;
 import com.jcertif.android.fragments.ProfileFragment;
-import com.jcertif.android.fragments.SessionListFragment;
 import com.jcertif.android.fragments.SessionParentFragment;
-import com.jcertif.android.fragments.SpeakeListFragment;
 import com.jcertif.android.fragments.SpeakerParentFragment;
 import com.jcertif.android.model.Participant;
 import com.squareup.picasso.Picasso;
+
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Partially based on the ASOP source/Drawer Layout
@@ -53,7 +54,7 @@ import com.squareup.picasso.Picasso;
  * @author Patrick Bashizi (bashizip@gmail.com)
  */
 public class MainActivity extends SherlockFragmentActivity implements
-		LoginFragment.OnSignedInListener, RefentielDataLodedListener {
+		LoginFragment.OnSignedInListener, RefentielDataLodedListener,PullToRefreshAttacher.OnRefreshListener  {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -64,6 +65,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private String[] mMenuTitles;
 	private UserProvider userProvider;
 	public static Participant user;
+	
+	private PullToRefreshAttacher mPullToRefreshAttacher;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
+		mPullToRefreshAttacher = PullToRefreshAttacher.get(this);   
+		
 		mTitle = mDrawerTitle = getTitle();
 		mMenuTitles = getResources().getStringArray(R.array.menu_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -123,8 +128,21 @@ public class MainActivity extends SherlockFragmentActivity implements
 		if (firstLaunch()) {
 			selectItem(8);
 		}
+		
+		
+		
+		//setupUpdateService();
 
 	}
+	
+	
+
+	public PullToRefreshAttacher getmPullToRefreshAttacher() {
+		return mPullToRefreshAttacher;
+	}
+
+
+
 
 	@Override
 	public void onBackPressed() {
@@ -235,6 +253,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
+		
+	
 	}
 
 	@Override
@@ -398,9 +418,26 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public void OnRefDataLoaded() {
-
 		init();
-
 	}
 
+	void setupUpdateService(){
+		Calendar calendar = Calendar.getInstance();
+		// 9 AM 
+		calendar.set(Calendar.HOUR_OF_DAY, 16);
+		calendar.set(Calendar.MINUTE,42);
+		calendar.set(Calendar.SECOND, 0);
+		Intent intent =   new Intent(this, UpdaterBroadcast.class);
+		
+		PendingIntent pi = PendingIntent.getBroadcast(this, 0, intent, 0);
+		
+		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+		am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pi);
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+		
+		
+	}
 }

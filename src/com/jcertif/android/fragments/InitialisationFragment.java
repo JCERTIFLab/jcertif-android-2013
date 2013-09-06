@@ -44,14 +44,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 			+ "/ref/category/list";
 	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
 			+ "/speaker/list";
-	/*
-	 * private final String SESSION_STATUS_URI = JcertifApplication.BASE_URL +
-	 * "/ref/sessionstatus/list";
-	 */
-	/*
-	 * private final String CIVILITES__URI = JcertifApplication.BASE_URL +
-	 * "/ref/title/list";
-	 */
+
 
 	private RefentielDataLodedListener listener;
 	CategorieProvider catProvider;
@@ -131,7 +124,11 @@ public class InitialisationFragment extends RESTResponderFragment {
 		}
 		if (resultType.equals(CATEGORIES__URI)) {
 			List<Category> cat = parseCategoryJson(result);
+			if(cat!=null){
 			saveCatToCache(cat);
+			}else{
+				return;
+			}
 		}
 		if (resultType.equals(SPEAKER_LIST_URI)) {
 			List<Speaker> speskers = parseSpeakerJson(result);
@@ -207,7 +204,6 @@ public class InitialisationFragment extends RESTResponderFragment {
 			th.join();
 
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (++currentThreadNo == threadCount) {

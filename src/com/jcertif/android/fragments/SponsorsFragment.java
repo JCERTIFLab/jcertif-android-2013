@@ -188,6 +188,7 @@ public class SponsorsFragment extends RESTResponderFragment {
 
 		mListener = new SpeedScrollListener();
 		gv_sponsors.setOnScrollListener(mListener);
+		if(adapter!=null)
 		adapter = new SponsorsAdapter(this.getSherlockActivity(), mListener, mSponsors);
 		gv_sponsors.setAdapter(adapter);
 		

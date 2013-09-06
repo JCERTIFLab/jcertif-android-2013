@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -44,11 +46,11 @@ import com.jcertif.android.service.RESTService;
  * @author Patrick Bashizi
  * 
  */
-public class SessionListFragment extends RESTResponderFragment {
+public class SessionListFragment extends RESTResponderFragment implements PullToRefreshAttacher.OnRefreshListener{
 
-	private static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL
+	public static final String SESSIONS_LIST_URI = JcertifApplication.BASE_URL
 			+ "/session/list";
-	private static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL
+	public static final String CATEGORY_LIST_URI = JcertifApplication.BASE_URL
 			+ "/ref/category/list";
 
 	private static String TAG = SessionListFragment.class.getName();
@@ -81,6 +83,10 @@ public class SessionListFragment extends RESTResponderFragment {
 		getActivity().setTitle(session);
 
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
+		
+		mPullToRefreshAttacher=((MainActivity)getSherlockActivity()).getmPullToRefreshAttacher();		
+	    mPullToRefreshAttacher.addRefreshableView(mLvSessions, this);
+	       
 		mLvSessions.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -276,8 +282,7 @@ public class SessionListFragment extends RESTResponderFragment {
 			params.putString(RESTService.KEY_JSON_PLAYLOAD, null);
 
 			intent.putExtra(RESTService.EXTRA_PARAMS, params);
-			intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,
-					getResultReceiver());
+			intent.putExtra(RESTService.EXTRA_RESULT_RECEIVER,getResultReceiver());
 
 			// Here we send our Intent to our RESTService.
 			activity.startService(intent);
@@ -297,7 +302,10 @@ public class SessionListFragment extends RESTResponderFragment {
 		mLvSessions.setOnScrollListener(mListener);
 		mAdapter = new SessionAdapter(this.getActivity(), mListener, mSessions);
 		mLvSessions.setAdapter(mAdapter);
-
+		if(refreshing){
+			refreshing=false;
+			mPullToRefreshAttacher.setRefreshComplete();
+		}
 	}
 
 	private boolean onTablet() {
@@ -377,5 +385,18 @@ public class SessionListFragment extends RESTResponderFragment {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+	}
+
+	@Override
+	public void onRefreshStarted(View view) {
+		
+		mProvider.deleteAll(Session.class);
+		mLvSessions.setAdapter(null);
+		mSessions = new ArrayList<Session>();
+		setSessions();
+		
+	   refreshing=true;
+		
+		
 	}
 }
