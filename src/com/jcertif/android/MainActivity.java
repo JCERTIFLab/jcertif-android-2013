@@ -3,7 +3,7 @@ package com.jcertif.android;
 import java.util.Calendar;
 import java.util.List;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -45,8 +45,6 @@ import com.jcertif.android.fragments.SpeakerParentFragment;
 import com.jcertif.android.model.Participant;
 import com.squareup.picasso.Picasso;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
 
 /**
  * Partially based on the ASOP source/Drawer Layout

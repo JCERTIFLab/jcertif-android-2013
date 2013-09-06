@@ -57,6 +57,8 @@ public class SpeakeListFragment extends RESTResponderFragment implements PullToR
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
+		
 		View rootView = inflater.inflate(R.layout.fragment_list_speaker,
 				container, false);
 		String speaker = getResources().getStringArray(R.array.menu_array)[1];
@@ -87,7 +89,9 @@ public class SpeakeListFragment extends RESTResponderFragment implements PullToR
 
 		});
 		getActivity().setTitle(speaker);
+		
 		return rootView;
+		
 	}
 
 	private void selectSpeaker(Speaker speaker) {
@@ -151,7 +155,7 @@ public class SpeakeListFragment extends RESTResponderFragment implements PullToR
 	}
 
 	void updateList() {
-		mLvSpeakers.setAdapter(null);
+		//mLvSpeakers.setAdapter(null);
 		
 		mListener = new SpeedScrollListener();
 		mLvSpeakers.setOnScrollListener(mListener);
@@ -244,7 +248,7 @@ public class SpeakeListFragment extends RESTResponderFragment implements PullToR
 	public void onRefreshStarted(View view) {
 	
 		mProvider.deleteAll(Speaker.class);
-		mLvSpeakers.setAdapter(null);
+	//	mLvSpeakers.setAdapter(null);
 		mSpeakers = new ArrayList<Speaker>();
 		setSpeakers();
 		

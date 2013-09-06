@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <resources>
 
-     <style name="ButtonText">
+    <style name="ButtonText">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">#ffffff</item>
@@ -15,8 +14,8 @@
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">2</item>
     </style>
-    
-      <style name="WaitDialog">
+
+    <style name="WaitDialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
@@ -27,7 +26,7 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
-    
+
     <style name="Theme.Jcertifstyle" parent="@style/Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarItemBackground">@drawable/selectable_background_jcertifstyle</item>
         <item name="popupMenuStyle">@style/PopupMenu.Jcertifstyle</item>
@@ -39,9 +38,9 @@
         <item name="actionModeSplitBackground">@drawable/cab_background_bottom_jcertifstyle</item>
         <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Jcertifstyle</item>
 
-                <!-- Light.DarkActionBar specific -->
+        <!-- Light.DarkActionBar specific -->
         <item name="actionBarWidgetTheme">@style/Theme.Jcertifstyle.Widget</item>
-
+       
     </style>
 
     <style name="ActionBar.Solid.Jcertifstyle" parent="@style/Widget.Sherlock.Light.ActionBar.Solid.Inverse">
@@ -49,17 +48,20 @@
         <item name="backgroundStacked">@drawable/ab_stacked_solid_jcertifstyle</item>
         <item name="backgroundSplit">@drawable/ab_bottom_solid_jcertifstyle</item>
         <item name="progressBarStyle">@style/ProgressBar.Jcertifstyle</item>
+ 
+  
     </style>
 
     <style name="ActionBar.Transparent.Jcertifstyle" parent="@style/Widget.Sherlock.ActionBar">
         <item name="background">@drawable/ab_transparent_jcertifstyle</item>
         <item name="progressBarStyle">@style/ProgressBar.Jcertifstyle</item>
+     <item name="android:displayOptions">useLogo|showHome</item>
     </style>
-	
-    <style name="PopupMenu.Jcertifstyle" parent="@style/Widget.Sherlock.ListPopupWindow">	
-        <item name="android:popupBackground">@drawable/menu_dropdown_panel_jcertifstyle</item>	
+
+    <style name="PopupMenu.Jcertifstyle" parent="@style/Widget.Sherlock.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_jcertifstyle</item>
     </style>
-	
+
     <style name="DropDownListView.Jcertifstyle" parent="@style/Widget.Sherlock.ListView.DropDown">
         <item name="android:listSelector">@drawable/selectable_background_jcertifstyle</item>
     </style>
@@ -67,25 +69,26 @@
     <style name="ActionBarTabStyle.Jcertifstyle" parent="@style/Widget.Sherlock.ActionBar.TabView">
         <item name="android:background">@drawable/tab_indicator_ab_jcertifstyle</item>
     </style>
-	
+
     <style name="DropDownNav.Jcertifstyle" parent="@style/Widget.Sherlock.Spinner.DropDown.ActionBar">
         <item name="android:background">@drawable/spinner_background_ab_jcertifstyle</item>
         <item name="android:popupBackground">@drawable/menu_dropdown_panel_jcertifstyle</item>
         <item name="android:dropDownSelector">@drawable/selectable_background_jcertifstyle</item>
     </style>
-    
+
     <style name="ProgressBar.Jcertifstyle" parent="@style/Widget.Sherlock.ProgressBar.Horizontal">
         <item name="android:progressDrawable">@drawable/progress_horizontal_jcertifstyle</item>
     </style>
-    
+
     <style name="ActionButton.CloseMode.Jcertifstyle" parent="@style/Widget.Sherlock.ActionButton.CloseMode">
         <item name="android:background">@drawable/btn_cab_done_jcertifstyle</item>
     </style>
-    
+
     <!-- this style is only referenced in a Light.DarkActionBar based theme -->
     <style name="Theme.Jcertifstyle.Widget" parent="@style/Theme.Sherlock">
         <item name="popupMenuStyle">@style/PopupMenu.Jcertifstyle</item>
         <item name="dropDownListViewStyle">@style/DropDownListView.Jcertifstyle</item>
+           <item name="android:displayOptions">useLogo|showHome</item>
     </style>
 
 </resources>

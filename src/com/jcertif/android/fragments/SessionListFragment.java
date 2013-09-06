@@ -391,8 +391,8 @@ public class SessionListFragment extends RESTResponderFragment implements PullTo
 	public void onRefreshStarted(View view) {
 		
 		mProvider.deleteAll(Session.class);
-		mLvSessions.setAdapter(null);
-		mSessions = new ArrayList<Session>();
+		//mLvSessions.setAdapter(null);
+		mSessions = loadSessionsFromCache();
 		setSessions();
 		
 	   refreshing=true;
