@@ -403,8 +403,8 @@ public class LoginFragment extends RESTResponderFragment implements ConnectionCa
 		participant.setFirstname(fullName.substring(0, fullName.indexOf(' ')));
 		participant.setLastname(fullName.substring(fullName.indexOf(' ')));
 		participant.setBiography(user.getDescription());
-		participant.setCity(location.substring(0, location.indexOf(", ")));
-		participant.setCountry(location.substring(location.indexOf(", ")));
+		// participant.setCity(location.substring(0, location.indexOf(", ")));
+		// participant.setCountry(location.substring(location.indexOf(", ")));
 		participant.setPhone(getBestPictureSize(user.getProfileImageURL()));
 		participant.setPhone("N/A");
 		participant.setPassword(getFakePassword());
