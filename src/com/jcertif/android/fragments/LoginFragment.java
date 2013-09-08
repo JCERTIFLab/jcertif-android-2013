@@ -405,7 +405,7 @@ public class LoginFragment extends RESTResponderFragment implements ConnectionCa
 		participant.setBiography(user.getDescription());
 		// participant.setCity(location.substring(0, location.indexOf(", ")));
 		// participant.setCountry(location.substring(location.indexOf(", ")));
-		participant.setPhone(getBestPictureSize(user.getProfileImageURL()));
+		participant.setPhoto(user.getProfileImageURL());
 		participant.setPhone("N/A");
 		participant.setPassword(getFakePassword());
 
