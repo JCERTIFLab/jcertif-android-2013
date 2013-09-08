@@ -4,13 +4,14 @@ import java.util.Calendar;
 import java.util.List;
 
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
-
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -45,14 +46,13 @@ import com.jcertif.android.fragments.SpeakerParentFragment;
 import com.jcertif.android.model.Participant;
 import com.squareup.picasso.Picasso;
 
-
 /**
  * Partially based on the ASOP source/Drawer Layout
  * 
  * @author Patrick Bashizi (bashizip@gmail.com)
  */
-public class MainActivity extends SherlockFragmentActivity implements
-		LoginFragment.OnSignedInListener, RefentielDataLodedListener,PullToRefreshAttacher.OnRefreshListener  {
+public class MainActivity extends SherlockFragmentActivity implements LoginFragment.OnSignedInListener,
+		RefentielDataLodedListener, PullToRefreshAttacher.OnRefreshListener {
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -63,13 +63,16 @@ public class MainActivity extends SherlockFragmentActivity implements
 	private String[] mMenuTitles;
 	private UserProvider userProvider;
 	public static Participant user;
-	
+
 	private PullToRefreshAttacher mPullToRefreshAttacher;
+
+	// preference twitter pour le stockage des cles du user
+	private static SharedPreferences mSharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		// getWindow().requestFeature((int)
 		// com.actionbarsherlock.view.Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -81,8 +84,8 @@ public class MainActivity extends SherlockFragmentActivity implements
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
-		mPullToRefreshAttacher = PullToRefreshAttacher.get(this);   
-		
+		mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
+
 		mTitle = mDrawerTitle = getTitle();
 		mMenuTitles = getResources().getStringArray(R.array.menu_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -90,8 +93,7 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 		// set a custom shadow that overlays the main content when the drawer
 		// opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
-				GravityCompat.START);
+		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 		mDrawerList.setAdapter(new DrawerListAdapter(getLoggedInUser()));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
@@ -120,27 +122,22 @@ public class MainActivity extends SherlockFragmentActivity implements
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+		mSharedPreferences = getApplicationContext().getSharedPreferences(Config.PREFERENCE_JCERTIF_TWITTER, 0);
+
 		if (savedInstanceState == null) {
 			init();
 		}
 		if (firstLaunch()) {
 			selectItem(8);
 		}
-		
-		
-		
-		//setupUpdateService();
+
+		// setupUpdateService();
 
 	}
-	
-	
 
 	public PullToRefreshAttacher getmPullToRefreshAttacher() {
 		return mPullToRefreshAttacher;
 	}
-
-
-
 
 	@Override
 	public void onBackPressed() {
@@ -191,16 +188,14 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		//getSupportMenuInflater().inflate(R.menu.main, menu);
+		// getSupportMenuInflater().inflate(R.menu.main, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	/* The click listner for ListView in the navigation drawer */
-	private class DrawerItemClickListener implements
-			ListView.OnItemClickListener {
+	private class DrawerItemClickListener implements ListView.OnItemClickListener {
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position,
-				long id) {
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			view.setSelected(true);
 			selectItem(position);
 		}
@@ -214,6 +209,20 @@ public class MainActivity extends SherlockFragmentActivity implements
 		case 0:
 			if (getLoggedInUser() == null) {
 				fragment = new LoginFragment();
+				// Apres authentification via le navigateur par defaut, deuxieme
+				// phase de
+				// la connexion vers twitter
+				Bundle bundle = new Bundle();
+				if (!mSharedPreferences.getBoolean(Config.PREF_KEY_TWITTER_LOGIN, false)) {
+					Uri uri = getIntent().getData();
+					if (uri != null && uri.toString().startsWith(Config.TWITTER_CALLBACK_URL)) {
+						// oAuth verifier
+						final String verifier = uri.getQueryParameter(Config.URL_TWITTER_OAUTH_VERIFIER);
+						bundle.putString("params", verifier);
+					}
+				}
+
+				fragment.setArguments(bundle);
 			} else {
 				fragment = new ProfileFragment();
 			}
@@ -225,11 +234,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 			fragment = new SpeakerParentFragment();
 			break;
 		case 3:
-			 fragment = new MapEventFragment();
+			fragment = new MapEventFragment();
 			break;
 
 		case 4:
-		//	fragment = new AboutFragment();
+			// fragment = new AboutFragment();
 			startActivity(new Intent(MainActivity.this, AboutFragmentActivity.class));
 			break;
 		case 8:
@@ -246,13 +255,11 @@ public class MainActivity extends SherlockFragmentActivity implements
 			return;
 		}
 
-		fragmentManager.beginTransaction()
-				.replace(R.id.content_frame, fragment).commit();
+		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 
 		mDrawerList.setItemChecked(position, true);
 		mDrawerLayout.closeDrawer(mDrawerList);
-		
-	
+
 	}
 
 	@Override
@@ -318,32 +325,25 @@ public class MainActivity extends SherlockFragmentActivity implements
 				holder = new ViewHolder();
 				switch (type) {
 				case TYPE_ITEM:
-					convertView = mInflater.inflate(R.layout.drawer_list_item,
-							null);
-					holder.textView = (TextView) convertView
-							.findViewById(R.id.tv_drawer_item);
+					convertView = mInflater.inflate(R.layout.drawer_list_item, null);
+					holder.textView = (TextView) convertView.findViewById(R.id.tv_drawer_item);
 
-					holder.imgView = (ImageView) convertView
-							.findViewById(R.id.img_drawer);
+					holder.imgView = (ImageView) convertView.findViewById(R.id.img_drawer);
 					int index = position;
 					switch (index) {
 					case 1:
-						holder.imgView.setImageDrawable(getResources()
-								.getDrawable(R.drawable.ic_action_list));
+						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_list));
 						break;
 					case 2:
-						holder.imgView.setImageDrawable(getResources()
-								.getDrawable(R.drawable.ic_action_user));
+						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_user));
 						break;
-				
+
 					case 3:
-						holder.imgView.setImageDrawable(getResources()
-								.getDrawable(R.drawable.ic_action_map));
+						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
 						break;
 
 					case 4:
-						holder.imgView.setImageDrawable(getResources()
-								.getDrawable(R.drawable.ic_action_help));
+						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
 						break;
 					default:
 						break;
@@ -352,20 +352,15 @@ public class MainActivity extends SherlockFragmentActivity implements
 
 					break;
 				case TYPE_PROFILE:
-					convertView = mInflater
-							.inflate(R.layout.item_profile, null);
-					holder.textView = (TextView) convertView
-							.findViewById(R.id.tv_username);
-					holder.imgView = (ImageView) convertView
-							.findViewById(R.id.img_profile);
+					convertView = mInflater.inflate(R.layout.item_profile, null);
+					holder.textView = (TextView) convertView.findViewById(R.id.tv_username);
+					holder.imgView = (ImageView) convertView.findViewById(R.id.img_profile);
 
 					if (user == null) {
 						holder.textView.setText("Please Login");
 					} else {
-						holder.textView.setText(user.getFirstname() + " "
-								+ user.getLastname());
-						Picasso.with(MainActivity.this).load(user.getPhoto())
-								.placeholder(R.drawable.ic_action_profile)
+						holder.textView.setText(user.getFirstname() + " " + user.getLastname());
+						Picasso.with(MainActivity.this).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile)
 								.into(holder.imgView);
 					}
 
@@ -397,13 +392,13 @@ public class MainActivity extends SherlockFragmentActivity implements
 	}
 
 	@Override
-	public void onSignedIn(Participant user,ProgressDialog dlg) {
-		
+	public void onSignedIn(Participant user, ProgressDialog dlg) {
+
 		mDrawerList.setAdapter(new DrawerListAdapter(user));
 		setLogedInUser(user);
 		selectItem(0);
 		mDrawerLayout.openDrawer(Gravity.LEFT);
-		
+
 		dlg.dismiss();
 	}
 
@@ -419,23 +414,22 @@ public class MainActivity extends SherlockFragmentActivity implements
 		init();
 	}
 
-	void setupUpdateService(){
+	void setupUpdateService() {
 		Calendar calendar = Calendar.getInstance();
-		// 9 AM 
+		// 9 AM
 		calendar.set(Calendar.HOUR_OF_DAY, 16);
-		calendar.set(Calendar.MINUTE,42);
+		calendar.set(Calendar.MINUTE, 42);
 		calendar.set(Calendar.SECOND, 0);
-		Intent intent =   new Intent(this, UpdaterBroadcast.class);
-		
+		Intent intent = new Intent(this, UpdaterBroadcast.class);
+
 		PendingIntent pi = PendingIntent.getBroadcast(this, 0, intent, 0);
-		
+
 		AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-		am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pi);
+		am.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pi);
 	}
 
 	@Override
 	public void onRefreshStarted(View view) {
-		
-		
+
 	}
 }
