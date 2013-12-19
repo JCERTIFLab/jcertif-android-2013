@@ -12,7 +12,8 @@ Ce projet consiste à développer l'application Android de l'événement JCertif
 <img src="http://lh6.googleusercontent.com/qPNbCGYKTMqNC4CGaw7q9aT1YeyG0jTz27NvdyOKckg39mkXoidiwQWZdV1QJhqwMSmXKDSsbZc
 " width="30%"/>
 <img src="http://lh5.googleusercontent.com/Q8RzEmRbfdozG09z7grJ4PNX70k4U7gI4dXg0He6lSSX1WGh_WEzzrx-ZGS1Os682A3ANLGDmFE
-" width="70%"/>
+" width="30%"/>
+<img src="http://lh4.googleusercontent.com/GlsFgVvJMMJA8ch2DYlk2XBnNlaU2P3wO_8Q3HLrw1tdTozsT5xAcVvT05uR1T8zzNlt8O-YUJw" width="30%"/>
 <br/>
 <img src="http://lh3.googleusercontent.com/NX3jex8otcVIgL2y0ZbAVc0LIxC_foGerqxZEAdizxelnu3MV2PrOupcaNG42rQenkJf46ZZkuc
 " width="100%"/>
