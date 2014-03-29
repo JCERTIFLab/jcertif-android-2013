@@ -1,6 +1,5 @@
 package com.jcertif.android.fragments;
 
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
@@ -8,6 +7,8 @@ import android.os.ResultReceiver;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.jcertif.android.service.RESTService;
+
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 /**
  * 

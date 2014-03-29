@@ -1,9 +1,5 @@
 package com.jcertif.android;
 
-import java.util.Calendar;
-import java.util.List;
-
-import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -46,6 +42,13 @@ import com.jcertif.android.fragments.SpeakerParentFragment;
 import com.jcertif.android.model.Participant;
 import com.squareup.picasso.Picasso;
 
+import java.util.Calendar;
+import java.util.List;
+
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
+
+
+
 /**
  * Partially based on the ASOP source/Drawer Layout
  * 
@@ -84,7 +87,7 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setHomeButtonEnabled(true);
 
-		mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
+        mPullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
 		mTitle = mDrawerTitle = getTitle();
 		mMenuTitles = getResources().getStringArray(R.array.menu_array);

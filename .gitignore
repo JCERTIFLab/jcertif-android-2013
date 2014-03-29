@@ -19,3 +19,13 @@ local.properties
 .classpath
 .project
 project.properties
+
+#gradle project files
+.gradle
+
+#intellig project files
+.idea
+jcertif-android-2013.iml
+
+#gradle build folder
+build/

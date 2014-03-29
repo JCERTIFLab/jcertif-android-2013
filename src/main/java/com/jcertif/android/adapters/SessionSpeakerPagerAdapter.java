@@ -12,7 +12,7 @@ public class SessionSpeakerPagerAdapter extends FragmentPagerAdapter {
 
 		private final List<SessionDetailFragment> fragments;
 
-		//On fournit à l'adapter la liste des fragments à afficher
+		//On fournit Ã  l'adapter la liste des fragments Ã  afficher
 		public SessionSpeakerPagerAdapter(FragmentManager fm, List<SessionDetailFragment> fragments) {
 			super(fm);
 			this.fragments = fragments;

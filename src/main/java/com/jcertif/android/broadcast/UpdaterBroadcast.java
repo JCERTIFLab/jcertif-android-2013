@@ -30,7 +30,7 @@ public class UpdaterBroadcast extends BroadcastReceiver {
 		this.ctx = context;
 		ctx.startService(new Intent(ctx, DataUpdaterService.class));
 
-		Toast.makeText(ctx, "JCertif : Mise à jour des données...",
+		Toast.makeText(ctx, "JCertif : Mise Ã  jour des donnÃ©es...",
 				Toast.LENGTH_SHORT).show();
 
 	}

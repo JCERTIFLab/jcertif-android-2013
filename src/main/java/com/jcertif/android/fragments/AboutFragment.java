@@ -1,48 +1,18 @@
 package com.jcertif.android.fragments;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.google.android.gms.internal.m;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.jcertif.android.JcertifApplication;
-import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
-import com.jcertif.android.adapters.SessionAdapter;
-import com.jcertif.android.adapters.SpeedScrollListener;
-import com.jcertif.android.adapters.SponsorsAdapter;
-import com.jcertif.android.dao.SessionProvider;
-import com.jcertif.android.dao.SponsorProvider;
-import com.jcertif.android.model.Participant;
-import com.jcertif.android.model.Session;
-import com.jcertif.android.model.Speaker;
-import com.jcertif.android.model.Sponsor;
-import com.jcertif.android.service.RESTService;
 import com.jcertif.android.util.Utils;
-import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * 

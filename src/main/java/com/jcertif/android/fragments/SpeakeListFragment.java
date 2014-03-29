@@ -1,10 +1,5 @@
 package com.jcertif.android.fragments;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,6 +26,12 @@ import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
+
 public class SpeakeListFragment extends RESTResponderFragment implements PullToRefreshAttacher.OnRefreshListener {
 
 	public static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
@@ -43,6 +44,7 @@ public class SpeakeListFragment extends RESTResponderFragment implements PullToR
 	private SpeakerAdapter mAdapter;
 	private SpeakerProvider mProvider;
 	private SpeedScrollListener mListener;
+    private PullToRefreshAttacher mPullToRefreshAttacher;
 	
 
 	public SpeakeListFragment() {

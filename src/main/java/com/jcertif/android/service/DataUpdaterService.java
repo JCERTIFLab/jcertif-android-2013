@@ -115,7 +115,7 @@ public class DataUpdaterService extends Service {
 			}
 		} else {
 
-			Toast.makeText(this, "Echec de mis à jour des données",
+			Toast.makeText(this, "Echec de mis Ã  jour des donnÃ©es",
 					Toast.LENGTH_LONG).show();
 		}
 	}

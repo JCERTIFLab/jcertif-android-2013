@@ -1,13 +1,5 @@
 package com.jcertif.android.fragments;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -41,6 +33,14 @@ import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.service.RESTService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefreshAttacher;
+
 /**
  * 
  * @author Patrick Bashizi
@@ -62,6 +62,7 @@ public class SessionListFragment extends RESTResponderFragment implements PullTo
 	private SpeedScrollListener mListener;
 	private ActionMode mActionMode;
 	private Session mSelectedSession;
+    private PullToRefreshAttacher mPullToRefreshAttacher ;
 
 	public SessionListFragment() {
 		// Empty constructor required for fragment subclasses
@@ -84,9 +85,9 @@ public class SessionListFragment extends RESTResponderFragment implements PullTo
 
 		mLvSessions = (ListView) rootView.findViewById(R.id.lv_session);
 		
-		mPullToRefreshAttacher=((MainActivity)getSherlockActivity()).getmPullToRefreshAttacher();		
+		mPullToRefreshAttacher=((MainActivity)getSherlockActivity()).getmPullToRefreshAttacher();
 	    mPullToRefreshAttacher.addRefreshableView(mLvSessions, this);
-	       
+
 		mLvSessions.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

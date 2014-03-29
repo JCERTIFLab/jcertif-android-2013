@@ -1,12 +1,5 @@
 package com.jcertif.android.fragments;
 
-import twitter4j.TwitterException;
-import twitter4j.TwitterFactory;
-import twitter4j.User;
-import twitter4j.auth.AccessToken;
-import twitter4j.auth.RequestToken;
-import twitter4j.conf.Configuration;
-import twitter4j.conf.ConfigurationBuilder;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -34,8 +27,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.PlusClient.OnAccessRevokedListener;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.PersonBuffer;
 import com.google.gson.Gson;
-import com.jcertif.android.BuildConfig;
 import com.jcertif.android.Config;
 import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.R;
@@ -43,13 +36,21 @@ import com.jcertif.android.fragments.RegistrationFormFragment.OnUserDialogReturn
 import com.jcertif.android.model.Participant;
 import com.jcertif.android.service.RESTService;
 
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
+import twitter4j.auth.RequestToken;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.ConfigurationBuilder;
+
 /**
  * 
  * @author bashizip
  * 
  */
 public class LoginFragment extends RESTResponderFragment implements ConnectionCallbacks, OnConnectionFailedListener,
-		OnAccessRevokedListener, OnClickListener, PlusClient.OnPersonLoadedListener, OnUserDialogReturns {
+		OnAccessRevokedListener, OnClickListener, PlusClient.OnPeopleLoadedListener, OnUserDialogReturns {
 
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
 	private static final String TAG = "Login Fragment";
@@ -76,7 +77,9 @@ public class LoginFragment extends RESTResponderFragment implements ConnectionCa
 	// Bouton de connexion à twitter
 	private Button twitterSigninButton;
 
-	// Container Activity must implement this interface
+
+
+    // Container Activity must implement this interface
 	public interface OnSignedInListener {
 		public void onSignedIn(Participant user, ProgressDialog dlg);
 	}
@@ -111,7 +114,7 @@ public class LoginFragment extends RESTResponderFragment implements ConnectionCa
 		getSherlockActivity().getSupportActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 
 		mPlusClient = new PlusClient.Builder(this.getActivity().getApplicationContext(), this, this)
-				.setVisibleActivities("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+                .setActions("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
 				.setScopes(Scopes.PLUS_LOGIN, Scopes.PLUS_PROFILE).build();
 
 		mConnectionProgressDialog = new ProgressDialog(this.getActivity());
@@ -192,7 +195,7 @@ public class LoginFragment extends RESTResponderFragment implements ConnectionCa
 		 */
 
 		String accountName = mPlusClient.getAccountName();
-		mPlusClient.loadPerson(this, "me");
+        mPlusClient.loadPeople(this,"me");
 		Log.d(TAG, "Display Name: " + accountName);
 		Toast.makeText(this.getActivity(), "Connected:" + accountName, Toast.LENGTH_LONG).show();
 
@@ -240,30 +243,33 @@ public class LoginFragment extends RESTResponderFragment implements ConnectionCa
 		registerDialog.show(fm, "fragment_register");
 	}
 
-	@Override
-	public void onPersonLoaded(ConnectionResult status, Person person) {
-		if (status.getErrorCode() == ConnectionResult.SUCCESS) {
+    @Override
+    public void onPeopleLoaded(ConnectionResult connectionResult, PersonBuffer persons, String s) {
 
-			user = new Participant();
-			String fullName = person.getDisplayName();
-			user.setFirstname(fullName.substring(0, fullName.indexOf(' ')));
-			user.setLastname(fullName.substring(fullName.indexOf(' ')));
-			user.setEmail(mPlusClient.getAccountName());
-			user.setBiography(person.getTagline());
-			user.setCity((person.getCurrentLocation() == null) ? "N/A" : person.getCurrentLocation());
-			user.setCountry((person.getCurrentLocation() == null) ? "N/A" : person.getCurrentLocation());
-			user.setCompany(person.getOrganizations().get(0).getName());
-			user.setPhoto(getBestPictureSize(person.getImage().getUrl()));
-			user.setWebsite(person.getUrl());
-			user.setPassword(getFakePassword());
-			user.setPhone("N/A");
+        if (connectionResult.getErrorCode() == ConnectionResult.SUCCESS) {
 
-			registerUser();
+            Person person = persons.get(0);
+            user = new Participant();
+            String fullName = person.getDisplayName();
+            user.setFirstname(fullName.substring(0, fullName.indexOf(' ')));
+            user.setLastname(fullName.substring(fullName.indexOf(' ')));
+            user.setEmail(mPlusClient.getAccountName());
+            user.setBiography(person.getTagline());
+            user.setCity((person.getCurrentLocation() == null) ? "N/A" : person.getCurrentLocation());
+            user.setCountry((person.getCurrentLocation() == null) ? "N/A" : person.getCurrentLocation());
+            user.setCompany(person.getOrganizations().get(0).getName());
+            user.setPhoto(getBestPictureSize(person.getImage().getUrl()));
+            user.setWebsite(person.getUrl());
+            user.setPassword(getFakePassword());
+            user.setPhone("N/A");
 
-		} else {
-			// TODO handle this
-		}
-	}
+            registerUser();
+
+        } else {
+            // TODO handle this
+        }
+    }
+
 
 	/**
 	 * G+ return pic size of 50, we need a bigger size, say 200 Url are like :
