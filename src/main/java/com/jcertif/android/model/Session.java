@@ -60,6 +60,9 @@ public class Session extends JCertifObject{
 		
 	}
 
+
+
+
 	public long getId() {
 		return id;
 	}

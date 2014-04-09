@@ -1,8 +1,5 @@
 package com.jcertif.android.fragments;
 
-import java.util.Arrays;
-import java.util.List;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,12 +17,21 @@ import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.dao.CategorieProvider;
+import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.dao.SponsorLevelProvider;
+import com.jcertif.android.dao.SponsorProvider;
 import com.jcertif.android.model.Category;
+import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
+import com.jcertif.android.model.Sponsor;
 import com.jcertif.android.model.SponsorLevel;
 import com.jcertif.android.service.RESTService;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 
@@ -50,8 +56,10 @@ public class InitialisationFragment extends RESTResponderFragment {
 	CategorieProvider catProvider;
 	SponsorLevelProvider spProvider;
 	SpeakerProvider spekerProvider;
+    SponsorProvider sponsorProvider;
+    SessionProvider sessionProvider;
 
-	private static int threadCount = 3; // must be equal to urls count
+	private static int threadCount = 5; // must be equal to urls count
 	private static int currentThreadNo = 0; // id of the incoming thread from
 											// intentService
 
@@ -93,8 +101,18 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 		spekerProvider = new SpeakerProvider(
 				InitialisationFragment.this.getSherlockActivity());
+        sponsorProvider = new SponsorProvider(
+                InitialisationFragment.this.getSherlockActivity());
 
-		loadData(CATEGORIES__URI);
+        sessionProvider = new SessionProvider(
+                InitialisationFragment.this.getSherlockActivity());
+
+
+        if(JcertifApplication.ONLINE){
+		    loadData(CATEGORIES__URI);
+        }else{
+            loadToCache();
+        }
 	}
 
 	void loadData(String URI) {
@@ -109,6 +127,21 @@ public class InitialisationFragment extends RESTResponderFragment {
 		activity.startService(intent);
 	}
 
+    void loadToCache(){
+        List<Sponsor> sponsors = parseSponsorJson(loadFromRaw(R.raw.sponsorsdata));
+        if (sponsors!=null)
+            saveSponsorToCache(sponsors);
+        List<Category> categories = parseCategoryJson(loadFromRaw(R.raw.categoriesdata));
+        if (categories!=null)
+            saveCatToCache(categories);
+        List<Speaker> speakers = parseSpeakerJson(loadFromRaw(R.raw.speackersdata));
+        if(speakers!=null)
+            saveSpeakerToCache(speakers);
+        List<Session> sessions = parseSessionJson(loadFromRaw(R.raw.sessionsdata));
+        if(sessions!=null)
+            saveSessionToCache(sessions);
+    }
+
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
 		if (resultData == null) {
@@ -120,7 +153,11 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 		if (resultType.equals(SPONSOR_LEVEL_URI)) {
 			List<SponsorLevel> sponsorsLevel = parseSponsorLevelJson(result);
+            if(sponsorsLevel!=null){
 			saveSponsorLevelToCache(sponsorsLevel);
+            }else{
+                return;
+            }
 		}
 		if (resultType.equals(CATEGORIES__URI)) {
 			List<Category> cat = parseCategoryJson(result);
@@ -137,34 +174,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 	}
 
-	private void saveCatToCache(final List<Category> cat) {
-		Thread th = new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				for (Category sl : cat) {
-					catProvider.store(sl);
-				}
-			}
-		});
-
-		th.start();
-
-		try {
-
-			th.join();
-
-		} catch (InterruptedException e) {
-			th.interrupt();
-			e.printStackTrace();
-		}
-		if (++currentThreadNo == threadCount) {
-			listener.OnRefDataLoaded();
-		} else {
-			loadData(SPONSOR_LEVEL_URI);
-		}
-
-	}
 
 	private List<Category> parseCategoryJson(String result) {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
@@ -180,6 +190,21 @@ public class InitialisationFragment extends RESTResponderFragment {
 		return Arrays.asList(sl);
 	}
 
+    private List<Sponsor> parseSponsorJson(String result) {
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+                .create();
+        Sponsor[] sl = gson.fromJson(result, Sponsor[].class);
+        return Arrays.asList(sl);
+    }
+
+    private List<Session> parseSessionJson(String result) {
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+                .create();
+        Session[] sl = gson.fromJson(result, Session[].class);
+        return Arrays.asList(sl);
+    }
+
+
 	private List<Speaker> parseSpeakerJson(String result) {
 		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
 				.create();
@@ -188,6 +213,35 @@ public class InitialisationFragment extends RESTResponderFragment {
 		return Arrays.asList(speakers);
 
 	}
+
+    private void saveCatToCache(final List<Category> cat) {
+        Thread th = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                for (Category sl : cat) {
+                    catProvider.store(sl);
+                }
+            }
+        });
+
+        th.start();
+
+        try {
+
+            th.join();
+
+        } catch (InterruptedException e) {
+            th.interrupt();
+            e.printStackTrace();
+        }
+        if (++currentThreadNo == threadCount) {
+            listener.OnRefDataLoaded();
+        } else {
+            loadData(SPONSOR_LEVEL_URI);
+        }
+
+    }
 
 	protected void saveSponsorLevelToCache(final List<SponsorLevel> sls) {
 		Thread th = new Thread(new Runnable() {
@@ -237,6 +291,75 @@ public class InitialisationFragment extends RESTResponderFragment {
 			listener.OnRefDataLoaded();
 		}
 	}
+
+
+    private void saveSponsorToCache(final List<Sponsor> result) {
+        Thread th = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (result != null)
+                    for (Sponsor sp : result)
+                        sponsorProvider.store(sp);
+            }
+        });
+        th.start();
+        try {
+
+            th.join();
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (++currentThreadNo == threadCount) {
+            listener.OnRefDataLoaded();
+        }
+    }
+
+
+    private void saveSessionToCache(final List<Session> result) {
+        Thread th = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (result != null)
+                    for (Session se : result)
+                        sessionProvider.store(se);
+            }
+        });
+        th.start();
+        try {
+
+            th.join();
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (++currentThreadNo == threadCount) {
+            listener.OnRefDataLoaded();
+        }
+    }
+
+    public String loadFromRaw(int inFile) {
+        String tContents = "";
+
+        try {
+            InputStream stream = getResources().openRawResource(inFile);
+
+            int size = stream.available();
+            byte[] buffer = new byte[size];
+            stream.read(buffer);
+            stream.close();
+            tContents = new String(buffer);
+        } catch (IOException e) {
+            // Handle exceptions here
+        }
+
+        return tContents;
+
+    }
 
 	@Override
 	public void onDestroy() {

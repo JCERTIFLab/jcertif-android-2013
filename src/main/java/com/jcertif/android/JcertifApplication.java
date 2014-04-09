@@ -7,6 +7,7 @@ public class JcertifApplication extends Application{
 
 	//public static final String BASE_URL="http://jcertif-backend.msomda.cloudbees.net";
 	public static final String BASE_URL="http://jcertif.backend.vm-host.net";
+    public static final Boolean ONLINE = false;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
