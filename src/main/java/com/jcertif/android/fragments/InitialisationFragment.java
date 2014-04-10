@@ -17,11 +17,13 @@ import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.MainActivity;
 import com.jcertif.android.R;
 import com.jcertif.android.dao.CategorieProvider;
+import com.jcertif.android.dao.ContributorProvider;
 import com.jcertif.android.dao.SessionProvider;
 import com.jcertif.android.dao.SpeakerProvider;
 import com.jcertif.android.dao.SponsorLevelProvider;
 import com.jcertif.android.dao.SponsorProvider;
 import com.jcertif.android.model.Category;
+import com.jcertif.android.model.Contributor;
 import com.jcertif.android.model.Session;
 import com.jcertif.android.model.Speaker;
 import com.jcertif.android.model.Sponsor;
@@ -58,8 +60,9 @@ public class InitialisationFragment extends RESTResponderFragment {
 	SpeakerProvider spekerProvider;
     SponsorProvider sponsorProvider;
     SessionProvider sessionProvider;
+    ContributorProvider contributorProvider;
 
-	private static int threadCount = 5; // must be equal to urls count
+	private static int threadCount = 3; // must be equal to urls count
 	private static int currentThreadNo = 0; // id of the incoming thread from
 											// intentService
 
@@ -107,10 +110,14 @@ public class InitialisationFragment extends RESTResponderFragment {
         sessionProvider = new SessionProvider(
                 InitialisationFragment.this.getSherlockActivity());
 
+        contributorProvider = new ContributorProvider(
+                InitialisationFragment.this.getSherlockActivity());
+
 
         if(JcertifApplication.ONLINE){
 		    loadData(CATEGORIES__URI);
         }else{
+            threadCount = 6;
             loadToCache();
         }
 	}
@@ -140,6 +147,9 @@ public class InitialisationFragment extends RESTResponderFragment {
         List<Session> sessions = parseSessionJson(loadFromRaw(R.raw.sessionsdata));
         if(sessions!=null)
             saveSessionToCache(sessions);
+        List<Contributor> contributors = parseContributorJson(loadFromRaw(R.raw.contributorsdata));
+        if(contributors!=null)
+            saveContributorToCache(contributors);
     }
 
 	@Override
@@ -213,6 +223,16 @@ public class InitialisationFragment extends RESTResponderFragment {
 		return Arrays.asList(speakers);
 
 	}
+
+
+    private List<Contributor> parseContributorJson(String result) {
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
+                .create();
+        Contributor[] contributors = gson.fromJson(result, Contributor[].class);
+
+        return Arrays.asList(contributors);
+
+    }
 
     private void saveCatToCache(final List<Category> cat) {
         Thread th = new Thread(new Runnable() {
@@ -326,6 +346,30 @@ public class InitialisationFragment extends RESTResponderFragment {
                 if (result != null)
                     for (Session se : result)
                         sessionProvider.store(se);
+            }
+        });
+        th.start();
+        try {
+
+            th.join();
+
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        if (++currentThreadNo == threadCount) {
+            listener.OnRefDataLoaded();
+        }
+    }
+
+    private void saveContributorToCache(final List<Contributor> result) {
+        Thread th = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                if (result != null)
+                    for (Contributor co : result)
+                        contributorProvider.store(co);
             }
         });
         th.start();
