@@ -1,0 +1,2 @@
+include ':jcertifApp'
+include ':viewPagerIndicator'

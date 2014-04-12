@@ -1,0 +1,28 @@
+apply plugin: 'android'
+
+repositories {
+    maven { url "http://dl.bintray.com/populov/maven" }
+    mavenCentral()
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
+    //Google Play services est en version  4.3.23. Penser a une maj dans ce fichier
+    compile 'com.google.android.gms:play-services:4.0.30'
+    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    compile 'com.android.support:support-v4:19.1.0'
+    compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abs:0.8'
+    compile project(':viewPagerIndicator')
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
+
+    defaultConfig {
+        minSdkVersion 8
+        targetSdkVersion 19
+    }
+
+
+}
