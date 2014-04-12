@@ -12,7 +12,7 @@ dependencies {
     compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
     compile 'com.android.support:support-v4:19.1.0'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abs:0.8'
-    compile 'com.viewpagerindicator:library:2.4.1'
+    compile project(':viewPagerIndicator')
 }
 
 android {
