@@ -25,7 +25,7 @@ project.properties
 
 #intellig project files
 .idea
-jcertif-android-2013.iml
+jcertifApp.iml
 
 #gradle build folder
-build/
+build/\
