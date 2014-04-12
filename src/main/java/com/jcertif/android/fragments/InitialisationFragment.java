@@ -150,7 +150,6 @@ public class InitialisationFragment extends RESTResponderFragment {
         List<Contributor> contributors = parseContributorJson(loadFromRaw(R.raw.contributorsdata));
         if(contributors!=null)
             saveContributorToCache(contributors);
-
     }
 
 	@Override
