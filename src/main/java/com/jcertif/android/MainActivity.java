@@ -53,6 +53,7 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefresh
  * Partially based on the ASOP source/Drawer Layout
  * 
  * @author Patrick Bashizi (bashizip@gmail.com)
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  */
 public class MainActivity extends SherlockFragmentActivity implements LoginFragment.OnSignedInListener,
 		RefentielDataLodedListener, PullToRefreshAttacher.OnRefreshListener {
@@ -290,111 +291,133 @@ public class MainActivity extends SherlockFragmentActivity implements LoginFragm
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-	class DrawerListAdapter extends BaseAdapter {
+    class DrawerListAdapter extends BaseAdapter {
 
-		private static final int TYPE_PROFILE = 0;
-		private static final int TYPE_ITEM = 1;
-		private LayoutInflater mInflater;
+        private static final int TYPE_PROFILE = 0;
+        private static final int TYPE_ITEM = 1;
+        private LayoutInflater mInflater;
 
-		private Participant user;
+        private Participant user;
 
-		public int getCount() {
-			return mMenuTitles.length + 1;
-		}
+        public int getCount() {
+            return mMenuTitles.length + 1;
+        }
 
-		public DrawerListAdapter(Participant user) {
-			mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			this.user = user;
-		}
+        public DrawerListAdapter(Participant user) {
+            mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            this.user = user;
+        }
 
-		@Override
-		public Object getItem(int position) {
-			if (position == 0) {
-				return 0;
-			} else
-				return mMenuTitles[position];
-		}
+        @Override
+        public Object getItem(int position) {
+            if (position == 0) {
+                return 0;
+            } else
+                return mMenuTitles[position];
+        }
 
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder holder = null;
-			int type = getItemViewType(position);
-			if (convertView == null) {
-				holder = new ViewHolder();
-				switch (type) {
-				case TYPE_ITEM:
-					convertView = mInflater.inflate(R.layout.drawer_list_item, null);
-					holder.textView = (TextView) convertView.findViewById(R.id.tv_drawer_item);
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder = null;
+            int type = getItemViewType(position);
+            if (convertView == null) {
+                holder = new ViewHolder();
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+            switch (type) {
+                case TYPE_ITEM:
+                    convertView = convertView == null?mInflater.inflate(R.layout.drawer_list_item, null):convertView;
+                    holder.textView = (TextView) convertView.findViewById(R.id.tv_drawer_item);
 
-					holder.imgView = (ImageView) convertView.findViewById(R.id.img_drawer);
-					int index = position;
-					switch (index) {
-					case 1:
-						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_list));
-						break;
-					case 2:
-						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_user));
-						break;
+                    holder.imgView = (ImageView) convertView.findViewById(R.id.img_drawer);
+                    holder=setTypeItemHolderValues(holder,position);
 
-					case 3:
-						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
-						break;
+                    break;
+                case TYPE_PROFILE:
+                    convertView = convertView == null?mInflater.inflate(R.layout.item_profile, null):convertView;
+                    holder.textView = (TextView) convertView.findViewById(R.id.tv_username);
+                    holder.imgView = (ImageView) convertView.findViewById(R.id.img_profile);
+                    holder=setTypeProfilHolderValues(holder,user);
+                    break;
+            }
+            convertView.setTag(holder);
 
-					case 4:
-						holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
-						break;
-					default:
-						break;
-					}
-					holder.textView.setText(mMenuTitles[index - 1]);
+            return convertView;
+        }
 
-					break;
-				case TYPE_PROFILE:
-					convertView = mInflater.inflate(R.layout.item_profile, null);
-					holder.textView = (TextView) convertView.findViewById(R.id.tv_username);
-					holder.imgView = (ImageView) convertView.findViewById(R.id.img_profile);
+        @Override
+        public int getItemViewType(int position) {
+            return (position == 0) ? TYPE_PROFILE : TYPE_ITEM;
+        }
 
-					if (user == null) {
-						holder.textView.setText("Please Login");
-					} else {
-						holder.textView.setText(user.getFirstname() + " " + user.getLastname());
-						Picasso.with(MainActivity.this).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile)
-								.into(holder.imgView);
-					}
+        @Override
+        public int getViewTypeCount() {
+            return 2;
+        }
 
-					break;
-				}
-				convertView.setTag(holder);
-			} else {
-				holder = (ViewHolder) convertView.getTag();
-			}
+        public class ViewHolder {
+            public TextView textView;
+            public ImageView imgView;
+        }
 
-			return convertView;
-		}
+        /**
+         *
+         * @param holder
+         * @param itemPosition
+         * @return
+         */
+        private ViewHolder setTypeItemHolderValues(ViewHolder holder,int itemPosition){
+            switch (itemPosition) {
+                case 1:
+                    holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_list));
+                    break;
+                case 2:
+                    holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_user));
+                    break;
 
-		@Override
-		public int getItemViewType(int position) {
-			return (position == 0) ? TYPE_PROFILE : TYPE_ITEM;
-		}
+                case 3:
+                    holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_map));
+                    break;
 
-		@Override
-		public int getViewTypeCount() {
-			return 2;
-		}
+                case 4:
+                    holder.imgView.setImageDrawable(getResources().getDrawable(R.drawable.ic_action_help));
+                    break;
+                default:
+                    break;
+            }
+            holder.textView.setText(mMenuTitles[itemPosition - 1]);
+            return holder;
+        }
 
-		public class ViewHolder {
-			public TextView textView;
-			public ImageView imgView;
-		}
+        /**
+         *
+         * @param holder
+         * @param user
+         * @return
+         */
+        private ViewHolder setTypeProfilHolderValues(ViewHolder holder,Participant user){
 
-	}
+            if (user == null) {
+                holder.textView.setText("Please Login");
+            } else {
+                holder.textView.setText(user.getFirstname() + " " + user.getLastname());
+                Picasso.with(MainActivity.this).load(user.getPhoto()).placeholder(R.drawable.ic_action_profile)
+                        .into(holder.imgView);
+            }
 
-	@Override
+            return holder;
+        }
+
+    }
+
+
+    @Override
 	public void onSignedIn(Participant user, ProgressDialog dlg) {
 
 		mDrawerList.setAdapter(new DrawerListAdapter(user));
