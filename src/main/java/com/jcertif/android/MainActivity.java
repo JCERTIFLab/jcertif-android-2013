@@ -53,6 +53,7 @@ import uk.co.senab.actionbarpulltorefresh.extras.actionbarsherlock.PullToRefresh
  * Partially based on the ASOP source/Drawer Layout
  * 
  * @author Patrick Bashizi (bashizip@gmail.com)
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  */
 public class MainActivity extends SherlockFragmentActivity implements LoginFragment.OnSignedInListener,
 		RefentielDataLodedListener, PullToRefreshAttacher.OnRefreshListener {
