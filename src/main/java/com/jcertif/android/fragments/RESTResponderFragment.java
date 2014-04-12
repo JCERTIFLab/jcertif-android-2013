@@ -6,6 +6,7 @@ import android.os.ResultReceiver;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.jcertif.android.JcertifApplication;
 import com.jcertif.android.service.RESTService;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
@@ -28,7 +29,7 @@ public abstract class RESTResponderFragment extends SherlockFragment {
 			@Override
 			protected void onReceiveResult(int resultCode, Bundle resultData) {
 				if (resultData != null
-						&& resultData.containsKey(RESTService.REST_RESULT)) {
+						&& resultData.containsKey(RESTService.REST_RESULT)&& JcertifApplication.ONLINE) {
 					onRESTResult(resultCode, resultData);
 				} else {
 					onRESTResult(resultCode, null);
