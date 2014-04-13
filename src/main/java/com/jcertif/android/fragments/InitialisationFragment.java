@@ -187,49 +187,41 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 
 	private List<Category> parseCategoryJson(String result) {
-		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-				.create();
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();
 		Category[] sl = gson.fromJson(result, Category[].class);
 		return Arrays.asList(sl);
 	}
 
 	private List<SponsorLevel> parseSponsorLevelJson(String result) {
-		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-				.create();
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();
 		SponsorLevel[] sl = gson.fromJson(result, SponsorLevel[].class);
 		return Arrays.asList(sl);
 	}
 
     private List<Sponsor> parseSponsorJson(String result) {
-        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-                .create();
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();
         Sponsor[] sl = gson.fromJson(result, Sponsor[].class);
         return Arrays.asList(sl);
     }
 
     private List<Session> parseSessionJson(String result) {
-        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-                .create();
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();
         Session[] sl = gson.fromJson(result, Session[].class);
         return Arrays.asList(sl);
     }
 
 
 	private List<Speaker> parseSpeakerJson(String result) {
-		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-				.create();
+		Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();
 		Speaker[] speakers = gson.fromJson(result, Speaker[].class);
-
 		return Arrays.asList(speakers);
 
 	}
 
 
     private List<Contributor> parseContributorJson(String result) {
-        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm")
-                .create();
+        Gson gson = new GsonBuilder().setDateFormat("dd/MM/yyyy hh:mm").create();
         Contributor[] contributors = gson.fromJson(result, Contributor[].class);
-
         return Arrays.asList(contributors);
 
     }

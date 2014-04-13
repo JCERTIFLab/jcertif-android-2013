@@ -1,9 +1,11 @@
+import groovy.json.JsonSlurper
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9+'
+        classpath 'com.android.tools.build:gradle:0.7.0+'
     }
 }
 
@@ -34,3 +36,4 @@ android {
 
 
 }
+
