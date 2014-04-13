@@ -1,13 +1,15 @@
 package com.jcertif.android;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.res.Configuration;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 public class JcertifApplication extends Application{
 
 	//public static final String BASE_URL="http://jcertif-backend.msomda.cloudbees.net";
 	public static final String BASE_URL="http://jcertif.backend.vm-host.net";
-    public static final Boolean ONLINE = false;
 
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
@@ -33,6 +35,12 @@ public class JcertifApplication extends Application{
 		super.onTerminate();
 	}
 
-	
+    public Boolean isApplicationConnected(){
+        ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
+
 	
 }

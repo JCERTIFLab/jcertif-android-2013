@@ -40,7 +40,7 @@ public class SponsorsFragment extends RESTResponderFragment {
 	private List<Sponsor> mSponsors = new ArrayList<Sponsor>();
 	private SponsorProvider mProvider;
 
-	private static final String SPONSOR_LIST_URI = JcertifApplication.BASE_URL
+	public static final String SPONSOR_LIST_URI = JcertifApplication.BASE_URL
 			+ "/sponsor/list";
 	private static final String TAG = "About Fragment";
 
