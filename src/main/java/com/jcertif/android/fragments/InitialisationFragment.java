@@ -34,10 +34,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * 
  * @author Patrick Bashizi (bashizip@gmail.com)
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  * 
  */
 public class InitialisationFragment extends RESTResponderFragment {
@@ -52,6 +54,10 @@ public class InitialisationFragment extends RESTResponderFragment {
 			+ "/ref/category/list";
 	private static final String SPEAKER_LIST_URI = JcertifApplication.BASE_URL
 			+ "/speaker/list";
+    private final String [] URI_LIST={SPEAKER_LIST_URI,CATEGORIES__URI,SPONSOR_LEVEL_URI,
+            ContributorFragment.GITHUB_CONTRIBUTOR_API_URL,SessionListFragment.SESSIONS_LIST_URI};
+    private final int HTTP_OK_STATUS=200;
+
 
 
 	private RefentielDataLodedListener listener;
@@ -62,7 +68,7 @@ public class InitialisationFragment extends RESTResponderFragment {
     SessionProvider sessionProvider;
     ContributorProvider contributorProvider;
 
-	private static int threadCount = 3; // must be equal to urls count
+	private static int threadCount = 5; // must be equal to urls count
 	private static int currentThreadNo = 0; // id of the incoming thread from
 											// intentService
 
@@ -114,13 +120,21 @@ public class InitialisationFragment extends RESTResponderFragment {
                 InitialisationFragment.this.getSherlockActivity());
 
 
-        if(JcertifApplication.ONLINE){
-		    loadData(CATEGORIES__URI);
+        if(getApplicationContext().isApplicationConnected()){
+		    loadAllData();
         }else{
-            threadCount = 6;
+            threadCount = 5;
             loadToCache();
         }
 	}
+
+    private void loadAllData(){
+        ListIterator<String> iterator=Arrays.asList(URI_LIST).listIterator();
+        while (iterator.hasNext()){
+            String uri=iterator.next();
+            loadData(uri);
+        }
+    }
 
 	void loadData(String URI) {
 
@@ -154,6 +168,7 @@ public class InitialisationFragment extends RESTResponderFragment {
 
 	@Override
 	public void onRESTResult(int code, Bundle resultData) {
+
 		if (resultData == null) {
 			Toast.makeText(this.getActivity(), "Failled to load data, check your connection", Toast.LENGTH_LONG).show();
 			return;
@@ -161,28 +176,85 @@ public class InitialisationFragment extends RESTResponderFragment {
 		String result = resultData.getString(RESTService.REST_RESULT);
 		String resultType = resultData.getString(RESTService.KEY_URI_SENT);
 
-		if (resultType.equals(SPONSOR_LEVEL_URI)) {
-			List<SponsorLevel> sponsorsLevel = parseSponsorLevelJson(result);
-            if(sponsorsLevel!=null){
-			saveSponsorLevelToCache(sponsorsLevel);
-            }else{
-                return;
-            }
-		}
-		if (resultType.equals(CATEGORIES__URI)) {
-			List<Category> cat = parseCategoryJson(result);
-			if(cat!=null){
-			saveCatToCache(cat);
-			}else{
-				return;
-			}
-		}
-		if (resultType.equals(SPEAKER_LIST_URI)) {
-			List<Speaker> speskers = parseSpeakerJson(result);
-			saveSpeakerToCache(speskers);
-		}
+        saveRESTResult(code,result,resultType);
 
 	}
+
+    private void saveRESTResult(int code,String result,String resultType){
+        if (resultType.equals(SPONSOR_LEVEL_URI)) {
+            if(code==HTTP_OK_STATUS) {
+                List<Sponsor> sponsors = parseSponsorJson(result);
+                if (sponsors != null) {
+                    saveSponsorToCache(sponsors);
+                }
+            }else{
+                List<Sponsor> sponsors = parseSponsorJson(loadFromRaw(R.raw.sponsorsdata));
+                if (sponsors!=null) {
+                    saveSponsorToCache(sponsors);
+                }
+            }
+            return;
+        }
+        if (resultType.equals(CATEGORIES__URI)) {
+            if(code==HTTP_OK_STATUS) {
+                List<Category> cat = parseCategoryJson(result);
+                if (cat != null) {
+                    saveCatToCache(cat);
+                }
+            }else{
+                List<Category> categories = parseCategoryJson(loadFromRaw(R.raw.categoriesdata));
+                if (categories!=null) {
+                    saveCatToCache(categories);
+                }
+            }
+            return;
+        }
+        if (resultType.equals(SPEAKER_LIST_URI)) {
+            if(code==HTTP_OK_STATUS) {
+                List<Speaker> speskers = parseSpeakerJson(result);
+                if (speskers != null) {
+                    saveSpeakerToCache(speskers);
+                }
+            }else{
+                List<Speaker> speakers = parseSpeakerJson(loadFromRaw(R.raw.speackersdata));
+                if(speakers!=null) {
+                    saveSpeakerToCache(speakers);
+                }
+            }
+            return;
+        }
+//        ,SpeakeListFragment.SPEAKER_LIST_URI,SessionListFragment.SESSIONS_LIST_URI};
+        if (resultType.equals(SessionListFragment.SESSIONS_LIST_URI)) {
+            if(code==HTTP_OK_STATUS) {
+                List<Session> sessions = parseSessionJson(result);
+                if (sessions != null) {
+                    saveSessionToCache(sessions);
+                }
+            }else{
+                List<Session> sessions = parseSessionJson(loadFromRaw(R.raw.sessionsdata));
+                if (sessions != null) {
+                    saveSessionToCache(sessions);
+                }
+            }
+            return;
+        }
+
+        if (resultType.equals(ContributorFragment.GITHUB_CONTRIBUTOR_API_URL)) {
+            if(code==HTTP_OK_STATUS) {
+                List<Contributor> contributors = parseContributorJson(result);
+                if (contributors != null) {
+                    saveContributorToCache(contributors);
+                }
+            }else{
+                List<Contributor> contributors = parseContributorJson(loadFromRaw(R.raw.contributorsdata));
+                if (contributors != null) {
+                    saveContributorToCache(contributors);
+                }
+            }
+            return;
+        }
+
+    }
 
 
 
@@ -257,8 +329,6 @@ public class InitialisationFragment extends RESTResponderFragment {
         }
         if (++currentThreadNo == threadCount) {
             listener.OnRefDataLoaded();
-        } else {
-            loadData(SPONSOR_LEVEL_URI);
         }
 
     }
@@ -282,8 +352,6 @@ public class InitialisationFragment extends RESTResponderFragment {
 		}
 		if (++currentThreadNo == threadCount) {
 			listener.OnRefDataLoaded();
-		} else {
-			loadData(SPEAKER_LIST_URI);
 		}
 
 	}

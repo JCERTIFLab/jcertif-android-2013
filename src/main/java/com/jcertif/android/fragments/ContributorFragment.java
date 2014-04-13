@@ -33,11 +33,12 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  * 
  * @author bashizip
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  * 
  */
 public class ContributorFragment extends RESTResponderFragment {
 
-	private static final String GITHUB_CONTRIBUTOR_API_URL = "https://api.github.com/repos/bashizip/jcertif-android-2013/contributors";
+	public static final String GITHUB_CONTRIBUTOR_API_URL = "https://api.github.com/repos/JCERTIFLab/jcertif-android-2013/contributors";
 	private static final String TAG = "Contributors Fragment";
 	ContributorsAdapter adapter;
 	private List<Contributor> mContributors = new ArrayList<Contributor>();

@@ -31,6 +31,7 @@ import java.util.List;
 /**
  * 
  * @author bashizip
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  *
  */
 public class SponsorsFragment extends RESTResponderFragment {
@@ -40,7 +41,7 @@ public class SponsorsFragment extends RESTResponderFragment {
 	private List<Sponsor> mSponsors = new ArrayList<Sponsor>();
 	private SponsorProvider mProvider;
 
-	private static final String SPONSOR_LIST_URI = JcertifApplication.BASE_URL
+	public static final String SPONSOR_LIST_URI = JcertifApplication.BASE_URL
 			+ "/sponsor/list";
 	private static final String TAG = "About Fragment";
 
