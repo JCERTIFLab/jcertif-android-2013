@@ -39,6 +39,7 @@ import java.util.ListIterator;
 /**
  * 
  * @author Patrick Bashizi (bashizip@gmail.com)
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  * 
  */
 public class InitialisationFragment extends RESTResponderFragment {

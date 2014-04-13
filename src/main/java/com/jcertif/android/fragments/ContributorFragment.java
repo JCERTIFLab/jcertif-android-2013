@@ -33,6 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  * 
  * @author bashizip
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  * 
  */
 public class ContributorFragment extends RESTResponderFragment {

@@ -6,6 +6,10 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+/**
+ * @author bashizip
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
+ */
 public class JcertifApplication extends Application{
 
 	//public static final String BASE_URL="http://jcertif-backend.msomda.cloudbees.net";

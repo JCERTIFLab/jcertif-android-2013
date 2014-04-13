@@ -16,6 +16,7 @@ import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 /**
  * 
  * @author Patrick Bashizi
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  * 
  */
 public abstract class RESTResponderFragment extends SherlockFragment implements RestFragment {

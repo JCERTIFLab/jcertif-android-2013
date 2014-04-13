@@ -31,6 +31,7 @@ import java.util.List;
 /**
  * 
  * @author bashizip
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  *
  */
 public class SponsorsFragment extends RESTResponderFragment {
