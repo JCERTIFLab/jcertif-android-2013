@@ -1,9 +1,9 @@
 {
   "title": "Jcertif Tunisie",
-  "launcher_hdpi":"",
-  "launcher_mdpi":"",
-  "launcher_xhdpi":"",
-  "launcher_xxhdpi":"",
+  "launcher_hdpi":"https://github.com/JCERTIFLab/jcertif-android-2013/test_files/ic_launcher/drawable-hdpi/ic_launcher.png",
+  "launcher_mdpi":"https://github.com/JCERTIFLab/jcertif-android-2013/test_files/ic_launcher/drawable-mdpi/ic_launcher.png",
+  "launcher_xhdpi":"https://github.com/JCERTIFLab/jcertif-android-2013/test_files/ic_launcher/drawable-xhdpi/ic_launcher.png",
+  "launcher_xxhdpi":"https://github.com/JCERTIFLab/jcertif-android-2013/test_files/ic_launcher/drawable-xxhdpi/ic_launcher.png",
   "logo":"",
   "about":"",
   "title_bar":"",

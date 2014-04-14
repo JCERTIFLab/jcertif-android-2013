@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import groovy.json.JsonBuilder
 
 buildscript {
     repositories {
@@ -6,9 +7,11 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.7.0+'
+        classpath 'de.undercouch:gradle-download-task:1.0'
     }
 }
 
+apply plugin: 'download-task'
 apply plugin: 'android'
 
 repositories {
@@ -41,21 +44,21 @@ android {
 android.applicationVariants.all{ variant ->
     variant.mergeResources.doLast {
         File configFile = file("config.json")
-        File valuesFile = file("${buildDir}/res/all/${variant.dirName}/values/values.xml")
-        File valuesFrFile = file("${buildDir}/res/all/${variant.dirName}/values-fr/values.xml")
-        File categoriesFile = file("${buildDir}/res/all/${variant.dirName}/raw/categoriesdata.json")
-        File contributorsFile = file("${buildDir}/res/all/${variant.dirName}/raw/contributorsdata.json")
-        File sessionsFile = file("${buildDir}/res/all/${variant.dirName}/raw/sessionsdata.json")
-        File speackersFile = file("${buildDir}/res/all/${variant.dirName}/raw/speackersdata.json")
-        File sponsorsFile = file("${buildDir}/res/all/${variant.dirName}/raw/sponsorsdata.json")
+        String resDir= "${buildDir}/res/all/${variant.dirName}"
+        File valuesFile = file(resDir+"/values/values.xml")
+        File valuesFrFile = file(resDir+"/values-fr/values.xml")
+        File categoriesFile = file(resDir+"/raw/categoriesdata.json")
+        File contributorsFile = file(resDir+"/raw/contributorsdata.json")
+        File sessionsFile = file(resDir+"/raw/sessionsdata.json")
+        File speackersFile = file(resDir+"/raw/speackersdata.json")
+        File sponsorsFile = file(resDir+"/raw/sponsorsdata.json")
 
         JsonSlurper slurper = new JsonSlurper()
         def config = slurper.parseText( configFile.getText('UTF-8') )
-        def title = config.title
         println("Replacing app title values")
-        replaceAppTitle(valuesFile,title)
+        replaceLine(valuesFile,"<string name=\"app_name\">JCertif</string>","<string name=\"app_name\">"+config.title+"</string>" )
         println("Replacing app title values-fr")
-        replaceAppTitle(valuesFrFile,title)
+        replaceLine(valuesFrFile,"<string name=\"app_name\">JCertif</string>","<string name=\"app_name\">"+config.title+"</string>" )
         println("Replacing categories json data")
         replaceContent(categoriesFile,config.categories)
         println("Replacing contributors json data")
@@ -66,16 +69,35 @@ android.applicationVariants.all{ variant ->
         replaceContent(speackersFile,config.speackers)
         println("Replacing sponsors json data")
         replaceContent(sponsorsFile,config.sponsors)
+        println("Replacing ic_launcher hdpi")
+        replaceFromUrl(config.launcher_hdpi,resDir+"/drawable-hdpi")
+        println("Replacing ic_launcher mdpi")
+        replaceFromUrl(config.launcher_mdpi,resDir+"/drawable-mdpi")
+        println("Replacing ic_launcher xhdpi")
+        replaceFromUrl(config.launcher_xhdpi,resDir+"/drawable-xhdpi")
+        println("Replacing ic_launcher xxhdpi")
+        replaceFromUrl(config.launcher_xxhdpi,resDir+"/drawable-xxhdpi")
 
     }
 }
 
 def replaceContent(File file, data) {
-    file.write(new groovy.json.JsonBuilder ( data ).toPrettyString(), 'UTF-8')
+    file.write(new JsonBuilder ( data ).toPrettyString(), 'UTF-8')
 }
 
-def replaceAppTitle(File file, String title) {
+def replaceLine(File file, String oldLine, String newLine) {
     String content = file.getText('UTF-8')
-    content = content.replaceAll("<string name=\"app_name\">JCertif</string>", "<string name=\"app_name\">"+title+"</string>")
+    content = content.replaceAll(oldLine, newLine)
     file.write(content, 'UTF-8')
 }
+
+def replaceFromUrl(String url, String destDir){
+
+    download {
+        src url
+        dest destDir
+        overwrite true
+    }
+
+}
+
