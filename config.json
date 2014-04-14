@@ -1,5 +1,17 @@
 {
   "title": "Jcertif Tunisie",
+  "launcher_hdpi":"",
+  "launcher_mdpi":"",
+  "launcher_xhdpi":"",
+  "launcher_xxhdpi":"",
+  "logo":"",
+  "about":"",
+  "title_bar":"",
+  "title_color":"",
+  "subtitle_color":"",
+  "selector_color":"",
+  "bouton_color":"",
+  "backend_url":"",
   "categories":[ { "version" : "01" , "deleted" : "false" , "label" : "Android"} , { "version" : "01" , "deleted" : "false" , "label" : "Web"} , { "version" : "01" , "deleted" : "false" , "label" : "Java"} , { "version" : "01" , "deleted" : "false" , "label" : "Entreprise"} , { "version" : "01" , "deleted" : "false" , "label" : "Web Design"} , { "version" : "01" , "deleted" : "false" , "label" : "Community"}],
   "contributors":[
                    {
