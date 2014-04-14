@@ -1,3 +1,18 @@
+/*
+ * Copyright 2013-2014 JCertifLab.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.jcertif.android.fragments;
 
 import java.util.ArrayList;
@@ -33,11 +48,12 @@ import android.widget.AdapterView.OnItemClickListener;
 /**
  * 
  * @author bashizip
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
  * 
  */
 public class ContributorFragment extends RESTResponderFragment {
 
-	private static final String GITHUB_CONTRIBUTOR_API_URL = "https://api.github.com/repos/bashizip/jcertif-android-2013/contributors";
+	public static final String GITHUB_CONTRIBUTOR_API_URL = "https://api.github.com/repos/JCERTIFLab/jcertif-android-2013/contributors";
 	private static final String TAG = "Contributors Fragment";
 	ContributorsAdapter adapter;
 	private List<Contributor> mContributors = new ArrayList<Contributor>();

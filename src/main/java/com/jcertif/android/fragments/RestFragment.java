@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 JCertifLab.
+ * Copyright 2014 JCertifLab.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.jcertif.android.model;
+package com.jcertif.android.fragments;
 
-public class Civilite extends JCertifObject {
-	private String label;
+import android.os.Bundle;
 
-	public Civilite(String label) {
-		super();
-		this.label = label;
-	}
+import com.jcertif.android.JcertifApplication;
 
-	public String getLabel() {
-		return label;
-	}
+/**
+ * @author Komi Serge Innocent <komi.innocent@gmail.com>
+ */
+public interface RestFragment {
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
-	
+    public JcertifApplication getApplicationContext();
+
+    /**
+     * Implementers of this Fragment will handle the result here.
+     * @param code
+     * @param result
+     */
+    public void onRESTResult(int code, Bundle result);
 }
