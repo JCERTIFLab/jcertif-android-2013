@@ -1,9 +1,11 @@
+import groovy.json.JsonSlurper
+
 buildscript {
     repositories {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.9+'
+        classpath 'com.android.tools.build:gradle:0.7.0+'
     }
 }
 
@@ -33,4 +35,47 @@ android {
     }
 
 
+}
+
+
+android.applicationVariants.all{ variant ->
+    variant.mergeResources.doLast {
+        File configFile = file("config.json")
+        File valuesFile = file("${buildDir}/res/all/${variant.dirName}/values/values.xml")
+        File valuesFrFile = file("${buildDir}/res/all/${variant.dirName}/values-fr/values.xml")
+        File categoriesFile = file("${buildDir}/res/all/${variant.dirName}/raw/categoriesdata.json")
+        File contributorsFile = file("${buildDir}/res/all/${variant.dirName}/raw/contributorsdata.json")
+        File sessionsFile = file("${buildDir}/res/all/${variant.dirName}/raw/sessionsdata.json")
+        File speackersFile = file("${buildDir}/res/all/${variant.dirName}/raw/speackersdata.json")
+        File sponsorsFile = file("${buildDir}/res/all/${variant.dirName}/raw/sponsorsdata.json")
+
+        JsonSlurper slurper = new JsonSlurper()
+        def config = slurper.parseText( configFile.getText('UTF-8') )
+        def title = config.title
+        println("Replacing app title values")
+        replaceAppTitle(valuesFile,title)
+        println("Replacing app title values-fr")
+        replaceAppTitle(valuesFrFile,title)
+        println("Replacing categories json data")
+        replaceContent(categoriesFile,config.categories)
+        println("Replacing contributors json data")
+        replaceContent(contributorsFile,config.contributors)
+        println("Replacing sessions json data")
+        replaceContent(sessionsFile,config.sessions)
+        println("Replacing speackers json data")
+        replaceContent(speackersFile,config.speackers)
+        println("Replacing sponsors json data")
+        replaceContent(sponsorsFile,config.sponsors)
+
+    }
+}
+
+def replaceContent(File file, data) {
+    file.write(new groovy.json.JsonBuilder ( data ).toPrettyString(), 'UTF-8')
+}
+
+def replaceAppTitle(File file, String title) {
+    String content = file.getText('UTF-8')
+    content = content.replaceAll("<string name=\"app_name\">JCertif</string>", "<string name=\"app_name\">"+title+"</string>")
+    file.write(content, 'UTF-8')
 }
