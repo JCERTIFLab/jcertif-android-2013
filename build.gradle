@@ -55,10 +55,12 @@ android.applicationVariants.all{ variant ->
 
         JsonSlurper slurper = new JsonSlurper()
         def config = slurper.parseText( configFile.getText('UTF-8') )
+        //App name//
         println("Replacing app title values")
         replaceLine(valuesFile,"<string name=\"app_name\">JCertif</string>","<string name=\"app_name\">"+config.title+"</string>" )
         println("Replacing app title values-fr")
         replaceLine(valuesFrFile,"<string name=\"app_name\">JCertif</string>","<string name=\"app_name\">"+config.title+"</string>" )
+        //Data//
         println("Replacing categories json data")
         replaceContent(categoriesFile,config.categories)
         println("Replacing contributors json data")
@@ -69,6 +71,7 @@ android.applicationVariants.all{ variant ->
         replaceContent(speackersFile,config.speackers)
         println("Replacing sponsors json data")
         replaceContent(sponsorsFile,config.sponsors)
+        //Ic_launcher//
         println("Replacing ic_launcher hdpi")
         replaceFromUrl(config.launcher_hdpi,resDir+"/drawable-hdpi")
         println("Replacing ic_launcher mdpi")
@@ -77,6 +80,20 @@ android.applicationVariants.all{ variant ->
         replaceFromUrl(config.launcher_xhdpi,resDir+"/drawable-xhdpi")
         println("Replacing ic_launcher xxhdpi")
         replaceFromUrl(config.launcher_xxhdpi,resDir+"/drawable-xxhdpi")
+        //Title Bar//
+        println("Replacing TitleBar hdpi")
+        replaceFromUrl(config.titlebar_hdpi_bottom,resDir+"/drawable-hdpi")
+        replaceFromUrl(config.titlebar_hdpi_solid,resDir+"/drawable-hdpi")
+        replaceFromUrl(config.titlebar_hdpi_transparent,resDir+"/drawable-hdpi")
+        println("Replacing TitleBar mdpi")
+        replaceFromUrl(config.titlebar_mdpi_bottom,resDir+"/drawable-mdpi")
+        replaceFromUrl(config.titlebar_mdpi_solid,resDir+"/drawable-mdpi")
+        replaceFromUrl(config.titlebar_mdpi_transparent,resDir+"/drawable-mdpi")
+        println("Replacing TitleBar xhdpi")
+        replaceFromUrl(config.titlebar_xhdpi_bottom,resDir+"/drawable-xhdpi")
+        replaceFromUrl(config.titlebar_xhdpi_solid,resDir+"/drawable-xhdpi")
+        replaceFromUrl(config.titlebar_xhdpi_transparent,resDir+"/drawable-xhdpi")
+
 
     }
 }
